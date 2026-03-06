@@ -2,108 +2,110 @@ import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react"
 
-export default function Footer() {
-    const { t } = useTranslation()
-    return (
-        <footer className="w-full bg-slate-900 pt-16 pb-8 text-slate-200 border-t border-slate-800">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 border-b border-slate-800 pb-12 mb-8">
+const Footer = () => {
+    const { t } = useTranslation();
 
-                    {/* Logo & About */}
-                    <div className="flex flex-col gap-6">
-                        <Link to="/" className="flex items-center gap-3 w-fit">
-                            <img src="/logo2-removebg-preview.png" alt="logo2" className="h-11 w-16 bg-transparent" />
+    return (
+        <footer className="bg-slate-950 text-slate-300 border-t border-slate-900">
+            {/* Main Footer Content */}
+            <div className="container-custom py-16 md:py-24">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
+
+                    {/* Column 1: Department Identity */}
+                    <div className="flex flex-col gap-6 lg:col-span-1">
+                        <div className="flex items-center gap-4">
+                            <img src="/logo1-removebg-preview.png" alt="Dept Seal" className="h-14 w-auto grayscale brightness-200 contrast-125" />
                             <div className="flex flex-col">
-                                <span className="text-sm text-slate-400 font-medium">Ta'ang Land Federal Unit Government of Immigration</span>
+                                <span className="text-white font-bold leading-tight tracking-tight uppercase text-sm">Immigration Department</span>
+                                <span className="text-[10px] font-bold text-primary tracking-[0.2em] uppercase">Ta'ang Land Federal Unit</span>
                             </div>
-                        </Link>
-                        <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
-                            {t("footer.about")}
+                        </div>
+                        <p className="text-sm leading-relaxed text-slate-400">
+                            The official portal for immigration services, news, and policy updates of the Ta'ang Land Federal Unit. Committed to security, transparency, and public service excellence.
                         </p>
-                        <div className="flex items-center gap-4 mt-2">
-                            <a href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-slate-800 hover:bg-primary text-slate-400 hover:text-white transition-all duration-300">
-                                <Facebook size={18} />
-                            </a>
-                            <a href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-slate-800 hover:bg-primary text-slate-400 hover:text-white transition-all duration-300">
-                                <Twitter size={18} />
-                            </a>
-                            <a href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-slate-800 hover:bg-primary text-slate-400 hover:text-white transition-all duration-300">
-                                <Instagram size={18} />
-                            </a>
+                        <div className="flex items-center gap-3">
+                            {[Facebook, Twitter, Instagram].map((Icon, idx) => (
+                                <a key={idx} href="#" className="h-10 w-10 flex items-center justify-center rounded-sm bg-slate-900 border border-slate-800 hover:bg-primary hover:border-primary text-slate-400 hover:text-white transition-all duration-300">
+                                    <Icon size={18} />
+                                </a>
+                            ))}
                         </div>
                     </div>
 
-                    {/* Quick Links */}
-                    <div className="flex flex-col gap-5">
-                        <h3 className="text-lg font-bold text-white mb-2 relative inline-block">
-                            {t("footer.quickLinks")}
-                            <span className="absolute -bottom-2 left-0 w-12 h-1 bg-primary rounded-full"></span>
-                        </h3>
-                        <ul className="flex flex-col gap-3">
-                            <li>
-                                <Link to="/" className="text-slate-400 hover:text-primary hover:translate-x-1 inline-block transition-all duration-300 text-sm font-medium">{t("nav.home")}</Link>
-                            </li>
-                            <li>
-                                <Link to="/activities" className="text-slate-400 hover:text-primary hover:translate-x-1 inline-block transition-all duration-300 text-sm font-medium">{t("nav.activities")}</Link>
-                            </li>
-                            <li>
-                                <Link to="/services" className="text-slate-400 hover:text-primary hover:translate-x-1 inline-block transition-all duration-300 text-sm font-medium">{t("nav.services")}</Link>
-                            </li>
-                            <li>
-                                <Link to="/districts" className="text-slate-400 hover:text-primary hover:translate-x-1 inline-block transition-all duration-300 text-sm font-medium">{t("nav.districts")}</Link>
-                            </li>
-                            <li>
-                                <Link to="/announcements" className="text-slate-400 hover:text-primary hover:translate-x-1 inline-block transition-all duration-300 text-sm font-medium">{t("nav.announcements")}</Link>
-                            </li>
+                    {/* Column 2: Quick Links */}
+                    <div className="flex flex-col gap-8">
+                        <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-2">
+                            Navigation Center
+                            <span className="w-8 h-[1px] bg-primary"></span>
+                        </h4>
+                        <ul className="flex flex-col gap-4">
+                            {["home", "activities", "services", "districts", "announcements"].map((item) => (
+                                <li key={item}>
+                                    <Link to={`/${item === "home" ? "" : item}`} className="text-sm font-semibold hover:text-primary transition-colors flex items-center group">
+                                        <span className="w-0 group-hover:w-3 h-[1px] bg-primary transition-all duration-300 mr-0 group-hover:mr-2"></span>
+                                        {t(`nav.${item}`)}
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
                     </div>
 
-                    {/* Contact Info */}
-                    <div className="flex flex-col gap-5 lg:col-span-2">
-                        <h3 className="text-lg font-bold text-white mb-2 relative inline-block">
-                            {t("footer.contact")}
-                            <span className="absolute -bottom-2 left-0 w-12 h-1 bg-primary rounded-full"></span>
-                        </h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div className="flex items-start gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-800">
-                                <MapPin className="text-primary shrink-0 mt-1" size={24} />
-                                <div className="flex flex-col gap-1 text-sm">
-                                    <span className="font-bold text-white">{t("footer.location")}</span>
-                                    <span className="text-slate-400">{t("footer.address")}</span>
+                    {/* Column 3 & 4: Contact & Location */}
+                    <div className="flex flex-col gap-8 lg:col-span-2">
+                        <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-2">
+                            Contact Information
+                            <span className="w-8 h-[1px] bg-primary"></span>
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                            <div className="flex gap-4">
+                                <div className="h-12 w-12 shrink-0 flex items-center justify-center rounded-sm bg-slate-900 border border-slate-800 text-primary">
+                                    <MapPin size={22} />
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <span className="text-sm font-bold text-white uppercase tracking-wider">{t("footer.location")}</span>
+                                    <span className="text-sm leading-relaxed text-slate-400">{t("footer.address")}</span>
                                 </div>
                             </div>
                             <div className="flex flex-col gap-4">
-                                <div className="flex items-center gap-3">
-                                    <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-slate-800 text-primary">
+                                <div className="flex items-center gap-4 group">
+                                    <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-sm bg-slate-900 border border-slate-800 text-primary group-hover:bg-primary group-hover:text-white transition-all">
                                         <Phone size={18} />
                                     </div>
-                                    <div className="flex flex-col text-sm">
-                                        <span className="text-slate-400 font-medium tracking-wider">+95 9 123 456 789</span>
+                                    <div className="flex flex-col">
+                                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">{t("footer.phone")}</span>
+                                        <span className="text-sm font-bold text-slate-300">+95 9 123 456 789</span>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-slate-800 text-primary">
+                                <div className="flex items-center gap-4 group">
+                                    <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-sm bg-slate-900 border border-slate-800 text-primary group-hover:bg-primary group-hover:text-white transition-all">
                                         <Mail size={18} />
                                     </div>
-                                    <div className="flex flex-col text-sm">
-                                        <span className="text-slate-400 font-medium">info@taangnews.org</span>
+                                    <div className="flex flex-col">
+                                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">{t("footer.email")}</span>
+                                        <span className="text-sm font-bold text-slate-300">contact@immigration.tlfug.gov</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
+            </div>
 
-                {/* Copyright */}
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-medium text-slate-500 text-center tracking-wider">
-                    <p>{t("footer.copyright")}</p>
-                    <div className="flex gap-6">
-                        <Link to="#" className="hover:text-white transition-colors">{t("footer.privacy")}</Link>
-                        <Link to="#" className="hover:text-white transition-colors">{t("footer.terms")}</Link>
+            {/* Bottom Bar: Ethics & Copyright */}
+            <div className="border-t border-slate-900 py-8 bg-slate-950/50">
+                <div className="container-custom flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.1em]">
+                        &copy; {new Date().getFullYear()} Ta'ang Land Federal Unit Immigration. All Rights Reserved.
+                    </div>
+                    <div className="flex gap-8">
+                        {["Privacy Policy", "Terms of Service", "Accessibility"].map((policy) => (
+                            <a key={policy} href="#" className="text-[11px] font-bold text-slate-600 hover:text-primary uppercase tracking-[0.1em] transition-colors">{policy}</a>
+                        ))}
                     </div>
                 </div>
             </div>
         </footer>
-    )
-}
+    );
+};
+
+export default Footer;
