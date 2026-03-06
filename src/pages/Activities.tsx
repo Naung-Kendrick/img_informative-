@@ -30,127 +30,120 @@ export default function Activities() {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8 animate-in fade-in duration-500 min-h-[70vh]">
-
-            {/* Page Header */}
-            <div className="mb-10">
-                <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2.5 rounded-xl bg-slate-50 text-[#808080]">
-                        <Zap size={22} />
-                    </div>
-                    <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 border-l-4 border-[#808080] pl-3 padauk-bold">
-                        {t("activities.title")}
-                    </h1>
-                </div>
-                <p className="text-slate-500 padauk-regular ml-14 sm:ml-16">
-                    {t("activities.subtitle")}
-                </p>
-            </div>
-
-            {isLoading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {[1, 2, 3, 4, 5, 6].map((i) => (
-                        <div key={i} className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                            <Skeleton className="w-full aspect-[16/10]" />
-                            <div className="p-6">
-                                <Skeleton className="h-6 w-3/4 mb-3" />
-                                <Skeleton className="h-4 w-1/2" />
-                            </div>
+        <div className="bg-[#f8fafc] min-h-screen py-16 animate-in fade-in duration-500">
+            <div className="container-custom">
+                {/* Page Header: Official Identity */}
+                <div className="mb-16 border-b border-slate-200 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div>
+                        <div className="text-primary text-xs font-bold uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                            <span className="w-8 h-[1px] bg-primary"></span>
+                            Engagement & Operations
                         </div>
-                    ))}
-                </div>
-            ) : isError ? (
-                <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
-                    <div className="bg-red-50 text-red-500 p-6 rounded-2xl max-w-lg">
-                        <h2 className="text-xl font-bold mb-2 padauk-bold">ကွန်ရက်ချို့ယွင်းချက်</h2>
-                        <p className="padauk-regular text-sm">ဆာဗာနှင့် ချိတ်ဆက်ရာတွင် အဆင်မပြေမှု ဖြစ်ပေါ်နေပါသည်။</p>
+                        <h1 className="mb-0 leading-none">
+                            {t("activities.title")}
+                        </h1>
+                    </div>
+                    <div className="text-muted-foreground text-sm font-medium max-w-md md:text-right">
+                        {t("activities.subtitle")}
                     </div>
                 </div>
-            ) : activities.length === 0 ? (
-                <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
-                    <div className="bg-slate-50 text-slate-500 p-8 rounded-2xl max-w-lg border border-slate-200">
-                        <Zap size={40} className="mx-auto mb-4 text-slate-300" />
-                        <h2 className="text-xl font-bold mb-2 padauk-bold text-slate-700">{t("activities.noActivities")}</h2>
-                        <p className="padauk-regular text-sm">{t("activities.noActivitiesDesc")}</p>
-                    </div>
-                </div>
-            ) : (
-                <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {paginatedItems.map((news) => (
-                            <Link
-                                key={news._id}
-                                to={`/news/${news._id}`}
-                                className="group flex flex-col h-full bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-                            >
-                                <div className="aspect-[16/10] bg-slate-100 relative overflow-hidden shrink-0">
-                                    {news.bannerImage ? (
-                                        <img src={news.bannerImage} alt={news.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-slate-300 bg-slate-50">
-                                            <Zap size={40} />
-                                        </div>
-                                    )}
-                                    <div className="absolute top-4 left-4">
-                                        <span className="px-3 py-1 bg-[#808080]/90 backdrop-blur-sm text-white rounded-md text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                                            {t("activities.badge")}
-                                        </span>
-                                    </div>
-                                </div>
 
-                                <div className="p-6 flex flex-col flex-grow">
-                                    <div className="text-[11px] text-slate-400 flex items-center gap-4 mb-3 font-bold uppercase tracking-wide">
-                                        <span className="flex items-center gap-1.5"><Calendar size={12} className="text-[#808080]" />{new Date(news.createdAt).toLocaleDateString('en-GB')}</span>
-                                        <span className="flex items-center gap-1.5"><User size={12} className="text-[#808080]" />{news.author?.name || t("activities.admin")}</span>
-                                    </div>
-                                    <h3 className="text-lg font-bold text-slate-900 mb-3 padauk-bold group-hover:text-[#808080] transition-colors line-clamp-2 leading-snug">
-                                        {news.title}
-                                    </h3>
-                                    <div className="mt-auto pt-4 flex items-center text-sm font-bold text-[#808080]">
-                                        {t("common.readMore")} <ArrowRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                                    </div>
+                {isLoading ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                        {[1, 2, 3, 4, 5, 6].map((i) => (
+                            <div key={i} className="bg-white rounded-sm border border-slate-200 overflow-hidden">
+                                <Skeleton className="w-full aspect-[16/10]" />
+                                <div className="p-8">
+                                    <Skeleton className="h-6 w-3/4 mb-4" />
+                                    <Skeleton className="h-4 w-1/2" />
                                 </div>
-                            </Link>
+                            </div>
                         ))}
                     </div>
+                ) : isError ? (
+                    <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
+                        <div className="bg-red-50 text-red-500 p-8 rounded-sm border border-red-100 max-w-lg">
+                            <h2 className="text-xl font-bold mb-3 uppercase tracking-tight">Access Error</h2>
+                            <p className="text-sm opacity-80">Unable to retrieve activity logs from the secure server. Please try again later.</p>
+                        </div>
+                    </div>
+                ) : activities.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
+                        <div className="bg-white text-slate-400 p-12 rounded-sm max-w-lg border border-slate-200 shadow-sm">
+                            <Zap size={40} className="mx-auto mb-6 text-slate-200" />
+                            <h2 className="text-xl font-bold mb-3 text-slate-800 uppercase tracking-tight">{t("activities.noActivities")}</h2>
+                            <p className="text-sm leading-relaxed">{t("activities.noActivitiesDesc")}</p>
+                        </div>
+                    </div>
+                ) : (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                            {paginatedItems.map((news) => (
+                                <Link
+                                    key={news._id}
+                                    to={`/news/${news._id}`}
+                                    className="group flex flex-col h-full bg-white rounded-sm border border-slate-200 overflow-hidden hover:shadow-2xl transition-all duration-500"
+                                >
+                                    <div className="aspect-[16/10] bg-slate-100 relative overflow-hidden shrink-0">
+                                        {news.bannerImage ? (
+                                            <img src={news.bannerImage} alt={news.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-slate-200 bg-slate-50 italic text-xs font-bold uppercase tracking-widest">
+                                                Archive Image
+                                            </div>
+                                        )}
+                                        <div className="absolute top-6 left-6">
+                                            <span className="px-3 py-1 bg-white/95 backdrop-blur-sm text-primary border border-primary/20 rounded-sm text-[10px] font-bold uppercase tracking-widest shadow-sm">
+                                                {t("activities.badge")}
+                                            </span>
+                                        </div>
+                                    </div>
 
-                    {/* Pagination Controls */}
-                    {totalPages > 1 && (
-                        <div className="mt-16 flex items-center justify-center gap-2">
-                            <button
-                                onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                                disabled={currentPage === 1}
-                                className="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                            >
-                                <ChevronLeft size={20} />
-                            </button>
+                                    <div className="p-8 flex flex-col flex-grow">
+                                        <div className="flex items-center gap-4 mb-6">
+                                            <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                                                <Calendar size={12} className="text-primary/70" />
+                                                {new Date(news.createdAt).toLocaleDateString('en-GB')}
+                                            </div>
+                                            <div className="w-[1px] h-3 bg-slate-200" />
+                                            <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                                                <User size={12} className="text-primary/70" />
+                                                {news.author?.name || "Admin"}
+                                            </div>
+                                        </div>
 
-                            <div className="flex items-center gap-1">
+                                        <h3 className="mb-6 group-hover:text-primary transition-colors line-clamp-2 leading-tight">
+                                            {news.title}
+                                        </h3>
+
+                                        <div className="mt-auto pt-6 border-t border-slate-50 flex items-center text-[11px] font-bold text-primary uppercase tracking-[0.2em] group-hover:gap-3 transition-all">
+                                            {t("common.readMore")} <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+
+                        {/* Professional Pagination */}
+                        {totalPages > 1 && (
+                            <div className="mt-20 flex items-center justify-center gap-2">
                                 {Array.from({ length: totalPages }).map((_, idx) => (
                                     <button
                                         key={idx}
                                         onClick={() => handlePageChange(idx + 1)}
-                                        className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === idx + 1
-                                            ? "bg-[#808080] text-white shadow-md shadow-slate-200"
-                                            : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
+                                        className={`w-12 h-12 rounded-sm text-xs font-bold uppercase tracking-widest transition-all ${currentPage === idx + 1
+                                            ? "bg-primary text-white shadow-xl shadow-primary/20 scale-110 z-10"
+                                            : "bg-white border border-slate-200 text-slate-400 hover:bg-slate-50 hover:text-primary"
                                             }`}
                                     >
                                         {idx + 1}
                                     </button>
                                 ))}
                             </div>
-
-                            <button
-                                onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                                disabled={currentPage === totalPages}
-                                className="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                            >
-                                <ChevronRight size={20} />
-                            </button>
-                        </div>
-                    )}
-                </>
-            )}
+                        )}
+                    </>
+                )}
+            </div>
         </div>
     );
 }

@@ -53,110 +53,161 @@ export default function PageReader() {
     ];
 
     return (
-        <div className="bg-white min-h-screen pb-16">
+        <div className="bg-[#f8fafc] min-h-screen pb-24">
             {/* Lightbox Modal */}
             {lightboxImage && (
                 <div
-                    className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 animate-in fade-in duration-300"
+                    className="fixed inset-0 z-[100] bg-slate-950/98 flex items-center justify-center p-4 animate-in fade-in duration-300"
                     onClick={() => setLightboxImage(null)}
                 >
-                    <button className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors">
+                    <button className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors">
                         <X size={32} />
                     </button>
-                    <div className="relative group max-w-5xl w-full flex flex-col items-center">
+                    <div className="relative group max-w-6xl w-full flex flex-col items-center">
                         <img
                             src={lightboxImage}
                             alt="Full view"
-                            className="max-h-[85vh] max-w-full rounded-lg shadow-2xl animate-in zoom-in-95 duration-300 pointer-events-none"
+                            className="max-h-[80vh] max-w-full rounded-sm shadow-2xl animate-in zoom-in-95 duration-300 pointer-events-none border border-white/10"
                         />
-                        <div className="mt-6">
+                        <div className="mt-8 flex items-center gap-6">
                             <a
                                 href={lightboxImage}
                                 download
-                                className="flex items-center gap-2 px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full text-sm transition-colors border border-white/20"
+                                className="flex items-center gap-3 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-sm text-xs font-bold uppercase tracking-widest transition-all"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <Download size={16} /> {t("pageReader.download")}
+                                <Download size={18} /> {t("pageReader.download")}
                             </a>
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* Header Area */}
-            <div className="w-full relative bg-slate-900 overflow-hidden">
-                <div className="absolute inset-0">
+            {/* Banner Section: Institutional Identity */}
+            <div className="w-full relative bg-slate-950 overflow-hidden border-b border-slate-900">
+                <div className="absolute inset-0 z-0">
                     {page.bannerImage ? (
                         <div className="relative w-full h-full">
-                            <img src={page.bannerImage} alt={page.title} className="w-full h-full object-cover opacity-30 blur-md scale-110" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
+                            <img src={page.bannerImage} alt={page.title} className="w-full h-full object-cover opacity-30 grayscale filter" />
+                            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-slate-950/80 to-slate-950" />
                         </div>
                     ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-slate-800 to-slate-950" />
+                        <div className="w-full h-full bg-slate-950" />
                     )}
+                    {/* Background Seal Watermark */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none invert">
+                        <img src="/logo1-removebg-preview.png" alt="" className="scale-150 rotate-12" />
+                    </div>
                 </div>
 
-                <div className="container mx-auto max-w-4xl px-4 py-20 text-center relative z-10 animate-in fade-in slide-in-from-top-8 duration-700">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-500/20 backdrop-blur-md rounded-full text-slate-400 text-xs font-bold uppercase tracking-widest mb-6 border border-slate-500/30">
-                        {page.section === "services" ? <Briefcase size={14} /> : <MapPin size={14} />}
-                        {page.section === "services" ? t("pageReader.service") : t("pageReader.districtInfo")}
+                <div className="container-custom relative z-10 py-20 md:py-32 flex flex-col items-center text-center">
+                    <div className="flex flex-col items-center gap-6 mb-10">
+                        <div className="flex items-center gap-2 text-primary text-[11px] font-bold uppercase tracking-[0.3em]">
+                            <span className="w-12 h-[1px] bg-primary/40"></span>
+                            {page.section === "services" ? "DEPARTMENTAL SERVICE" : "DISTRICT ADMINISTRATION"}
+                            <span className="w-12 h-[1px] bg-primary/40"></span>
+                        </div>
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-0 leading-[1.1] max-w-4xl tracking-tight">
+                            {page.title}
+                        </h1>
                     </div>
-                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white mb-8 leading-tight padauk-bold drop-shadow-2xl">
-                        {page.title}
-                    </h1>
-                    <div className="flex items-center justify-center gap-6 text-slate-300">
-                        <div className="flex items-center gap-2">
-                            <div className="p-1.5 bg-slate-800 rounded-full border border-slate-700"><User size={14} /></div>
-                            <span className="text-sm font-medium">{page.author?.name || "Admin"}</span>
+
+                    <div className="flex flex-wrap items-center justify-center gap-6 py-6 border-y border-white/10 w-full max-w-3xl">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-slate-900 rounded-sm text-primary">
+                                {page.section === "services" ? <Briefcase size={16} /> : <MapPin size={16} />}
+                            </div>
+                            <span className="text-xs font-bold text-slate-300 uppercase tracking-widest">
+                                {page.section === "services" ? t("pageReader.service") : t("pageReader.districtInfo")}
+                            </span>
+                        </div>
+                        <div className="w-[1px] h-4 bg-white/10 hidden md:block" />
+                        <div className="flex items-center gap-3 text-slate-300">
+                            <User size={16} className="text-primary" />
+                            <span className="text-xs font-bold uppercase tracking-widest leading-none">
+                                {page.author?.name || "Official Admin"}
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Content Container */}
-            <div className="container mx-auto max-w-4xl px-4 -mt-12 relative z-20">
-                <div className="bg-white rounded-3xl p-6 md:p-12 shadow-2xl border border-slate-100 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
-                    <Breadcrumbs items={breadcrumbItems} />
+            {/* Content Section */}
+            <div className="container-custom -mt-16 sm:-mt-24 relative z-20">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    {/* Main Content Canvas */}
+                    <div className="lg:col-span-8">
+                        <div className="bg-white rounded-sm border border-slate-200 p-8 md:p-16 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.08)]">
+                            <div className="mb-12">
+                                <Breadcrumbs items={breadcrumbItems} />
+                            </div>
 
-                    {page.bannerImage && (
-                        <div
-                            className="relative group mb-12 overflow-hidden rounded-2xl cursor-zoom-in border border-slate-100"
-                            onClick={() => setLightboxImage(page.bannerImage)}
-                        >
-                            <img
-                                src={page.bannerImage}
-                                alt={page.title}
-                                className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-700"
+                            {page.bannerImage && (
+                                <div
+                                    className="relative group mb-12 overflow-hidden rounded-sm cursor-zoom-in border border-slate-100"
+                                    onClick={() => setLightboxImage(page.bannerImage)}
+                                >
+                                    <img
+                                        src={page.bannerImage}
+                                        alt={page.title}
+                                        className="w-full aspect-[16/9] object-cover group-hover:scale-[1.02] transition-transform duration-1000"
+                                    />
+                                    <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white p-4 rounded-full">
+                                            <ZoomIn size={24} />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <article
+                                className="prose prose-slate prose-lg max-w-none 
+                                prose-headings:text-slate-900 prose-headings:font-bold prose-headings:tracking-tight
+                                prose-p:text-slate-700 prose-p:leading-[1.8] prose-p:mb-8
+                                prose-img:rounded-sm prose-img:shadow-xl prose-img:mx-auto prose-img:cursor-zoom-in prose-img:border prose-img:border-slate-100
+                                prose-strong:text-slate-900 prose-strong:font-bold
+                                prose-blockquote:border-l-primary prose-blockquote:bg-slate-50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-sm
+                                prose-li:text-slate-700"
+                                dangerouslySetInnerHTML={{ __html: page.content }}
                             />
-                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <span className="p-4 bg-white/20 backdrop-blur-md text-white rounded-full">
-                                    <ZoomIn size={24} />
-                                </span>
+
+                            <div className="mt-16 flex items-center justify-between border-t border-slate-100 pt-10">
+                                <Link
+                                    to={page.section === "services" ? "/services" : "/districts"}
+                                    className="flex items-center gap-3 px-8 py-4 bg-slate-50 border border-slate-200 rounded-sm text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:bg-white hover:text-primary transition-all"
+                                >
+                                    <ArrowLeft size={16} /> {t("pageReader.back")}
+                                </Link>
+
+                                <div className="flex items-center gap-6">
+                                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest hidden sm:block">Public Archive</span>
+                                    <ShareButtons
+                                        url={window.location.href}
+                                        title={page.title}
+                                    />
+                                </div>
                             </div>
                         </div>
-                    )}
+                    </div>
 
-                    <article
-                        className="prose prose-slate prose-lg max-w-none padauk-regular
-                        prose-headings:padauk-bold prose-headings:text-slate-900
-                        prose-a:text-[#808080] prose-a:no-underline hover:prose-a:underline
-                        prose-img:rounded-2xl prose-img:shadow-lg prose-img:mx-auto prose-img:cursor-zoom-in
-                        prose-p:leading-relaxed prose-p:text-slate-700"
-                        dangerouslySetInnerHTML={{ __html: page.content }}
-                    />
-
-                    <ShareButtons
-                        url={window.location.href}
-                        title={page.title}
-                    />
-
-                    <div className="mt-12 pt-8 border-t border-slate-100 flex justify-between items-center">
-                        <Link
-                            to={page.section === "services" ? "/services" : "/districts"}
-                            className="text-slate-400 hover:text-[#808080] flex items-center gap-2 text-sm font-bold transition-colors padauk-bold"
-                        >
-                            <ArrowLeft size={16} /> {t("pageReader.back")}
-                        </Link>
+                    {/* Sidebar: Institutional Context */}
+                    <div className="lg:col-span-4 space-y-8">
+                        {/* Official Support Sidebar Card */}
+                        <div className="bg-slate-950 text-white p-8 rounded-sm shadow-2xl relative overflow-hidden group">
+                            <div className="relative z-10">
+                                <h4 className="text-primary text-xs font-bold uppercase tracking-[0.2em] mb-4">Official Notice</h4>
+                                <p className="text-sm text-slate-400 leading-relaxed mb-6">
+                                    This page contains official administrative data and service protocols of the Ta'ang Land Federal Unit.
+                                </p>
+                                <div className="p-4 bg-white/5 border border-white/10 rounded-sm">
+                                    <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Documentation Type</div>
+                                    <div className="text-xs font-bold text-slate-300">
+                                        {page.section === "services" ? "Public Service Charter" : "District Governance Record"}
+                                    </div>
+                                </div>
+                            </div>
+                            <img src="/logo1-removebg-preview.png" alt="" className="absolute -bottom-10 -right-10 w-48 opacity-[0.05] grayscale invert rotate-12 pointer-events-none" />
+                        </div>
                     </div>
                 </div>
             </div>
