@@ -96,7 +96,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             >
                 {/* Search Input */}
                 <div className="flex items-center gap-3 px-6 py-5 border-b border-slate-800/80 bg-slate-900/50">
-                    <SearchIcon size={22} className="text-[#808080] shrink-0 drop-shadow-sm" />
+                    <SearchIcon size={22} className="text-primary shrink-0 drop-shadow-sm" />
                     <input
                         ref={inputRef}
                         type="text"
@@ -119,7 +119,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 <div className="max-h-[55vh] overflow-y-auto custom-scrollbar">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-16 gap-4">
-                            <Loader2 size={32} className="text-[#808080] animate-spin" />
+                            <Loader2 size={32} className="text-primary animate-spin" />
                             <p className="text-sm text-slate-400 padauk-regular animate-pulse">Searching...</p>
                         </div>
                     ) : query.trim().length < 2 ? (
@@ -136,7 +136,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                             </div>
                             <p className="padauk-bold text-lg text-slate-300 mb-1">{t("searchModal.noResults")}</p>
                             <p className="padauk-regular text-sm text-slate-500">
-                                {t("searchModal.noResultsDesc")} <span className="text-[#808080]">"{query}"</span>
+                                {t("searchModal.noResultsDesc")} <span className="text-primary">"{query}"</span>
                             </p>
                         </div>
                     ) : (
@@ -153,16 +153,16 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                         onClick={onClose}
                                         onMouseEnter={() => setSelectedIndex(index)}
                                         className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group ${selectedIndex === index
-                                                ? "bg-slate-800/80 ring-1 ring-inset ring-[#808080]/40 shadow-lg"
-                                                : "hover:bg-slate-800/40 transparent"
+                                            ? "bg-slate-800/80 ring-1 ring-inset ring-primary/40 shadow-lg"
+                                            : "hover:bg-slate-800/40 transparent"
                                             }`}
                                     >
                                         {/* Thumbnail */}
-                                        {news.bannerImage ? (
+                                        {news.images && news.images.length > 0 ? (
                                             <div className="relative shrink-0 overflow-hidden rounded-lg shadow-sm border border-slate-700/50">
                                                 <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors z-10"></div>
                                                 <img
-                                                    src={news.bannerImage}
+                                                    src={news.images[0]}
                                                     alt=""
                                                     className="w-16 h-12 object-cover transform group-hover:scale-105 transition-transform duration-500"
                                                 />
@@ -181,19 +181,19 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                             </p>
                                             <div className="flex items-center gap-3 mt-1.5 text-[11px] font-medium text-slate-400">
                                                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${selectedIndex === index
-                                                        ? "bg-[#808080]/20 text-[#808080] border-[#808080]/30"
-                                                        : "bg-slate-800 text-slate-400 border-slate-700 group-hover:text-[#808080] group-hover:border-[#808080]/20"
+                                                    ? "bg-primary/20 text-primary border-primary/30"
+                                                    : "bg-slate-800 text-slate-400 border-slate-700 group-hover:text-primary group-hover:border-primary/20"
                                                     }`}>
                                                     {news.category}
                                                 </span>
                                                 <span className="flex items-center gap-1.5 opacity-80">
-                                                    <Calendar size={11} className={selectedIndex === index ? "text-[#808080]" : ""} />
+                                                    <Calendar size={11} className={selectedIndex === index ? "text-primary" : ""} />
                                                     {new Date(news.createdAt).toLocaleDateString("en-GB")}
                                                 </span>
                                             </div>
                                         </div>
 
-                                        <div className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 shrink-0 ${selectedIndex === index ? "bg-[#808080] shadow-md shadow-[#808080]/20 text-white" : "bg-transparent text-slate-600 group-hover:text-slate-400 group-hover:bg-slate-700/50"
+                                        <div className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 shrink-0 ${selectedIndex === index ? "bg-primary shadow-md shadow-primary/20 text-white" : "bg-transparent text-slate-600 group-hover:text-slate-400 group-hover:bg-slate-700/50"
                                             }`}>
                                             <ArrowRight size={16} className={selectedIndex === index ? "translate-x-0.5" : ""} />
                                         </div>
@@ -207,7 +207,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 {/* Footer hint */}
                 <div className="px-6 py-4 border-t border-slate-800/80 bg-slate-900 flex items-center justify-between text-[11px] text-slate-500 font-medium">
                     <span className="padauk-regular flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-[#808080]/80 animate-pulse"></span>
+                        <span className="w-2 h-2 rounded-full bg-primary/80 animate-pulse"></span>
                         Powered by RTK Query
                     </span>
                     <span className="hidden sm:flex items-center gap-2">

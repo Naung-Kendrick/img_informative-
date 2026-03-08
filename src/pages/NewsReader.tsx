@@ -1,25 +1,47 @@
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useGetNewsByIdQuery, useToggleLikeNewsMutation } from "../store/newsApiSlice";
+import { useGetNewsByIdQuery, useGetAllNewsQuery, useToggleLikeNewsMutation } from "../store/newsApiSlice";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store";
 import Comments from "../components/Comments";
-import Breadcrumbs from "../components/Breadcrumbs";
-import ShareButtons from "../components/ShareButtons";
-import { Loader2, ArrowLeft, Calendar, User, Tag, X, ZoomIn, Download, Heart } from "lucide-react";
+import ReportModal from "../components/ReportModal";
+import {
+    Loader2,
+    ArrowLeft,
+    Calendar,
+    User,
+    Tag,
+    X,
+    Heart,
+    Eye,
+    Share2,
+    Flag,
+    ChevronLeft
+} from "lucide-react";
 
+/**
+ * Senior UI/UX Redesign: Professional 2-Column News Reader
+ * Adheres to top-tier digital journalism standards.
+ */
 export default function NewsReader() {
-    const { t } = useTranslation();
     const { id } = useParams();
+    const articleId = id as string;
     const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
     const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
-    const { data: newsQuery, isLoading, isError } = useGetNewsByIdQuery(id as string, { skip: !id });
+
+    // Data Fetching
+    const { data: article, isLoading, isError } = useGetNewsByIdQuery(articleId, { skip: !id });
+    const { data: allNews } = useGetAllNewsQuery();
     const [toggleLikeNews, { isLoading: isLiking }] = useToggleLikeNewsMutation();
 
-    const article = newsQuery;
-    const isLiked = article?.likes?.includes(user?._id || "");
+    // Related News Logic (Same category, excluding current)
+    const relatedNews = allNews
+        ?.filter((n) => n.category === article?.category && n._id !== id && n.status === "Published")
+        .slice(0, 5) || [];
+
+    const isLiked = article?.likes?.some(like => like._id === user?._id);
 
     const handleToggleLike = async () => {
         if (!isAuthenticated) {
@@ -34,237 +56,245 @@ export default function NewsReader() {
         }
     };
 
-    // Lightbox click handler for images in rich text
+    // Auto-scroll to top on ID change
     useEffect(() => {
-        const handleImageClick = (e: MouseEvent) => {
-            const target = e.target as HTMLElement;
-            if (target.tagName === 'IMG' && target.closest('article')) {
-                setLightboxImage((target as HTMLImageElement).src);
-            }
-        };
-
-        document.addEventListener('click', handleImageClick);
-        return () => document.removeEventListener('click', handleImageClick);
-    }, []);
+        window.scrollTo(0, 0);
+    }, [id]);
 
     if (isLoading) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh]">
-                <Loader2 className="h-12 w-12 text-[#808080] animate-spin mb-4" />
-                <p className="text-slate-500 padauk-bold text-lg animate-pulse">{t("newsReader.preparing")}</p>
+            <div className="page-container bg-background flex flex-col items-center justify-center min-h-[70vh]">
+                <Loader2 className="h-10 w-10 text-primary animate-spin mb-6" />
+                <p className="p-small animate-pulse">Synchronizing Data...</p>
             </div>
         );
     }
 
     if (isError || !article) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
-                <h2 className="text-2xl font-bold text-slate-800 padauk-bold mb-4">{t("newsReader.notFound")}</h2>
-                <p className="text-slate-500 padauk-regular mb-8">{t("newsReader.notFoundDesc")}</p>
-                <Link to="/" className="px-6 py-3 bg-[#808080] hover:bg-[#555555] text-white font-bold rounded-xl transition-colors padauk-bold flex items-center gap-2">
-                    <ArrowLeft size={18} /> {t("newsReader.backHome")}
-                </Link>
+            <div className="page-container bg-background flex flex-col items-center justify-center min-h-[70vh] px-4">
+                <div className="bg-card p-12 rounded-xl border border-border shadow-xl max-w-md text-center">
+                    <h2 className="h2 mb-4">Access Denied</h2>
+                    <p className="p-muted mb-8">The requested document could not be retrieved from the server. It may have been archived or removed.</p>
+                    <Link to="/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-primary/90 transition-all">
+                        <ArrowLeft size={16} /> Return to Portal
+                    </Link>
+                </div>
             </div>
         );
     }
 
-    const breadcrumbItems = [
-        { label: article.category === "Activities" ? t("activities.title") : article.category === "Announcements" ? t("announcements.title") : article.category, path: article.category === "Activities" ? "/activities" : article.category === "Announcements" ? "/announcements" : "/" },
-        { label: article.title }
-    ];
-
     return (
-        <div className="bg-[#f8fafc] min-h-screen pb-24">
+        <div className="page-container bg-background min-h-screen">
             {/* Lightbox Modal */}
             {lightboxImage && (
-                <div
-                    className="fixed inset-0 z-[100] bg-slate-950/98 flex items-center justify-center p-4 animate-in fade-in duration-300"
-                    onClick={() => setLightboxImage(null)}
-                >
-                    <button className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors">
-                        <X size={32} />
-                    </button>
-                    <div className="relative group max-w-6xl w-full flex flex-col items-center">
-                        <img
-                            src={lightboxImage}
-                            alt="Full view"
-                            className="max-h-[80vh] max-w-full rounded-sm shadow-2xl animate-in zoom-in-95 duration-300 pointer-events-none border border-white/10"
-                        />
-                        <div className="mt-8 flex items-center gap-6">
-                            <a
-                                href={lightboxImage}
-                                download
-                                className="flex items-center gap-3 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-sm text-xs font-bold uppercase tracking-widest transition-all"
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                <Download size={18} /> {t("newsReader.download")}
-                            </a>
-                        </div>
-                    </div>
+                <div className="fixed inset-0 z-[100] bg-foreground/95 flex items-center justify-center p-8 animate-in fade-in duration-300" onClick={() => setLightboxImage(null)}>
+                    <button className="absolute top-10 right-10 text-background/50 hover:text-background transition-colors"><X size={32} /></button>
+                    <img src={lightboxImage} alt="Full view" className="max-h-[85vh] max-w-full rounded-sm shadow-2xl animate-in zoom-in-95 duration-500 border border-background/10" />
                 </div>
             )}
 
-            {/* Banner Section: Institutional Authority */}
-            <div className="w-full relative bg-slate-950 overflow-hidden border-b border-slate-900">
-                <div className="absolute inset-0 z-0">
-                    {article.bannerImage ? (
-                        <div className="relative w-full h-full">
-                            <img src={article.bannerImage} alt={article.title} className="w-full h-full object-cover opacity-30 grayscale filter" />
-                            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-slate-950/80 to-slate-950" />
-                        </div>
-                    ) : (
-                        <div className="w-full h-full bg-slate-950" />
-                    )}
-                    {/* Background Seal Watermark */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none invert">
-                        <img src="/logo1-removebg-preview.png" alt="" className="scale-150 rotate-12" />
-                    </div>
-                </div>
-
-                <div className="container-custom relative z-10 py-20 md:py-32 flex flex-col items-center text-center">
-                    <div className="flex flex-col items-center gap-6 mb-10">
-                        <div className="flex items-center gap-2 text-primary text-[11px] font-bold uppercase tracking-[0.3em]">
-                            <span className="w-12 h-[1px] bg-primary/40"></span>
-                            OFFICIAL STATEMENT
-                            <span className="w-12 h-[1px] bg-primary/40"></span>
-                        </div>
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-0 leading-[1.1] max-w-4xl tracking-tight">
-                            {article.title}
-                        </h1>
-                    </div>
-
-                    <div className="flex flex-wrap items-center justify-center gap-6 py-6 border-y border-white/10 w-full max-w-3xl">
-                        <div className="flex items-center gap-3">
-                            <Calendar size={16} className="text-primary" />
-                            <span className="text-xs font-bold text-slate-300 uppercase tracking-widest">
-                                {new Date(article.createdAt).toLocaleDateString("en-GB", { year: 'numeric', month: 'long', day: 'numeric' })}
-                            </span>
-                        </div>
-                        <div className="w-[1px] h-4 bg-white/10 hidden md:block" />
-                        <div className="flex items-center gap-3">
-                            <Tag size={16} className="text-primary" />
-                            <span className="text-xs font-bold text-primary uppercase tracking-widest">{article.category}</span>
-                        </div>
-                        <div className="w-[1px] h-4 bg-white/10 hidden md:block" />
-                        <div className="flex items-center gap-3 text-slate-300">
-                            <User size={16} className="text-primary" />
-                            <span className="text-xs font-bold uppercase tracking-widest leading-none">
-                                {article.author?.name || t("newsReader.admin")}
-                            </span>
-                        </div>
-                    </div>
+            {/* Breadcrumb / Top Navigation */}
+            <div className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-40">
+                <div className="container-custom py-4">
+                    <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors p-small">
+                        <ChevronLeft size={16} /> နောက်သို့ ပြန်သွားရန်
+                    </Link>
                 </div>
             </div>
 
-            {/* Content Section */}
-            <div className="container-custom -mt-16 sm:-mt-24 relative z-20">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                    {/* Main Article Canvas */}
-                    <div className="lg:col-span-8">
-                        <div className="bg-white rounded-sm border border-slate-200 p-8 md:p-16 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.08)]">
-                            <div className="mb-12">
-                                <Breadcrumbs items={breadcrumbItems} />
-                            </div>
+            <main className="container-custom section-padding">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
 
-                            {article.bannerImage && (
+                    {/* LEFT SIDE: MAIN ARTICLE (8 Cols) */}
+                    <div className="lg:col-span-8">
+                        {/* Article Header */}
+                        <header className="mb-10">
+                            <div className="p-small inline-block px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-sm mb-6">
+                                {article.category}
+                            </div>
+                            <h1 className="h1 mb-8">
+                                {article.title}
+                            </h1>
+
+                            {/* Meta Row */}
+                            <div className="flex flex-wrap items-center gap-6 pb-8 border-b border-border mb-10">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center border border-border">
+                                        <User size={14} className="text-muted-foreground" />
+                                    </div>
+                                    <span className="text-xs font-bold text-foreground">{article.author?.name || "Official Admin"}</span>
+                                </div>
+                                <div className="hidden sm:block w-[1px] h-3 bg-border" />
+                                <div className="flex items-center gap-2 text-muted-foreground">
+                                    <Calendar size={14} />
+                                    <span className="text-xs font-medium">{new Date(article.createdAt).toLocaleDateString("en-GB", { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                                </div>
+                            </div>
+                        </header>
+
+                        {/* Images Gallery */}
+                        {article.images && article.images.length > 0 && (
+                            <div className="mb-12 space-y-4">
+                                {/* Main Image */}
                                 <div
-                                    className="relative group mb-12 overflow-hidden rounded-sm cursor-zoom-in border border-slate-100"
-                                    onClick={() => setLightboxImage(article.bannerImage)}
+                                    className="relative group overflow-hidden rounded-sm shadow-2xl border border-slate-100 cursor-zoom-in"
+                                    onClick={() => setLightboxImage(article.images[0])}
                                 >
-                                    <img
-                                        src={article.bannerImage}
-                                        alt={article.title}
-                                        className="w-full aspect-[16/9] object-cover group-hover:scale-[1.02] transition-transform duration-1000"
-                                    />
+                                    <img src={article.images[0]} alt="" className="w-full aspect-[16/9] object-cover group-hover:scale-[1.03] transition-transform duration-1000" />
                                     <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                        <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white p-4 rounded-full">
-                                            <ZoomIn size={24} />
+                                        <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-full text-white">
+                                            <Eye size={24} />
                                         </div>
                                     </div>
                                 </div>
-                            )}
 
-                            <article
-                                className="prose prose-slate prose-lg max-w-none 
-                                prose-headings:text-slate-900 prose-headings:font-bold prose-headings:tracking-tight
-                                prose-p:text-slate-700 prose-p:leading-[1.8] prose-p:mb-8
-                                prose-img:rounded-sm prose-img:shadow-xl prose-img:mx-auto prose-img:cursor-zoom-in prose-img:border prose-img:border-slate-100
-                                prose-strong:text-slate-900 prose-strong:font-bold
-                                prose-blockquote:border-l-primary prose-blockquote:bg-slate-50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-sm
-                                prose-li:text-slate-700"
-                                dangerouslySetInnerHTML={{ __html: article.content }}
-                            />
+                                {/* Thumbnails Grid (if more than 1 image) */}
+                                {article.images.length > 1 && (
+                                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                                        {article.images.slice(1).map((img, idx) => (
+                                            <div
+                                                key={idx}
+                                                className="aspect-square rounded-sm overflow-hidden border border-slate-200 cursor-zoom-in group relative"
+                                                onClick={() => setLightboxImage(img)}
+                                            >
+                                                <img src={img} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                                <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
-                            {/* Like / Love Interaction */}
-                            <div className="mt-16 flex items-center justify-between border-t border-slate-100 pt-10">
+                        {/* Article Body */}
+                        <div
+                            className="prose prose-slate prose-lg max-w-none 
+                            prose-headings:text-foreground prose-headings:font-bold prose-headings:tracking-tight
+                            prose-p:text-muted-foreground prose-p:leading-[1.8] prose-p:text-[1.05rem]
+                            prose-img:rounded-xl prose-img:shadow-lg prose-img:border prose-img:border-border prose-img:cursor-zoom-in
+                            prose-strong:text-foreground prose-strong:font-bold
+                            prose-blockquote:border-l-primary prose-blockquote:bg-secondary prose-blockquote:py-2 prose-blockquote:px-8 prose-blockquote:rounded-r-lg
+                            mb-16"
+                            dangerouslySetInnerHTML={{ __html: article.content }}
+                        />
+
+                        {/* Engagement Bar */}
+                        <div className="flex flex-wrap items-center justify-between gap-6 py-8 border-y border-border mb-16">
+                            <div className="flex items-center gap-4">
                                 <button
                                     onClick={handleToggleLike}
                                     disabled={isLiking}
-                                    className={`flex items-center gap-3 px-8 py-4 rounded-sm font-bold uppercase tracking-widest text-[11px] transition-all duration-300 shadow-xl ${isLiked
-                                        ? "bg-red-600 text-white"
-                                        : "bg-white text-slate-600 border border-slate-200 hover:border-red-600 hover:text-red-600"
+                                    className={`flex items-center gap-3 px-6 py-3 rounded-lg p-small transition-all border ${isLiked
+                                        ? "bg-primary border-primary text-primary-foreground shadow-lg shadow-primary/20"
+                                        : "bg-card border-border text-muted-foreground hover:border-primary hover:text-primary"
                                         }`}
                                 >
-                                    <Heart
-                                        size={18}
-                                        fill={isLiked ? "currentColor" : "none"}
-                                        className={`${isLiked ? "animate-pulse" : ""} transition-transform active:scale-125`}
-                                    />
-                                    <span>{article?.likes?.length || 0} Appreciation</span>
+                                    <Heart size={16} fill={isLiked ? "currentColor" : "none"} className={isLiked ? "animate-pulse" : ""} />
+                                    <span>{article?.likes?.length || 0} Likes</span>
                                 </button>
-
-                                <div className="flex items-center gap-6">
-                                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest hidden sm:block">Spread Awareness</span>
-                                    <ShareButtons
-                                        url={window.location.href}
-                                        title={article.title}
-                                    />
-                                </div>
+                                <button className="flex items-center gap-3 px-6 py-3 rounded-lg p-small bg-card border border-border text-muted-foreground hover:border-foreground hover:text-foreground transition-all">
+                                    <Share2 size={16} />
+                                    <span>Share</span>
+                                </button>
                             </div>
+                            <button
+                                onClick={() => setIsReportModalOpen(true)}
+                                className="flex items-center gap-2 text-muted-foreground hover:text-destructive transition-colors p-small"
+                            >
+                                <Flag size={14} /> Report Content
+                            </button>
                         </div>
 
                         {/* Comments Section */}
-                        <div className="mt-12 bg-white rounded-sm border border-slate-200 p-8 md:p-12 shadow-sm">
-                            <h4 className="text-xl font-bold mb-8 flex items-center gap-3 text-slate-900">
-                                Public Discourse
-                                <span className="w-12 h-[1px] bg-slate-200"></span>
-                            </h4>
+                        <div className="bg-card rounded-xl border border-border p-8 md:p-12 shadow-sm">
+                            <h3 className="h3 mb-10 flex items-center gap-4">
+                                <span className="w-8 h-[2px] bg-primary"></span>
+                                Public Interaction
+                            </h3>
                             <Comments newsId={article._id} />
                         </div>
                     </div>
 
-                    {/* Sidebar: Institutional Context */}
-                    <div className="lg:col-span-4 space-y-8">
-                        {/* Official Support Sidebar Card */}
-                        <div className="bg-slate-950 text-white p-8 rounded-sm shadow-2xl relative overflow-hidden group">
-                            <div className="relative z-10">
-                                <h4 className="text-primary text-xs font-bold uppercase tracking-[0.2em] mb-4">Official Verification</h4>
-                                <p className="text-sm text-slate-400 leading-relaxed mb-6">
-                                    All information published on this portal is verified by the Department of Media and Public Relations of the Ta'ang Land Federal Unit.
-                                </p>
-                                <div className="flex flex-col gap-3">
-                                    <div className="p-4 bg-white/5 border border-white/10 rounded-sm">
-                                        <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Source Accuracy</div>
-                                        <div className="text-xs font-bold text-slate-300">Verified Department Document</div>
+                    <ReportModal
+                        isOpen={isReportModalOpen}
+                        onClose={() => setIsReportModalOpen(false)}
+                        newsId={article._id}
+                        newsTitle={article.title}
+                    />
+
+                    {/* RIGHT SIDE: SIDEBAR (4 Cols) */}
+                    <div className="lg:col-span-4">
+                        <div className="sticky top-28 space-y-12">
+
+                            {/* Related News Section */}
+                            <div>
+                                <h4 className="p-small text-foreground uppercase mb-8 pb-4 border-b-2 border-primary/20 flex justify-between items-center">
+                                    ဆက်စပ်သတင်းများ
+                                    <div className="flex gap-1">
+                                        <div className="w-1 h-1 bg-primary rounded-full"></div>
+                                        <div className="w-1 h-1 bg-primary rounded-full opacity-50"></div>
+                                        <div className="w-1 h-1 bg-primary rounded-full opacity-20"></div>
                                     </div>
-                                    <div className="p-4 bg-white/5 border border-white/10 rounded-sm">
-                                        <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Access Tier</div>
-                                        <div className="text-xs font-bold text-slate-300">Public Domain Access</div>
+                                </h4>
+
+                                {relatedNews.length > 0 ? (
+                                    <div className="space-y-8">
+                                        {relatedNews.map((news) => (
+                                            <Link key={news._id} to={`/news/${news._id}`} className="group flex gap-4">
+                                                <div className="w-20 h-20 bg-secondary rounded-lg overflow-hidden shrink-0 border border-border">
+                                                    {news.images && news.images.length > 0 ? (
+                                                        <img src={news.images[0]} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center"><Tag size={20} className="text-muted-foreground/30" /></div>
+                                                    )}
+                                                </div>
+                                                <div className="flex flex-col justify-center">
+                                                    <h5 className="text-[14px] font-bold text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors mb-2">
+                                                        {news.title}
+                                                    </h5>
+                                                    <div className="flex items-center gap-2 text-[11px] text-muted-foreground font-medium">
+                                                        <Calendar size={12} />
+                                                        {new Date(news.createdAt).toLocaleDateString("en-GB")}
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="p-muted italic">No related articles found in this category.</p>
+                                )}
+                            </div>
+
+                            {/* Official Verification Widget */}
+                            <div className="bg-slate-50/40 backdrop-blur-sm border border-slate-200/60 p-6 rounded-2xl relative overflow-hidden group shadow-sm">
+                                <div className="relative z-10">
+                                    <div className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+                                        <div className="w-1 h-1 rounded-full bg-slate-300"></div>
+                                        Internal Records
+                                    </div>
+                                    <p className="text-[11px] text-slate-500 leading-relaxed mb-5 font-medium italic">
+                                        Documentation authorized by the Media Clearance Division.
+                                    </p>
+                                    <div className="space-y-2.5">
+                                        <div className="flex justify-between text-[9px] uppercase tracking-widest pb-2 border-b border-slate-100">
+                                            <span className="text-slate-400 font-semibold">Security Tier</span>
+                                            <span className="text-primary font-bold">Unclassified</span>
+                                        </div>
+                                        <div className="flex justify-between text-[9px] uppercase tracking-widest pt-1">
+                                            <span className="text-slate-400 font-semibold">Source</span>
+                                            <span className="text-slate-700 font-bold">TU Gov News</span>
+                                        </div>
                                     </div>
                                 </div>
+                                <img src="/logo1-removebg-preview.png" alt="" className="absolute -bottom-4 -right-4 w-24 opacity-[0.03] grayscale rotate-12 pointer-events-none" />
                             </div>
-                            {/* Decorative Seal */}
-                            <img src="/logo1-removebg-preview.png" alt="" className="absolute -bottom-10 -right-10 w-48 opacity-[0.05] grayscale invert rotate-12 group-hover:rotate-0 transition-transform duration-1000" />
-                        </div>
 
-                        {/* Back Link */}
-                        <Link to="/" className="flex items-center justify-center gap-3 w-full py-4 border border-slate-200 rounded-sm text-xs font-bold uppercase tracking-widest text-slate-500 hover:bg-white hover:text-primary transition-all">
-                            <ArrowLeft size={16} /> {t("newsReader.backHome")}
-                        </Link>
+                        </div>
                     </div>
+
                 </div>
-            </div>
+            </main>
         </div>
     );
 }
-

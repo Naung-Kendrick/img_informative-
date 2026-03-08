@@ -2,259 +2,392 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useGetAllNewsQuery } from "../store/newsApiSlice";
-import { ArrowRight, Calendar, User, ChevronLeft, ChevronRight } from "lucide-react";
+import { useGetAllAnnouncementsQuery } from "../store/announcementApiSlice";
+import { useGetAllDistrictsQuery } from "../store/districtApiSlice";
+import {
+    ArrowRight,
+    Calendar,
+    User,
+    FileText,
+    IdCard,
+    Users,
+    AlertCircle,
+    ChevronLeft,
+    ChevronRight
+} from "lucide-react";
 import { Skeleton } from "../components/ui/skeleton";
 import { Button } from "../components/ui/button";
+import StatisticsSection from "../components/StatisticsSection";
+import WeatherWidget from "../components/WeatherWidget";
 
-const ITEMS_PER_PAGE = 6;
-
-export default function Home() {
+const Home = () => {
     const { t } = useTranslation();
-    const { data: news, isLoading, isError } = useGetAllNewsQuery();
     const [currentPage, setCurrentPage] = useState(1);
+    const newsPerPage = 6;
 
-    // 1. Filter out only Published articles
-    const publishedNews = news?.filter((item) => item.status === "Published") || [];
+    // API Hooks
+    const { data: allNews = [], isLoading, isError } = useGetAllNewsQuery();
+    const { data: announcements = [], isLoading: isAnnouncementsLoading } = useGetAllAnnouncementsQuery();
+    const { data: districts = [], isLoading: isDistrictsLoading } = useGetAllDistrictsQuery();
 
-    // 2. Separate Hero vs feed
-    const heroNews = publishedNews.slice(0, 1)[0]; // Latest 1 item is Hero
-    const allFeedNews = publishedNews.slice(1); // All remaining news
+    // Filter for Published news
+    const publishedNews = allNews.filter(n => n.status === "Published");
 
-    // 3. Pagination Logic
-    const totalPages = Math.ceil(allFeedNews.length / ITEMS_PER_PAGE);
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const paginatedFeed = allFeedNews.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    // Latest news for Hero and Feed
+    const sortedNews = [...publishedNews].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
 
-    const scrollToContent = () => {
-        window.scrollTo({ top: 500, behavior: 'smooth' });
-    };
+    const heroNews = sortedNews[0];
+    const allFeedNews = sortedNews.slice(1);
+
+    // Latest 5 Announcements
+    const latestAnnouncements = [...announcements]
+        .sort((a, b) => new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime())
+        .slice(0, 5);
+
+    // Districts (Top 3 for home)
+    const displayDistricts = districts.slice(0, 3);
+
+    // Pagination for News Feed
+    const totalPages = Math.ceil(allFeedNews.length / newsPerPage);
+    const paginatedFeed = allFeedNews.slice(
+        (currentPage - 1) * newsPerPage,
+        currentPage * newsPerPage
+    );
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
-        setTimeout(scrollToContent, 10);
+        document.getElementById("news-feed")?.scrollIntoView({ behavior: "smooth" });
     };
 
     return (
-        <div className="bg-background animate-in fade-in duration-500 min-h-screen">
-            <div className="container-custom py-12">
+        <div className="page-container bg-background animate-in fade-in duration-500">
+            {/* Hero: Official Department Banner */}
+            {isLoading ? (
+                <div className="container-custom section-padding">
+                    <Skeleton className="w-full h-[600px] rounded-3xl" />
+                </div>
+            ) : heroNews && (
+                <section className="relative w-full bg-slate-900 overflow-hidden min-h-[600px] flex items-center">
+                    {/* Background Visuals */}
+                    <div className="absolute inset-0 z-0">
+                        {heroNews.images && heroNews.images.length > 0 ? (
+                            <>
+                                <img
+                                    src={heroNews.images[0]}
+                                    alt=""
+                                    className="w-full h-full object-cover opacity-40 scale-105"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent" />
+                            </>
+                        ) : (
+                            <div className="w-full h-full bg-slate-800" />
+                        )}
+                    </div>
 
-                {isLoading ? (
-                    <div className="space-y-12">
-                        {/* Hero Skeleton */}
-                        <div className="relative rounded-3xl overflow-hidden shadow-sm border border-slate-200">
-                            <Skeleton className="w-full aspect-[21/9]" />
-                            <div className="absolute bottom-6 left-6 right-6">
-                                <Skeleton className="h-6 w-24 mb-4" />
-                                <Skeleton className="h-10 w-3/4 mb-4" />
-                                <Skeleton className="h-6 w-48" />
+                    {/* Compact Weather Widget in Corner — Namhsan Township */}
+                    <div className="absolute top-8 right-8 z-30 animate-in fade-in slide-in-from-top-4 duration-1000 delay-500 hidden md:block">
+                        <WeatherWidget variant="compact" />
+                    </div>
+
+                    <div className="container-custom relative z-10 py-20">
+                        <div className="max-w-3xl">
+                            <div className="flex items-center gap-3 mb-6 animate-in slide-in-from-left duration-700">
+                                <span className="px-3 py-1 bg-primary text-white text-[10px] font-bold tracking-widest uppercase rounded">
+                                    {heroNews.category}
+                                </span>
+                                <span className="text-slate-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                                    <Calendar size={14} className="text-primary" />
+                                    {new Date(heroNews.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                </span>
+                            </div>
+
+                            <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-[1.6] mb-8 animate-in slide-in-from-left duration-1000 delay-100 padauk-bold">
+                                {heroNews.title}
+                            </h1>
+
+                            <p className="text-lg md:text-xl text-slate-300 mb-10 leading-[1.8] line-clamp-3 max-w-2xl animate-in slide-in-from-left duration-1000 delay-200 padauk-regular">
+                                {t("hero.subtitle") || "Providing transparent, efficient, and secure immigration services for all residents and visitors. Stay updated with our official policy enhancements and legal frameworks."}
+                            </p>
+
+                            <div className="flex flex-wrap gap-5 items-center animate-in slide-in-from-bottom duration-1000 delay-300">
+                                <Button asChild className="bg-primary hover:bg-primary/90 text-white px-10 py-7 h-auto text-sm font-bold tracking-widest rounded-xl shadow-2xl shadow-primary/20 transition-all transform active:scale-95">
+                                    <Link to={`/news/${heroNews._id}`}>READ FULL STATEMENT</Link>
+                                </Button>
+                                <div className="flex items-center gap-4 pl-6 border-l border-white/10">
+                                    <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                                        <User size={18} className="text-primary" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Released By</span>
+                                        <span className="text-white text-sm font-bold">{heroNews.author?.name || "Official Media Office"}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        {/* Grid Skeleton */}
-                        <div>
-                            <div className="flex items-center justify-between mb-6">
-                                <Skeleton className="h-8 w-48" />
+                    </div>
+                </section>
+            )}
+
+            {/* Statistics Animation Section */}
+            <StatisticsSection />
+
+            {/* Featured Services (Gray Alternate) */}
+            <section className="bg-secondary/10 section-padding border-b border-border/50">
+                <div className="container-custom">
+                    <div className="text-center mb-20 flex flex-col items-center">
+                        <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-6 border border-primary/20">
+                            Public Assistance Center
+                        </div>
+                        <h2 className="h2 mb-8 relative inline-block pb-4">
+                            ပြည်သူ့ဝန်ဆောင်မှုများ
+                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
+                        </h2>
+                        <p className="p-lead text-muted-foreground max-w-2xl mx-auto mt-6">
+                            အောက်ပါဝန်ဆောင်မှုများကို အွန်လိုင်းမှတစ်ဆင့် လွယ်ကူလျင်မြန်စွာ လျှောက်ထားရယူနိုင်ပါသည်။
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 max-w-5xl mx-auto gap-10">
+                        {/* Service Card 1 */}
+                        <div className="bg-card rounded-[2rem] p-10 shadow-sm border border-border flex flex-col items-center text-center hover:shadow-2xl hover:border-primary/20 transition-all group">
+                            <div className="w-24 h-24 bg-primary/5 text-primary rounded-3xl flex items-center justify-center mb-8 shadow-inner group-hover:bg-primary group-hover:text-white transition-all duration-500 rotate-3 group-hover:rotate-0">
+                                <IdCard size={44} />
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                {[1, 2, 3].map((i) => (
-                                    <div key={i} className="flex flex-col h-full bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                                        <Skeleton className="w-full aspect-[16/10]" />
-                                        <div className="p-6 flex flex-col flex-grow">
-                                            <Skeleton className="h-4 w-1/2 mb-4" />
-                                            <Skeleton className="h-6 w-full mb-2" />
-                                            <Skeleton className="h-4 w-full mb-4" />
-                                            <div className="mt-auto pt-4 flex items-center">
-                                                <Skeleton className="h-5 w-32" />
+                            <h3 className="h3 mb-6">Smartcard ပြုလုပ်ရန်</h3>
+                            <p className="text-muted-foreground mb-10 flex-grow leading-relaxed">နိုင်ငံသားစိစစ်ရေးကတ်ပြားအစား ခေတ်မီစမတ်ကတ်အဖြစ် အသစ်လျှောက်ထားခြင်းနှင့် လဲလှယ်ခြင်း</p>
+                            <Button className="w-full py-7 rounded-2xl bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground font-bold transition-all shadow-xl" asChild>
+                                <Link to="/services/smartcard">START APPLICATION →</Link>
+                            </Button>
+                        </div>
+
+                        {/* Service Card 2 */}
+                        <div className="bg-card rounded-[2rem] p-10 shadow-sm border border-border flex flex-col items-center text-center hover:shadow-2xl hover:border-primary/20 transition-all group">
+                            <div className="w-24 h-24 bg-primary/5 text-primary rounded-3xl flex items-center justify-center mb-8 shadow-inner group-hover:bg-primary group-hover:text-white transition-all duration-500 -rotate-3 group-hover:rotate-0">
+                                <Users size={44} />
+                            </div>
+                            <h3 className="h3 mb-6">အိမ်ထောင်စုစာရင်း ပြုလုပ်ရန်</h3>
+                            <p className="text-muted-foreground mb-10 flex-grow leading-relaxed">အိမ်ထောင်စုလူဦးရေစာရင်း သစ်သွင်းခြင်း၊ ပြောင်းရွှေ့ခြင်း၊ ခွဲထွက်ခြင်းနှင့် ပေါင်းထည့်ခြင်းများပြုလုပ်ရန်</p>
+                            <Button className="w-full py-7 rounded-2xl bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground font-bold transition-all shadow-xl" asChild>
+                                <Link to="/services/household">START APPLICATION →</Link>
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Regional Districts (White) */}
+            <section className="bg-background section-padding">
+                <div className="container-custom">
+                    <div className="text-center mb-16 flex flex-col items-center">
+                        <div className="inline-flex items-center justify-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.2em] mb-4">
+                            Regional Offices
+                        </div>
+                        <h2 className="h2 mb-8 relative inline-block pb-4">
+                            ခရိုင်အုပ်ချုပ်ရေးရုံးများ
+                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
+                        </h2>
+                        <p className="p-lead text-muted-foreground max-w-2xl mx-auto mt-6">
+                            ဒေသအလိုက် ခရိုင်ရုံးများနှင့် ဆက်သွယ်မေးမြန်းနိုင်သော အချက်အလက်များ
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                        {isDistrictsLoading ? (
+                            [1, 2, 3].map(i => <Skeleton key={i} className="aspect-[16/10] rounded-3xl" />)
+                        ) : (
+                            displayDistricts.map((district: any) => (
+                                <Link key={district._id} to="/districts" className="group flex flex-col overflow-hidden bg-card border border-border rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500">
+                                    <div className="aspect-[16/10] bg-secondary/20 relative overflow-hidden">
+                                        <img
+                                            src={district.coverImage}
+                                            alt=""
+                                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
+                                        <div className="absolute bottom-6 left-6 right-6">
+                                            <h3 className="text-xl font-bold text-white mb-2">{district.name}</h3>
+                                            <div className="flex items-center gap-2 text-white/80 text-xs font-bold uppercase tracking-widest group-hover:gap-4 transition-all">
+                                                VIEW DETAILS <ArrowRight size={14} />
                                             </div>
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
+                                </Link>
+                            ))
+                        )}
                     </div>
-                ) : isError ? (
-                    <div className="flex flex-col items-center justify-center min-h-[50vh] text-center max-w-lg mx-auto">
-                        <div className="bg-red-50 text-red-500 p-6 rounded-2xl w-full">
-                            <h2 className="text-xl font-bold mb-2 padauk-bold">ကွန်ရက်ချို့ယွင်းချက်</h2>
-                            <p className="padauk-regular text-sm">ဆာဗာနှင့် ချိတ်ဆက်ရာတွင် အဆင်မပြေမှု ဖြစ်ပေါ်နေပါသည်။ ခေတ္တစောင့်ဆိုင်းပြီး ပြန်လည်ကြိုးစားကြည့်ပါ။</p>
-                        </div>
-                    </div>
-                ) : publishedNews.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center min-h-[50vh] text-center max-w-lg mx-auto">
-                        <div className="bg-slate-50 text-slate-500 p-8 rounded-2xl w-full border border-slate-200">
-                            <h2 className="text-xl font-bold mb-2 padauk-bold text-slate-700">သတင်းအချက်အလက်များ မရှိသေးပါ</h2>
-                            <p className="padauk-regular text-sm">လတ်တလော လွှင့်တင်ထားသော သတင်းများ မရှိသေးပါ။ နောက်မှ ပြန်လည်ဝင်ရောက်ကြည့်ရှုပါ။</p>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="space-y-12">
 
-                        {/* Hero: Official Banner Section */}
-                        {heroNews && (
-                            <div className="mb-24">
-                                <div className="relative overflow-hidden bg-slate-900 border border-slate-800 rounded-sm shadow-2xl flex flex-col lg:flex-row items-stretch min-h-[500px]">
-                                    <div className="lg:w-1/2 relative min-h-[300px]">
-                                        {heroNews.bannerImage ? (
+                    <div className="mt-16 text-center">
+                        <Button variant="outline" asChild className="border-border text-muted-foreground hover:border-primary hover:text-primary font-bold rounded-xl px-10 h-14">
+                            <Link to="/districts">VIEW ALL DISTRICTS</Link>
+                        </Button>
+                    </div>
+                </div>
+            </section>
+
+            {/* Official Press Center (Slate Alternate) */}
+            {allFeedNews.length > 0 && (
+                <section id="news-feed" className="bg-secondary/10 section-padding border-t border-border/50">
+                    <div className="container-custom">
+                        <div className="text-center mb-16 flex flex-col items-center">
+                            <div className="inline-flex items-center justify-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.2em] mb-4">
+                                Press Center
+                            </div>
+                            <h2 className="h2 mb-8 relative inline-block pb-4">
+                                Latest Official News
+                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
+                            </h2>
+                            <p className="p-lead text-muted-foreground max-w-2xl mx-auto mt-6">
+                                ဌာန၏ လုပ်ဆောင်ချက်များ၊ သတင်းထုတ်ပြန်ချက်များနှင့် အထူးသတင်းများကို ဤနေရာတွင် စုစည်းတင်ပြထားပါသည်။
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                            {paginatedFeed.map((news) => (
+                                <Link key={news._id} to={`/news/${news._id}`} className="group flex flex-col h-full bg-card rounded-3xl border border-border overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500">
+                                    <div className="aspect-[16/10] relative overflow-hidden">
+                                        {news.images && news.images.length > 0 ? (
                                             <img
-                                                src={heroNews.bannerImage}
-                                                alt={heroNews.title}
-                                                className="absolute inset-0 w-full h-full object-cover opacity-90 transition-opacity duration-700 hover:opacity-100"
+                                                src={news.images[0]}
+                                                alt=""
+                                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                             />
                                         ) : (
-                                            <div className="absolute inset-0 w-full h-full bg-slate-800 flex items-center justify-center p-12">
-                                                <div className="border border-slate-700 p-8 text-center text-slate-500 font-bold uppercase tracking-widest">Official Image Placeholder</div>
-                                            </div>
+                                            <div className="w-full h-full bg-secondary flex items-center justify-center text-muted-foreground">Archive Image</div>
                                         )}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/40 to-transparent lg:hidden" />
-                                    </div>
-
-                                    <div className="lg:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center bg-slate-900 overflow-hidden relative">
-                                        <div className="relative z-10">
-                                            <div className="flex items-center gap-4 mb-6">
-                                                <span className="px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase tracking-widest rounded-sm shadow-lg">
-                                                    {heroNews.category}
-                                                </span>
-                                                <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                                                    <Calendar size={14} className="text-primary" />
-                                                    {new Date(heroNews.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
-                                                </div>
-                                            </div>
-
-                                            <h1 className="text-white mb-6 leading-[1.15] tracking-tight group-hover:text-primary transition-colors">
-                                                {heroNews.title}
-                                            </h1>
-
-                                            <p className="text-slate-400 text-lg leading-relaxed mb-8 line-clamp-3">
-                                                {/* Assuming summary exists or slicing content if available, here we mock a professional summary feel */}
-                                                {t("hero.subtitle") || "Providing transparent, efficient, and secure immigration services for all residents and visitors. Stay updated with our official policy enhancements and legal frameworks."}
-                                            </p>
-
-                                            <div className="flex flex-wrap gap-4 items-center">
-                                                <Button asChild className="bg-primary text-white hover:bg-primary/90 px-8 py-6 h-auto text-sm font-bold uppercase tracking-widest rounded-sm transition-all transform active:scale-95 shadow-xl">
-                                                    <Link to={`/news/${heroNews._id}`}>Read Full News</Link>
-                                                </Button>
-                                                <div className="flex items-center gap-3 pl-4 border-l border-slate-800">
-                                                    <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700">
-                                                        <User size={16} className="text-primary" />
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Released By</span>
-                                                        <span className="text-slate-300 text-xs font-bold">{heroNews.author?.name || "Dept. Media Office"}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* Subtle Departmental Watermark */}
-                                        <div className="absolute -bottom-10 -right-10 opacity-[0.03] rotate-12 scale-150 pointer-events-none grayscale invert select-none">
-                                            <img src="/logo1-removebg-preview.png" alt="watermark" />
+                                        <div className="absolute top-6 left-6">
+                                            <span className="px-3 py-1 bg-background/95 backdrop-blur-sm text-primary font-bold text-[10px] uppercase tracking-widest rounded shadow-sm border border-border/50">
+                                                {news.category}
+                                            </span>
                                         </div>
                                     </div>
-                                </div>
+
+                                    <div className="p-8 flex flex-col flex-grow">
+                                        <div className="flex items-center gap-4 text-muted-foreground font-bold text-[10px] uppercase tracking-widest mb-6">
+                                            <div className="flex items-center gap-1.5"><Calendar size={12} className="text-primary" /> {new Date(news.createdAt).toLocaleDateString('en-GB')}</div>
+                                            <div className="w-[1px] h-3 bg-border" />
+                                            <div className="flex items-center gap-1.5"><User size={12} className="text-primary" /> {news.author?.name || "Admin"}</div>
+                                        </div>
+                                        <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-[1.6] mb-8 padauk-bold">
+                                            {news.title}
+                                        </h3>
+                                        <div className="mt-auto pt-6 border-t border-border/50 flex items-center justify-between group-hover:text-primary transition-all font-bold text-xs uppercase tracking-widest text-muted-foreground">
+                                            READ MORE <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className="mt-20 flex items-center justify-center gap-3">
+                                <button
+                                    onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                                    disabled={currentPage === 1}
+                                    className="w-12 h-12 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:border-primary hover:text-primary disabled:opacity-30 transition-all bg-card"
+                                >
+                                    <ChevronLeft size={20} />
+                                </button>
+                                {Array.from({ length: totalPages }).map((_, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => handlePageChange(idx + 1)}
+                                        className={`w-12 h-12 rounded-xl font-bold transition-all ${currentPage === idx + 1
+                                            ? "bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-110"
+                                            : "bg-card border border-border text-muted-foreground hover:border-primary hover:text-primary"
+                                            }`}
+                                    >
+                                        {idx + 1}
+                                    </button>
+                                ))}
+                                <button
+                                    onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                                    disabled={currentPage === totalPages}
+                                    className="w-12 h-12 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:border-primary hover:text-primary disabled:opacity-30 transition-all bg-card"
+                                >
+                                    <ChevronRight size={20} />
+                                </button>
                             </div>
                         )}
-
-                        {/* Section: Official Press & Feed */}
-                        {allFeedNews.length > 0 && (
-                            <div id="news-feed" className="pt-8 pt-16 border-t border-slate-200">
-                                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
-                                    <div>
-                                        <div className="text-primary text-xs font-bold uppercase tracking-[0.2em] mb-2 leading-none">Press Center</div>
-                                        <h2 className="mb-0 leading-none">Latest Official News</h2>
-                                    </div>
-                                    <div className="text-muted-foreground text-sm font-medium max-w-md">
-                                        Access the most recent updates, policy changes, and official statements from the department.
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-                                    {paginatedFeed.map((news) => (
-                                        <Link key={news._id} to={`/news/${news._id}`} className="group flex flex-col h-full overflow-hidden transition-all duration-300">
-                                            <div className="aspect-[16/10] bg-slate-100 relative overflow-hidden mb-6 rounded-sm">
-                                                {news.bannerImage ? (
-                                                    <img
-                                                        src={news.bannerImage}
-                                                        alt={news.title}
-                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                                    />
-                                                ) : (
-                                                    <div className="w-full h-full flex items-center justify-center bg-slate-50 border border-slate-100 italic text-slate-300 text-sm font-bold uppercase tracking-widest">
-                                                        Department Archive
-                                                    </div>
-                                                )}
-                                                <div className="absolute top-4 left-4">
-                                                    <span className="px-3 py-1 bg-white/95 backdrop-blur-sm text-primary border border-primary/20 text-[10px] font-bold uppercase tracking-widest shadow-sm rounded-sm">
-                                                        {news.category}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <div className="flex flex-col flex-grow group">
-                                                <div className="flex items-center gap-4 mb-4">
-                                                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
-                                                        <Calendar size={12} className="text-primary/70" />
-                                                        {new Date(news.createdAt).toLocaleDateString('en-GB')}
-                                                    </div>
-                                                    <div className="h-3 w-[1px] bg-slate-200" />
-                                                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
-                                                        <User size={12} className="text-primary/70" />
-                                                        {news.author?.name || "Admin"}
-                                                    </div>
-                                                </div>
-
-                                                <h3 className="text-xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors line-clamp-2 leading-tight">
-                                                    {news.title}
-                                                </h3>
-
-                                                <div className="mt-auto pt-6 flex items-center text-xs font-bold uppercase tracking-[0.15em] text-primary group-hover:gap-3 transition-all">
-                                                    <span>{t("common.readMore")}</span>
-                                                    <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" />
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    ))}
-                                </div>
-
-                                {/* Pagination Controls */}
-                                {totalPages > 1 && (
-                                    <div className="mt-16 flex items-center justify-center gap-2">
-                                        <button
-                                            onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                                            disabled={currentPage === 1}
-                                            className="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                                        >
-                                            <ChevronLeft size={20} />
-                                        </button>
-
-                                        <div className="flex items-center gap-1">
-                                            {Array.from({ length: totalPages }).map((_, idx) => (
-                                                <button
-                                                    key={idx}
-                                                    onClick={() => handlePageChange(idx + 1)}
-                                                    className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === idx + 1
-                                                        ? "bg-primary text-white shadow-md shadow-slate-200"
-                                                        : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
-                                                        }`}
-                                                >
-                                                    {idx + 1}
-                                                </button>
-                                            ))}
-                                        </div>
-
-                                        <button
-                                            onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                                            disabled={currentPage === totalPages}
-                                            className="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                                        >
-                                            <ChevronRight size={20} />
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
                     </div>
-                )}
-            </div>
+                </section>
+            )}
+
+            {/* Official Announcements Section (White) */}
+            <section className="bg-background section-padding border-b border-border/50">
+                <div className="container-custom">
+                    <div className="text-center mb-16 flex flex-col items-center">
+                        <div className="inline-flex items-center justify-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.2em] mb-4">
+                            Official Directives
+                        </div>
+                        <h2 className="h2 mb-8 relative inline-block pb-4">
+                            နောက်ဆုံးရ ထုတ်ပြန်ချက်များ
+                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
+                        </h2>
+                        <p className="p-lead text-muted-foreground max-w-2xl mx-auto mt-6">
+                            ဌာနမှ ထုတ်ပြန်သော အမိန့်ကြော်ငြာစာများ၊ ညွှန်ကြားချက်များနှင့် အများပြည်သူ သိမှတ်ဖွယ်ရာများကို ဤနေရာတွင် ဖတ်ရှုနိုင်ပါသည်။
+                        </p>
+                    </div>
+
+                    {isAnnouncementsLoading ? (
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                            {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} className="aspect-[1/1.414] rounded-2xl" />)}
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+                            {latestAnnouncements.map((announcement) => (
+                                <Link
+                                    key={announcement._id}
+                                    to={`/announcements/${announcement._id}`}
+                                    className="group flex flex-col transition-all duration-300 transform hover:-translate-y-2"
+                                >
+                                    <div className="w-full aspect-[1/1.414] bg-secondary/10 relative overflow-hidden border border-border/50 rounded-2xl shadow-sm group-hover:shadow-xl group-hover:border-primary/50 transition-all">
+                                        {announcement.documentImages && announcement.documentImages.length > 0 ? (
+                                            <img
+                                                src={announcement.documentImages[0]}
+                                                alt=""
+                                                className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center"><FileText size={48} className="text-muted" /></div>
+                                        )}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    </div>
+                                    <div className="mt-5 px-1">
+                                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-bold uppercase tracking-widest mb-2">
+                                            <Calendar size={12} className="text-primary" />
+                                            {new Date(announcement.publishedDate).toLocaleDateString('en-GB')}
+                                        </div>
+                                        <h3 className="text-sm font-bold text-foreground line-clamp-2 leading-relaxed group-hover:text-primary transition-colors padauk-bold">
+                                            {announcement.title}
+                                        </h3>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    )}
+
+                    <div className="mt-16 text-center">
+                        <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary/5 font-bold rounded-xl px-10 h-14">
+                            <Link to="/announcements" className="flex items-center gap-2">ကြည့်ရှုရန် <ArrowRight size={18} /></Link>
+                        </Button>
+                    </div>
+                </div>
+            </section>
+
+            {/* Error Message */}
+            {isError && (
+                <div className="container-custom py-10">
+                    <div className="bg-destructive/5 border border-destructive/20 p-6 rounded-2xl flex items-center gap-4 text-destructive">
+                        <AlertCircle size={24} />
+                        <p className="font-bold">သတင်းအချက်အလက်များ ရယူရာတွင် အဆင်မပြေမှု ရှိနေပါသည်။</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
+export default Home;

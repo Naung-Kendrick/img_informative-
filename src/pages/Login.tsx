@@ -1,24 +1,57 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Mail, Lock, ArrowRight, ShieldCheck, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useDispatch } from "react-redux";
-import { useLoginMutation } from "../store/authApiSlice";
+import { useLoginMutation, useGoogleLoginMutation, useRegisterMutation } from "../store/authApiSlice";
 import { setCredentials } from "../store/authSlice";
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function Login() {
     const { t } = useTranslation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [name, setName] = useState("");
+    const [phone, setPhone] = useState("");
+    const [isRegistering, setIsRegistering] = useState(false);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [login, { isLoading, isError, error }] = useLoginMutation();
+    const [register, { isLoading: isRegisterLoading, isError: isRegisterError, error: registerError }] = useRegisterMutation();
+    const [googleLogin, { isLoading: isGoogleLoading }] = useGoogleLoginMutation();
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const loginData = await login({ email, password }).unwrap();
+            let authData;
+            if (isRegistering) {
+                authData = await register({ name, email, password, phone }).unwrap();
+            } else {
+                authData = await login({ email, password }).unwrap();
+            }
+
+            dispatch(
+                setCredentials({
+                    user: authData.user,
+                    token: authData.accessToken,
+                })
+            );
+
+            if (authData.user.role >= 1) {
+                navigate("/admin");
+            } else {
+                navigate("/");
+            }
+        } catch (err: any) {
+            console.error("Authentication Error:", err);
+        }
+    };
+
+    const handleGoogleSuccess = async (credentialResponse: any) => {
+        try {
+            // Send the credential back using the mutation
+            const loginData = await googleLogin({ token: credentialResponse.credential }).unwrap();
 
             dispatch(
                 setCredentials({
@@ -33,102 +66,188 @@ export default function Login() {
                 navigate("/");
             }
         } catch (err: any) {
-            console.error("Login Error:", err);
+            console.error("Google Login Error:", err);
         }
     };
 
     return (
-        <div className="flex min-h-[90vh] items-center justify-center p-6 w-full animate-in fade-in duration-700 bg-[#f8fafc]">
-            <div className="w-full max-w-md bg-white rounded-sm shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] overflow-hidden border border-slate-200">
-                <div className="p-10 md:p-12">
-                    <div className="flex justify-center mb-8">
-                        <div className="h-20 w-20 bg-slate-950 flex items-center justify-center rounded-sm border border-slate-900 shadow-2xl relative overflow-hidden group">
-                            <ShieldCheck className="h-10 w-10 text-primary relative z-10" />
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        <div className="page-container bg-background flex min-h-[90vh] items-center justify-center p-4 md:p-6 w-full animate-in fade-in duration-700">
+            <div className="w-full max-w-[900px] bg-card rounded-2xl md:rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] overflow-hidden grid grid-cols-1 md:grid-cols-2 border border-border mt-8 mb-8">
+
+                {/* Left Side - Graphic & Welcome */}
+                <div className="bg-gradient-to-br from-[#021024] via-[#052659] to-[#1e3a8a] p-10 md:p-14 text-white flex flex-col justify-between relative overflow-hidden min-h-[400px]">
+                    {/* Decorative abstract wave pattern (mimicking the image's background) */}
+                    <div className="absolute top-1/2 left-[-20%] right-[-20%] h-[200px] border-t border-white/10 rounded-[100%] shadow-[0_-20px_50px_rgba(255,255,255,0.05)] transform -rotate-[15deg]"></div>
+                    <div className="absolute top-[45%] left-[-10%] right-[-30%] h-[300px] border-t border-white/5 rounded-[100%] transform -rotate-[5deg]"></div>
+
+                    {/* Logo Area */}
+                    <div className="relative z-10 flex items-center gap-3">
+                        <div className="h-10 w-10 flex items-center justify-center relative">
+                            {/* Recreating the circle and dot logo from the image */}
+
+
+                        </div>
+                        <div className="flex flex-col ">
+                            <img src="public/logo1-removebg-preview.png" alt="logo" className="w-30 h-" />
+
                         </div>
                     </div>
 
-                    <div className="text-center mb-10">
-                        <div className="text-primary text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Secure Access Portal</div>
-                        <h2 className="text-2xl font-bold text-slate-900 mb-0 tracking-tight leading-none">{t("login.title")}</h2>
+                    <div className="relative z-10 mt-16 mb-12">
+                        <h2 className="text-4xl md:text-[3.25rem] font-bold mb-4 leading-[1.1] tracking-tight text-white">
+                            {isRegistering ? (
+                                <>Join our<br />network!</>
+                            ) : (
+                                <>Hello,<br />welcome!</>
+                            )}
+                        </h2>
+                        <p className="text-white/70 text-sm max-w-[250px] leading-relaxed mt-6">
+                            Official secure portal for Ta'ang Land Federal Unit Government Immigration Department.
+                        </p>
                     </div>
 
-                    {isError && (
-                        <div className="bg-red-50 text-red-600 text-[11px] font-bold uppercase tracking-widest p-4 text-center rounded-sm mb-6 border border-red-100 animate-in shake">
-                            {(error as any)?.data?.message || t("login.failed")}
+                    <div className="relative z-10 mt-auto">
+                        <Link to="/" className="inline-flex bg-white/10 hover:bg-white/20 border border-white/20 transition-colors rounded-full px-6 py-2.5 text-xs font-semibold backdrop-blur-md text-white">
+                            View more
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Right Side - Form */}
+                <div className="p-10 md:p-14 flex flex-col justify-center bg-card relative">
+
+                    {(isError || isRegisterError) && (
+                        <div className="bg-destructive/10 text-destructive text-sm p-4 text-center rounded-lg mb-6 border border-destructive/20 animate-in shake">
+                            {((error || registerError) as any)?.data?.message || (isRegistering ? "Registration failed. Please try again." : t("login.failed"))}
                         </div>
                     )}
 
-                    <form onSubmit={handleLogin} className="space-y-6">
-                        <div className="space-y-3">
-                            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                                {t("login.email")} <span className="text-primary">*</span>
+                    <form onSubmit={handleAuth} className="space-y-6">
+                        {isRegistering && (
+                            <>
+                                <div className="space-y-2">
+                                    <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider ml-1">
+                                        Full Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="w-full bg-secondary/50 border border-border text-foreground rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm font-medium placeholder:text-muted-foreground/50 shadow-sm"
+                                        placeholder="John Doe"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider ml-1">
+                                        Phone Number <span className="text-muted-foreground/50 font-normal lowercase">(optional)</span>
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        value={phone}
+                                        onChange={(e) => setPhone(e.target.value)}
+                                        className="w-full bg-secondary/50 border border-border text-foreground rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm font-medium placeholder:text-muted-foreground/50 shadow-sm"
+                                        placeholder="+95 9..."
+                                    />
+                                </div>
+                            </>
+                        )}
+                        {/* Email Input */}
+                        <div className="space-y-2">
+                            <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider ml-1">
+                                Email address
                             </label>
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors">
-                                    <Mail className="h-4 w-4 text-slate-400 group-focus-within:text-primary transition-colors" />
-                                </div>
-                                <input
-                                    type="email"
-                                    required
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-sm pl-12 pr-4 py-4 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm font-medium"
-                                    placeholder="official@talfu.gov"
-                                />
-                            </div>
+                            <input
+                                type="email"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full bg-secondary/50 border border-border text-foreground rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm font-medium placeholder:text-muted-foreground/50 shadow-sm"
+                                placeholder="name@mail.com"
+                            />
                         </div>
 
-                        <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                                    {t("login.password")} <span className="text-primary">*</span>
-                                </label>
-                                <Link to="/contact" className="text-[10px] font-bold text-primary uppercase tracking-widest hover:underline transition-all">
-                                    {t("login.forgot")}
-                                </Link>
-                            </div>
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors">
-                                    <Lock className="h-4 w-4 text-slate-400 group-focus-within:text-primary transition-colors" />
-                                </div>
-                                <input
-                                    type="password"
-                                    required
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-sm pl-12 pr-4 py-4 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm font-medium"
-                                    placeholder="••••••••"
-                                />
-                            </div>
+                        {/* Password Input */}
+                        <div className="space-y-2">
+                            <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider ml-1">
+                                Password
+                            </label>
+                            <input
+                                type="password"
+                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full bg-secondary/50 border border-border text-foreground rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm font-medium placeholder:text-muted-foreground/50 shadow-sm"
+                                placeholder="••••••••••••"
+                            />
                         </div>
 
-                        <div className="pt-4">
+                        {/* Remember me & Forgot Password */}
+                        <div className="flex items-center justify-between px-1 pt-1">
+                            <label className="flex items-center gap-2 cursor-pointer group">
+                                <input type="checkbox" className="w-4 h-4 rounded border-border text-primary focus:ring-primary/20 bg-secondary" />
+                                <span className="text-xs font-semibold text-muted-foreground group-hover:text-foreground transition-colors">Remember me</span>
+                            </label>
+                            <Link to="/contact" className="text-xs font-semibold text-primary hover:text-primary/80 transition-colors">
+                                Forgot password?
+                            </Link>
+                        </div>
+
+                        {/* Login Button */}
+                        <div className="pt-2">
                             <button
                                 type="submit"
-                                disabled={isLoading}
-                                className="w-full bg-slate-950 hover:bg-slate-900 text-white font-bold py-5 rounded-sm shadow-xl shadow-slate-950/20 transition-all duration-300 flex items-center justify-center gap-3 group text-[11px] uppercase tracking-[0.2em] relative overflow-hidden disabled:opacity-70 disabled:pointer-events-none"
+                                disabled={isLoading || isRegisterLoading || isGoogleLoading}
+                                className="w-full bg-background border border-border hover:bg-muted text-foreground font-bold py-4 rounded-xl shadow-sm transition-all text-sm disabled:opacity-70 disabled:pointer-events-none flex items-center justify-center gap-2"
                             >
-                                <div className="absolute inset-y-0 left-0 w-[2px] bg-primary group-hover:w-full transition-all duration-500 -z-0 opacity-10" />
-                                <span className="relative z-10 flex items-center gap-3">
-                                    {isLoading ? (
-                                        <>
-                                            <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                                            Authenticating...
-                                        </>
-                                    ) : (
-                                        <>
-                                            Authorize Login
-                                            <ArrowRight className="h-4 w-4 group-hover:translate-x-2 transition-transform text-primary" />
-                                        </>
-                                    )}
-                                </span>
+                                {(isLoading || isRegisterLoading) ? (
+                                    <>
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                        Processing...
+                                    </>
+                                ) : (
+                                    isRegistering ? "Create Account" : "Login"
+                                )}
                             </button>
                         </div>
                     </form>
-                </div>
-                <div className="bg-slate-50 px-10 py-6 border-t border-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    Department of Immigration Internal Access
+
+                    <div className="mt-8 text-center space-y-5">
+                        <div className="flex items-center justify-center gap-2 text-sm font-medium">
+                            <span className="text-muted-foreground">
+                                {isRegistering ? "Already have an account?" : "Not a member yet?"}
+                            </span>
+                            <button
+                                type="button"
+                                onClick={() => setIsRegistering(!isRegistering)}
+                                className="text-primary hover:underline font-bold"
+                            >
+                                {isRegistering ? "Sign in instead" : "Create an account"}
+                            </button>
+                        </div>
+
+                        <div className="relative mt-8 mb-4">
+                            <div className="absolute inset-0 flex items-center">
+                                <span className="w-full border-t border-border" />
+                            </div>
+                            <div className="relative flex justify-center text-[10px] sm:text-xs tracking-widest uppercase">
+                                <span className="bg-card px-3 text-muted-foreground font-bold">Or continue with</span>
+                            </div>
+                        </div>
+
+                        {/* Sign up / Google Login Block */}
+                        <div className="w-full flex justify-center [&>div]:w-full [&>div>div]:w-full [&>div>div>iframe]:w-full hover:scale-[1.02] transition-transform duration-300 relative z-10">
+                            <GoogleLogin
+                                onSuccess={handleGoogleSuccess}
+                                onError={() => console.log('Login Failed')}
+                                useOneTap
+                                theme="filled_blue"
+                                shape="rectangular"
+                                text="signup_with"
+                                size="large"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

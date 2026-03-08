@@ -1,110 +1,111 @@
-import { useGetPagesBySectionQuery } from "../store/pageApiSlice";
 import { Link } from "react-router-dom";
+import { IdCard, BookOpen, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Button } from "../components/ui/button";
 import { useTranslation } from "react-i18next";
-import { Briefcase, ArrowRight } from "lucide-react";
-import { Skeleton } from "../components/ui/skeleton";
 
-/**
- * Public Services page — shows published pages with section="services"
- */
 export default function Services() {
     const { t } = useTranslation();
-    const { data: pages, isLoading, isError } = useGetPagesBySectionQuery("services");
-
-    const published = pages?.filter((p) => p.status === "Published") || [];
-
     return (
-        <div className="bg-[#f8fafc] min-h-screen py-16 animate-in fade-in duration-500">
-            <div className="container-custom">
-                {/* Page Header: Official Identity */}
-                <div className="mb-16 border-b border-slate-200 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
-                    <div>
-                        <div className="text-primary text-xs font-bold uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                            <span className="w-8 h-[1px] bg-primary"></span>
-                            Public Administration
-                        </div>
-                        <h1 className="mb-0 leading-none">
-                            {t("services.title")}
-                        </h1>
+        <div className="page-container bg-background animate-in fade-in duration-500 relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10"></div>
+            <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -z-10"></div>
+
+            <div className="container-custom section-padding">
+                {/* Page Header */}
+                <div className="mb-16 text-center max-w-3xl mx-auto flex flex-col items-center">
+                    <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-6 border border-primary/20">
+                        <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        {t("services.portalBadge")}
                     </div>
-                    <div className="text-muted-foreground text-sm font-medium max-w-md md:text-right">
-                        {t("services.subtitle")}
-                    </div>
+                    <h1 className="h1 mb-8 relative inline-block pb-4">
+                        {t("services.publicServices")}
+                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
+                    </h1>
+                    <p className="p-lead mt-6">
+                        {t("services.publicServicesDesc")}
+                    </p>
                 </div>
 
-                {isLoading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        {[1, 2, 3, 4].map((i) => (
-                            <div key={i} className="bg-white rounded-sm border border-slate-200 overflow-hidden">
-                                <Skeleton className="w-full aspect-[21/9]" />
-                                <div className="p-10">
-                                    <Skeleton className="h-8 w-3/4 mb-4" />
-                                    <Skeleton className="h-4 w-full" />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : isError ? (
-                    <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
-                        <div className="bg-red-50 text-red-500 p-8 rounded-sm border border-red-100 max-w-lg">
-                            <h2 className="text-xl font-bold mb-3 uppercase tracking-tight">System Error</h2>
-                            <p className="text-sm opacity-80">Unable to retrieve departmental service data. Please contact the administrative support desk.</p>
-                        </div>
-                    </div>
-                ) : published.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
-                        <div className="bg-white text-slate-400 p-12 rounded-sm max-w-lg border border-slate-200 shadow-sm">
-                            <Briefcase size={40} className="mx-auto mb-6 text-slate-200" />
-                            <h2 className="text-xl font-bold mb-3 text-slate-800 uppercase tracking-tight">{t("services.noServices")}</h2>
-                            <p className="text-sm leading-relaxed">{t("services.noServicesDesc")}</p>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        {published.map((page) => (
-                            <Link
-                                key={page._id}
-                                to={`/services/${page._id}`}
-                                className="group bg-white rounded-sm border border-slate-200 overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col shadow-sm"
-                            >
-                                {/* Banner */}
-                                <div className="aspect-[21/9] bg-slate-900 overflow-hidden relative">
-                                    {page.bannerImage ? (
-                                        <img src={page.bannerImage} alt={page.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 opacity-80" />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-slate-800">
-                                            <Briefcase size={60} className="opacity-10" />
-                                            <div className="absolute inset-0 flex items-center justify-center italic text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500">Service Document</div>
-                                        </div>
-                                    )}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent opacity-60" />
-                                    <div className="absolute bottom-6 left-6 flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-sm bg-primary/90 flex items-center justify-center text-white shadow-lg">
-                                            <Briefcase size={18} />
-                                        </div>
-                                        <span className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">Official Portal</span>
-                                    </div>
-                                </div>
+                {/* Dual-Card Layout */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
 
-                                {/* Content */}
-                                <div className="p-10 flex flex-col flex-grow">
-                                    <h3 className="text-2xl font-bold mb-6 group-hover:text-primary transition-colors leading-tight tracking-tight">
-                                        {page.title}
-                                    </h3>
-                                    <div
-                                        className="text-slate-500 text-sm leading-relaxed line-clamp-3 mb-8"
-                                        dangerouslySetInnerHTML={{ __html: page.content.replace(/<[^>]*>?/gm, '') }}
-                                    />
-                                    <div className="mt-auto pt-8 border-t border-slate-50 flex items-center text-[11px] font-bold text-primary uppercase tracking-[0.2em] group-hover:gap-3 transition-all">
-                                        Access Information <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" />
-                                    </div>
-                                </div>
+                    {/* Card 1: Smartcard */}
+                    <div className="bg-card rounded-2xl p-8 md:p-10 border border-border hover:border-primary/30 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col items-center text-center group transform hover:-translate-y-2 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10 transition-transform duration-500 group-hover:scale-150"></div>
+
+                        <div className="w-24 h-24 rounded-3xl bg-secondary text-primary border border-border flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 shadow-sm relative z-10">
+                            <IdCard size={48} strokeWidth={1.5} />
+                        </div>
+
+                        <h2 className="h4 mb-4 relative z-10">
+                            {t("services.smartcardTitle")}
+                        </h2>
+
+                        <p className="p-muted mb-8 max-w-sm relative z-10">
+                            {t("services.smartcardDesc")}
+                        </p>
+
+                        <div className="flex flex-col gap-4 w-full mb-10 text-left px-2 sm:px-6 relative z-10">
+                            <div className="flex items-center gap-3 p-small text-muted-foreground bg-muted/50 p-3 rounded-xl border border-border">
+                                <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
+                                <span>{t("services.smartcardFeature1")}</span>
+                            </div>
+                            <div className="flex items-center gap-3 p-small text-muted-foreground bg-muted/50 p-3 rounded-xl border border-border">
+                                <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
+                                <span>{t("services.smartcardFeature2")}</span>
+                            </div>
+                        </div>
+
+                        <div className="mt-auto w-full relative z-10">
+                            <Link to="/services/smartcard/apply" className="w-full block">
+                                <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold py-7 text-base lg:text-lg rounded-xl transition-all duration-500 shadow-md hover:shadow-xl hover:shadow-primary/20 flex items-center justify-center gap-3 active:scale-[0.98]">
+                                    {t("services.applyBtn")}
+                                    <ArrowRight size={20} className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-500" />
+                                </Button>
                             </Link>
-                        ))}
+                        </div>
                     </div>
-                )}
+
+                    {/* Card 2: Household Registration */}
+                    <div className="bg-card rounded-2xl p-8 md:p-10 border border-border hover:border-primary/30 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col items-center text-center group transform hover:-translate-y-2 relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-32 h-32 bg-primary/5 rounded-br-[100px] -z-10 transition-transform duration-500 group-hover:scale-150"></div>
+
+                        <div className="w-24 h-24 rounded-3xl bg-secondary text-primary border border-border flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 shadow-sm relative z-10">
+                            <BookOpen size={48} strokeWidth={1.5} />
+                        </div>
+
+                        <h2 className="h4 mb-4 relative z-10">
+                            {t("services.householdTitle")}
+                        </h2>
+
+                        <p className="p-muted mb-8 max-w-sm relative z-10">
+                            {t("services.householdDesc")}
+                        </p>
+
+                        <div className="flex flex-col gap-4 w-full mb-10 text-left px-2 sm:px-6 relative z-10">
+                            <div className="flex items-center gap-3 p-small text-muted-foreground bg-muted/50 p-3 rounded-xl border border-border">
+                                <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
+                                <span>{t("services.householdFeature1")}</span>
+                            </div>
+                            <div className="flex items-center gap-3 p-small text-muted-foreground bg-muted/50 p-3 rounded-xl border border-border">
+                                <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
+                                <span>{t("services.householdFeature2")}</span>
+                            </div>
+                        </div>
+
+                        <div className="mt-auto w-full relative z-10">
+                            <Link to="/services/household/apply" className="w-full block">
+                                <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold py-7 text-base lg:text-lg rounded-xl transition-all duration-500 shadow-md hover:shadow-xl hover:shadow-primary/20 flex items-center justify-center gap-3 active:scale-[0.98]">
+                                    {t("services.applyBtn")}
+                                    <ArrowRight size={20} className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-500" />
+                                </Button>
+                            </Link>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     );
 }
-

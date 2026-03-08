@@ -7,7 +7,7 @@ export interface Page {
     content: string;
     bannerImage: string;
     section: 'services' | 'districts';
-    status: 'Draft' | 'Published';
+    status: 'Draft' | 'Published' | 'Pending';
     author: { _id: string; name: string };
     order: number;
     createdAt: string;
@@ -27,7 +27,7 @@ export interface CreatePagePayload {
     title: string;
     content: string;
     section: 'services' | 'districts';
-    status: 'Draft' | 'Published';
+    status: 'Draft' | 'Published' | 'Pending';
     bannerImage?: string;
     order?: number;
 }

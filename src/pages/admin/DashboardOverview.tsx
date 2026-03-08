@@ -49,8 +49,8 @@ export default function DashboardOverview() {
 
             {/* ── Welcome Banner ─────────────────────────────── */}
             <div className={`mb-8 rounded-2xl p-6 md:p-8 border shadow-sm ${role === 3 ? "bg-gradient-to-r from-slate-900 to-slate-800 border-slate-700" :
-                    role === 2 ? "bg-gradient-to-r from-[#808080] to-[#555555] border-slate-600" :
-                        "bg-gradient-to-r from-blue-600 to-indigo-700 border-indigo-600"
+                role === 2 ? "bg-gradient-to-r from-[#808080] to-[#555555] border-slate-600" :
+                    "bg-gradient-to-r from-blue-600 to-indigo-700 border-indigo-600"
                 }`}>
                 <div className="flex items-start justify-between flex-wrap gap-4">
                     <div>
@@ -150,7 +150,7 @@ export default function DashboardOverview() {
                             icon={<CheckCircle2 size={22} />}
                             label="လွှင့်တင်ပြီး သတင်းများ"
                             value={newsLoading ? "-" : publishedCount}
-                            bg="bg-slate-50" text="text-[#808080]" border="border-slate-100"
+                            bg="bg-slate-50" text="text-primary" border="border-slate-100"
                         />
                         <StatCard
                             icon={<FileEdit size={22} />}
@@ -175,7 +175,7 @@ export default function DashboardOverview() {
 
                     {/* CMS Section Stats */}
                     <h2 className="text-lg font-bold text-slate-800 padauk-bold mb-4 flex items-center gap-2">
-                        <span className="w-1.5 h-5 rounded-full bg-[#808080] inline-block" />
+                        <span className="w-1.5 h-5 rounded-full bg-primary inline-block" />
                         ကဏ္ဍအလိုက် အချက်အလက်
                     </h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
@@ -195,7 +195,7 @@ export default function DashboardOverview() {
 
                     {/* Admin Quick Actions */}
                     <h2 className="text-lg font-bold text-slate-800 padauk-bold mb-4 flex items-center gap-2">
-                        <span className="w-1.5 h-5 rounded-full bg-[#808080] inline-block" />
+                        <span className="w-1.5 h-5 rounded-full bg-primary inline-block" />
                         အမြန် လုပ်ဆောင်ရန်
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -225,7 +225,7 @@ export default function DashboardOverview() {
 
                     {/* Admin Permission Info */}
                     <div className="mt-8 bg-slate-50 border border-slate-200 rounded-2xl p-5 flex items-start gap-3">
-                        <ShieldCheck size={20} className="text-[#808080] shrink-0 mt-0.5" />
+                        <ShieldCheck size={20} className="text-primary shrink-0 mt-0.5" />
                         <div>
                             <p className="text-sm font-bold text-slate-900 padauk-bold">စီမံခန့်ခွဲသူ အကောင့်</p>
                             <p className="text-xs text-slate-700 padauk-regular mt-1">
@@ -247,7 +247,7 @@ export default function DashboardOverview() {
                             icon={<CheckCircle2 size={22} />}
                             label="လွှင့်တင်ပြီး သတင်းများ"
                             value={newsLoading ? "-" : publishedCount}
-                            bg="bg-slate-50" text="text-[#808080]" border="border-slate-100"
+                            bg="bg-slate-50" text="text-primary" border="border-slate-100"
                         />
                         <StatCard
                             icon={<FileEdit size={22} />}
@@ -271,7 +271,7 @@ export default function DashboardOverview() {
 
                     {/* CMS Section Stats */}
                     <h2 className="text-lg font-bold text-slate-800 padauk-bold mb-4 flex items-center gap-2">
-                        <span className="w-1.5 h-5 rounded-full bg-[#808080] inline-block" />
+                        <span className="w-1.5 h-5 rounded-full bg-primary inline-block" />
                         ကဏ္ဍအလိုက် အချက်အလက်
                     </h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
@@ -291,7 +291,7 @@ export default function DashboardOverview() {
 
                     {/* Root Admin Quick Actions */}
                     <h2 className="text-lg font-bold text-slate-800 padauk-bold mb-4 flex items-center gap-2">
-                        <span className="w-1.5 h-5 rounded-full bg-[#808080] inline-block" />
+                        <span className="w-1.5 h-5 rounded-full bg-primary inline-block" />
                         အမြန် လုပ်ဆောင်ရန်
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -371,7 +371,7 @@ function QuickAction({ to, icon, title, subtitle, variant, badge }: {
             to={to}
             className={`group relative p-6 rounded-2xl border shadow-sm hover:shadow-lg transition-all flex flex-col ${isDark
                 ? 'bg-gradient-to-br from-slate-900 to-slate-800 border-slate-700'
-                : 'bg-gradient-to-br from-[#808080] to-[#555555] border-[#555555] shadow-[#808080]/20'
+                : 'bg-gradient-to-br from-primary to-primary/80 border-primary/20 shadow-primary/20'
                 }`}
         >
             {badge ? (
@@ -379,7 +379,7 @@ function QuickAction({ to, icon, title, subtitle, variant, badge }: {
                     {badge}
                 </span>
             ) : null}
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform ${isDark ? 'bg-slate-800 border-2 border-[#808080] text-[#808080]' : 'bg-[#555555] border-2 border-white/30 text-white'
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform ${isDark ? 'bg-slate-800 border-2 border-primary/40 text-primary' : 'bg-primary/20 border-2 border-white/30 text-white'
                 }`}>
                 {icon}
             </div>

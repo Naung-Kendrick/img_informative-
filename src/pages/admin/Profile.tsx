@@ -67,7 +67,7 @@ export default function Profile() {
         if (!file) return;
 
         const formData = new FormData();
-        formData.append("avatar", file);
+        formData.append("file", file);
 
         try {
             const result = await uploadAvatar(formData).unwrap();
@@ -122,7 +122,7 @@ export default function Profile() {
                             <p className="text-slate-500 text-sm mt-1">{user.email}</p>
                             <span className="inline-flex mt-4 items-center gap-1.5 px-3 py-1 bg-slate-50 text-[#808080] rounded-full text-xs font-bold uppercase tracking-wider border border-slate-100">
                                 <ShieldCheck size={14} />
-                                {user.role === 3 ? "Root Admin" : user.role === 2 ? "Admin" : "Staff"}
+                                {user.role === 3 ? "Root Admin" : user.role === 2 ? "Admin" : user.role === 1 ? "Staff" : "User"}
                             </span>
                         </div>
                     </div>

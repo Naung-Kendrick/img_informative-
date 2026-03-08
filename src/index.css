@@ -1,14 +1,17 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* Institutional Color Palette */
-  --color-primary: #9a7b4f;
-  /* Warm Gold / Bronze Accent */
-  --color-primary-foreground: #ffffff;
+  --color-brand-blue: #1A5B9C;
+  --color-brand-green: #228B22;
+  --color-brand-gold: #D4AF37;
+  --color-brand-silver: #E2E8F0;
 
-  --color-accent: #9a7b4f;
-  --color-accent-foreground: #ffffff;
+  --font-sans: "Inter", "Padauk", "Noto Sans Myanmar", sans-serif;
+  --font-padauk: "Padauk", sans-serif;
 
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
@@ -16,25 +19,30 @@
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
 
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
+
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
 
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
   --color-popover: hsl(var(--popover));
   --color-popover-foreground: hsl(var(--popover-foreground));
 
-  /* Spacing & Borders */
-  --radius-xl: 4px;
-  /* Crisp, institutional borders */
-  --radius-lg: 2px;
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
 
-  /* Typography */
-  --font-sans: 'Inter', 'Padauk', 'Noto Sans Myanmar', sans-serif;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 
   --animate-marquee: marquee 40s linear infinite;
 
@@ -49,99 +57,152 @@
   }
 }
 
-/* CSS Variables for Light and Dark Themes */
-:root {
-  /* Institutional Design Tokens (WCAG Compliant) */
-  --background: 210 20% 98%;
-  /* Light Gray-Blue */
-  --foreground: 222 47% 11%;
-  /* Charcoal Black */
-
-  --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
-
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
-
-  --primary: 35 32% 46%;
-  /* Deep Gold/Bronze */
-  --primary-foreground: 0 0% 100%;
-
-  --secondary: 210 20% 92%;
-  /* Neutral Gray */
-  --secondary-foreground: 222 47% 11%;
-
-  --muted: 210 20% 95%;
-  --muted-foreground: 215 16% 40%;
-
-  --accent: 35 32% 46%;
-  --accent-foreground: 0 0% 100%;
-
-  --destructive: 0 84% 45%;
-  /* Serious error red */
-  --destructive-foreground: 210 40% 98%;
-
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 35 32% 46%;
-
-  font-family: 'Inter', 'Padauk', 'Noto Sans Myanmar', sans-serif;
-  line-height: 1.6;
-  /* Optimal readability */
-  font-weight: 400;
-  color-scheme: light;
-}
-
-/* Dark mode CSS block removed to revert to original styling */
-
 @layer base {
-  h1 {
-    @apply text-[36px] md:text-[48px] font-bold leading-tight tracking-tight text-foreground mb-6;
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 224 76% 33%;
+    /* Deep Navy Blue #1e3a8a */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 215 19% 35%;
+    /* Dark Slate #475569 */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 24 94% 50%;
+    /* Burnt Orange #ea580c */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 224 76% 33%;
+
+    --radius: 0.5rem;
   }
 
-  h2 {
-    @apply text-[28px] md:text-[32px] font-semibold leading-snug text-foreground mb-4;
-  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
 
-  h3 {
-    @apply text-[22px] md:text-[24px] font-medium leading-normal text-foreground mb-3;
-  }
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
 
-  p {
-    @apply text-[16px] md:text-[18px] leading-[1.7] text-muted-foreground mb-4;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 224 76% 33%;
+    /* Deep Navy Blue #1e3a8a */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 215 19% 35%;
+    /* Dark Slate #475569 */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+
+    --accent: 24 94% 50%;
+    /* Burnt Orange #ea580c */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 224 76% 33%;
   }
 
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
   }
 
   body {
-    @apply bg-background text-foreground;
-  }
-}
-
-/* Animations for Sheet */
-@keyframes "in" {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+    @apply bg-background text-foreground font-sans antialiased selection:bg-primary/20 selection:text-primary;
+    font-feature-settings: "cv11", "ss01";
   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+  /* 
+    =========================================
+    TYPOGRAPHY TOKENS (ELITE STANDARD)
+    =========================================
+  */
 
-@keyframes "out" {
-  from {
-    opacity: 1;
-    transform: translateY(0);
+  .h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-[1.6] font-bold;
+    font-family: var(--font-padauk);
   }
 
-  to {
-    opacity: 0;
-    transform: translateY(10px);
+  .h2 {
+    @apply text-3xl md:text-4xl font-bold tracking-tight text-foreground leading-[1.6] font-bold;
+    font-family: var(--font-padauk);
+  }
+
+  .h3 {
+    @apply text-2xl md:text-3xl font-semibold tracking-tight text-foreground leading-[1.6] font-bold;
+    font-family: var(--font-padauk);
+  }
+
+  .h4 {
+    @apply text-xl md:text-2xl font-semibold tracking-tight text-foreground leading-[1.6] font-bold;
+    font-family: var(--font-padauk);
+  }
+
+  .p-lead {
+    @apply text-lg md:text-xl text-muted-foreground leading-relaxed font-normal;
+    font-family: var(--font-padauk);
+  }
+
+  .p-default {
+    @apply text-base leading-7 text-foreground font-normal;
+    font-family: var(--font-padauk);
+  }
+
+  .p-muted {
+    @apply text-sm text-muted-foreground font-normal leading-relaxed;
+    font-family: var(--font-padauk);
+  }
+
+  .p-small {
+    @apply text-xs text-muted-foreground font-medium uppercase tracking-wider;
+  }
+
+  /* 
+    =========================================
+    LAYOUT & SPACING TOKENS
+    =========================================
+  */
+  .page-container {
+    @apply w-full flex flex-col min-h-screen;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  .container-custom {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-narrow {
+    @apply w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-content {
+    @apply w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
 

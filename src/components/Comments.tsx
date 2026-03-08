@@ -29,7 +29,7 @@ export default function Comments({ newsId }: { newsId: string }) {
     return (
         <div className="mt-16 pt-8 border-t border-slate-100">
             <div className="flex items-center gap-2 mb-8">
-                <div className="p-2 bg-slate-50 rounded-lg text-[#808080]">
+                <div className="p-2 bg-secondary rounded-lg text-primary">
                     <MessageSquare size={20} />
                 </div>
                 <h3 className="text-2xl font-bold text-slate-800 padauk-bold">
@@ -56,13 +56,13 @@ export default function Comments({ newsId }: { newsId: string }) {
                                 value={content}
                                 onChange={(e) => setContent(e.target.value)}
                                 placeholder={t("comments.placeholder")}
-                                className="w-full bg-white border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular min-h-[120px] resize-y shadow-inner"
+                                className="w-full bg-white border border-border rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular min-h-[120px] resize-y shadow-inner"
                             />
                             <div className="flex justify-end">
                                 <button
                                     type="submit"
                                     disabled={isSubmitting || !content.trim()}
-                                    className="px-8 py-3 bg-[#808080] text-white font-bold rounded-xl hover:bg-[#555555] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-md hover:shadow-lg shadow-[#808080]/20 padauk-bold active:scale-95"
+                                    className="px-8 py-3 bg-primary text-primary-foreground font-bold rounded-xl hover:bg-primary/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-md hover:shadow-lg shadow-primary/20 padauk-bold active:scale-95"
                                 >
                                     {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
                                     {t("comments.submit")}
@@ -73,7 +73,7 @@ export default function Comments({ newsId }: { newsId: string }) {
                 </form>
             ) : (
                 <div className="mb-10 bg-gradient-to-br from-slate-50 to-slate-50/20 p-8 rounded-3xl border border-dashed border-slate-200 text-center padauk-regular shadow-sm">
-                    <div className="mx-auto w-16 h-16 bg-white rounded-full flex items-center justify-center text-[#808080] mb-4 shadow-sm">
+                    <div className="mx-auto w-16 h-16 bg-white rounded-full flex items-center justify-center text-primary mb-4 shadow-sm">
                         <MessageSquare size={32} />
                     </div>
                     <p className="text-slate-600 mb-6 font-medium text-lg">{t("comments.loginRequiredTitle")}</p>
@@ -98,7 +98,7 @@ export default function Comments({ newsId }: { newsId: string }) {
             ) : comments && comments.length > 0 ? (
                 <div className="space-y-6">
                     {comments.map((comment: Comment) => (
-                        <div key={comment._id} className="flex flex-col sm:flex-row gap-4 p-6 rounded-2xl bg-white border border-slate-100 hover:border-[#808080]/10 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-500 animate-in fade-in slide-in-from-bottom-4">
+                        <div key={comment._id} className="flex flex-col sm:flex-row gap-4 p-6 rounded-2xl bg-white border border-border hover:border-primary/10 hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 animate-in fade-in slide-in-from-bottom-4">
                             <div className="flex items-center gap-3 sm:block shrink-0">
                                 <div className="w-12 h-12 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden shadow-sm transition-transform hover:scale-105">
                                     {comment.author?.avatar ? (
@@ -110,7 +110,7 @@ export default function Comments({ newsId }: { newsId: string }) {
                                 <div className="sm:hidden flex flex-col">
                                     <span className="font-bold text-slate-900 padauk-bold text-base">{comment.author?.name || t("comments.anonymous")}</span>
                                     <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                                        {new Date(comment.createdAt).toLocaleDateString("en-GB", { day: 'numeric', month: 'short' })}
+                                        {new Date(comment.createdAt).toLocaleDateString("en-GB", { day: 'numeric', month: 'short', year: 'numeric' })} • {new Date(comment.createdAt).toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit', hour12: true })}
                                     </span>
                                 </div>
                             </div>
@@ -120,7 +120,7 @@ export default function Comments({ newsId }: { newsId: string }) {
                                     <span className="font-bold text-slate-900 padauk-bold text-xl">{comment.author?.name || t("comments.anonymous")}</span>
                                     <div className="w-1 h-1 rounded-full bg-slate-300" />
                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                        {new Date(comment.createdAt).toLocaleDateString("en-GB", { day: 'numeric', month: 'short', year: 'numeric' })}
+                                        {new Date(comment.createdAt).toLocaleDateString("en-GB", { day: 'numeric', month: 'short', year: 'numeric' })} • {new Date(comment.createdAt).toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit', hour12: true })}
                                     </span>
 
                                     {comment.author?.role >= 1 && (

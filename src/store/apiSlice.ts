@@ -6,7 +6,7 @@ export const apiSlice = createApi({
     reducerPath: 'api',
     // Set the base URL matching our Node backend
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:3000',
+        baseUrl: 'http://127.0.0.1:3000',
         prepareHeaders: (headers, { getState }) => {
             // By default, if we have a token in the store, let's use that for authenticated requests
             const token = (getState() as RootState).auth.token;
@@ -17,7 +17,7 @@ export const apiSlice = createApi({
         },
     }),
     // This allows us to invalidate specific parts of our cache
-    tagTypes: ['User', 'Category', 'News', 'Comment', 'Page', 'Contact'],
+    tagTypes: ['User', 'Category', 'News', 'Comment', 'Page', 'Contact', 'Announcement', 'District', 'About', 'Statistic', 'ContactInfo', 'Report'],
     // Endpoints will be injected in individual api slice extensions
     endpoints: () => ({}),
 });

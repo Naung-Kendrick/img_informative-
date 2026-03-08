@@ -114,11 +114,12 @@ export default function EditNews() {
                                     onChange={(e) => setCategory(e.target.value)}
                                     className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular"
                                 >
-                                    <option value="Politics">နိုင်ငံရေး</option>
-                                    <option value="Economy">စီးပွားရေး</option>
-                                    <option value="Local">ဒေသတွင်းသတင်း</option>
                                     <option value="Activities">လှုပ်ရှားမှုများ</option>
-                                    <option value="Announcements">ထုတ်ပြန်ချက်များ</option>
+                                    <option value="Services">ဝန်ဆောင်မှုများ</option>
+                                    <option value="Districts">ခရိုင်များ</option>
+                                    <option value="Announcements">ထုတ်ပြန်ချက်နှင့် ညွှန်ကြားချက်များ (Announcement & Directives)</option>
+                                    <option value="About">ဌာနအကြောင်း</option>
+                                    <option value="Contact">ဆက်သွယ်ရန်</option>
                                     <option value="HotNews">အထူးသတင်း (Hot News Ticker)</option>
                                 </select>
                             </div>

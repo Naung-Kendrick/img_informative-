@@ -1,108 +1,146 @@
-import { useGetPagesBySectionQuery } from "../store/pageApiSlice";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { MapPin, ArrowRight } from "lucide-react";
+import { useGetAllDistrictsQuery } from "../store/districtApiSlice";
+import type { District } from "../store/districtApiSlice";
+import { MapPin, Phone, Building, ArrowRight } from "lucide-react";
+import { Button } from "../components/ui/button";
 import { Skeleton } from "../components/ui/skeleton";
+import { useTranslation } from "react-i18next";
 
-/**
- * Public Districts page — shows published pages with section="districts"
- */
 export default function Districts() {
     const { t } = useTranslation();
-    const { data: pages, isLoading, isError } = useGetPagesBySectionQuery("districts");
+    const { data: districts, isLoading, isError } = useGetAllDistrictsQuery();
 
-    const published = pages?.filter((p) => p.status === "Published") || [];
+    const fallbackDistricts = [
+        {
+            _id: "1",
+            name: "နမ့်ဆန်ခရိုင်",
+            address: "ခရိုင်အထွေထွေအုပ်ချုပ်ရေးဦးစီးဌာနရုံး၊ နမ့်ဆန်မြို့",
+            phone: "09-xxxxxxxxx",
+            coverImage: "https://images.unsplash.com/photo-1596401057633-54a8fe8ef647?q=80&w=800&auto=format&fit=crop",
+            mapUrl: "#"
+        },
+        {
+            _id: "2",
+            name: "မန်တုံခရိုင်",
+            address: "ခရိုင်အထွေထွေအုပ်ချုပ်ရေးဦးစီးဌာနရုံး၊ မန်တုံမြို့",
+            phone: "09-xxxxxxxxx",
+            coverImage: "https://images.unsplash.com/photo-1582298538104-efa9acff89ed?q=80&w=800&auto=format&fit=crop",
+            mapUrl: "#"
+        },
+        {
+            _id: "3",
+            name: "နမ့်ခမ်းခရိုင်",
+            address: "ခရိုင်အထွေထွေအုပ်ချုပ်ရေးဦးစီးဌာနရုံး၊ နမ့်ခမ်းမြို့",
+            phone: "09-xxxxxxxxx",
+            coverImage: "https://images.unsplash.com/photo-1542361345-89e58247f2d5?q=80&w=800&auto=format&fit=crop",
+            mapUrl: "#"
+        }
+    ];
+
+    const displayDistricts = districts && districts.length > 0 ? districts : fallbackDistricts;
 
     return (
-        <div className="bg-[#f8fafc] min-h-screen py-16 animate-in fade-in duration-500">
-            <div className="container-custom">
-                {/* Page Header: Official Identity */}
-                <div className="mb-16 border-b border-slate-200 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
-                    <div>
-                        <div className="text-primary text-xs font-bold uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                            <span className="w-8 h-[1px] bg-primary"></span>
-                            Territorial Governance
-                        </div>
-                        <h1 className="mb-0 leading-none">
-                            {t("districts.title")}
-                        </h1>
+        <div className="page-container bg-background animate-in fade-in duration-500 relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -z-10 translate-x-1/3 -translate-y-1/3"></div>
+
+            <div className="container-custom section-padding">
+                {/* Page Header */}
+                <div className="mb-16 text-center max-w-2xl mx-auto flex flex-col items-center">
+                    <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-6 border border-primary/20">
+                        <Building size={14} />
+                        {t("districts.badge")}
                     </div>
-                    <div className="text-muted-foreground text-sm font-medium max-w-md md:text-right">
-                        {t("districts.subtitle")}
-                    </div>
+                    <h1 className="h1 mb-8 relative inline-block pb-4">
+                        {t("districts.adminOffices")}
+                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
+                    </h1>
+                    <p className="p-lead mt-6">
+                        {t("districts.adminOfficesDesc")}
+                    </p>
                 </div>
 
+                {/* Loading State */}
                 {isLoading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                         {[1, 2, 3].map((i) => (
-                            <div key={i} className="bg-white rounded-sm border border-slate-200 overflow-hidden">
-                                <Skeleton className="w-full aspect-[16/10]" />
-                                <div className="p-8">
-                                    <Skeleton className="h-6 w-3/4 mb-4" />
-                                    <Skeleton className="h-4 w-full" />
-                                </div>
+                            <div key={i} className="bg-card rounded-2xl p-6 shadow-sm border border-border flex flex-col">
+                                <Skeleton className="w-full aspect-video rounded-xl mb-6" />
+                                <Skeleton className="h-8 w-2/3 mb-6" />
+                                <Skeleton className="h-5 w-full mb-3" />
+                                <Skeleton className="h-5 w-1/2 mb-8" />
+                                <Skeleton className="h-12 w-full mt-auto" />
                             </div>
                         ))}
                     </div>
                 ) : isError ? (
-                    <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
-                        <div className="bg-red-50 text-red-500 p-8 rounded-sm border border-red-100 max-w-lg">
-                            <h2 className="text-xl font-bold mb-3 uppercase tracking-tight">Data Error</h2>
-                            <p className="text-sm opacity-80">Could not synchronize district administrative records. Please verify your connection.</p>
+                    <div className="flex flex-col items-center justify-center py-20 bg-card rounded-2xl shadow-sm border border-destructive/20 max-w-3xl mx-auto text-center">
+                        <div className="w-16 h-16 bg-destructive/10 text-destructive rounded-full flex items-center justify-center mb-4 mx-auto">
+                            <Building size={32} />
                         </div>
-                    </div>
-                ) : published.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
-                        <div className="bg-white text-slate-400 p-12 rounded-sm max-w-lg border border-slate-200 shadow-sm">
-                            <MapPin size={40} className="mx-auto mb-6 text-slate-200" />
-                            <h2 className="text-xl font-bold mb-3 text-slate-800 uppercase tracking-tight">{t("districts.noDistricts")}</h2>
-                            <p className="text-sm leading-relaxed">{t("districts.noDistrictsDesc")}</p>
-                        </div>
+                        <h2 className="h4 mb-2">{t("districts.networkError")}</h2>
+                        <p className="p-muted">{t("districts.networkErrorDesc")}</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {published.map((page) => (
-                            <Link
-                                key={page._id}
-                                to={`/districts/${page._id}`}
-                                className="group bg-white rounded-sm border border-slate-200 overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col shadow-sm"
+                    /* Display Grid */
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                        {displayDistricts.map((district: District | any) => (
+                            <div
+                                key={district._id}
+                                className="group bg-card rounded-2xl shadow-sm border border-border overflow-hidden hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col pt-0"
                             >
-                                {/* Banner */}
-                                <div className="aspect-[16/10] bg-slate-900 overflow-hidden relative">
-                                    {page.bannerImage ? (
-                                        <img src={page.bannerImage} alt={page.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 opacity-90" />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-slate-800">
-                                            <MapPin size={50} className="opacity-10" />
-                                            <div className="absolute inset-0 flex items-center justify-center italic text-[9px] font-bold uppercase tracking-[0.3em] text-slate-500">Geospatial Record</div>
-                                        </div>
-                                    )}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60" />
-                                    <div className="absolute top-6 right-6">
-                                        <div className="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-sm text-[9px] font-bold uppercase tracking-widest shadow-xl">
-                                            Official Domain
-                                        </div>
-                                    </div>
+                                {/* Image */}
+                                <div className="aspect-video w-full bg-secondary/20 overflow-hidden relative border-b border-border">
+                                    <img
+                                        src={district.coverImage}
+                                        alt={district.name}
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                 </div>
 
-                                {/* Content */}
-                                <div className="p-8 flex flex-col flex-grow">
-                                    <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-4">
-                                        <MapPin size={12} />
-                                        Regional Administration
-                                    </div>
-                                    <h3 className="text-xl font-bold mb-4 group-hover:text-primary transition-colors leading-tight tracking-tight">
-                                        {page.title}
+                                {/* Body */}
+                                <div className="p-6 md:p-8 flex flex-col flex-grow relative">
+                                    <h3 className="h4 mb-6 group-hover:text-primary transition-colors">
+                                        {district.name}
                                     </h3>
-                                    <div
-                                        className="text-slate-500 text-sm leading-relaxed line-clamp-3 mb-8 italic font-medium"
-                                        dangerouslySetInnerHTML={{ __html: page.content.replace(/<[^>]*>?/gm, '') }}
-                                    />
-                                    <div className="mt-auto pt-6 border-t border-slate-50 flex items-center text-[11px] font-bold text-slate-400 group-hover:text-primary uppercase tracking-[0.2em] group-hover:gap-3 transition-all">
-                                        View Profile <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform text-primary/70" />
+
+                                    <div className="flex flex-col gap-4 mb-8">
+                                        <div className="flex items-start gap-3">
+                                            <div className="mt-1 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
+                                                <MapPin size={16} className="text-primary" />
+                                            </div>
+                                            <p className="p-default pt-1">
+                                                {district.address}
+                                            </p>
+                                        </div>
+
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
+                                                <Phone size={16} className="text-primary" />
+                                            </div>
+                                            <p className="text-foreground font-bold tracking-wider text-[15px]">
+                                                {district.phone}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Action Button */}
+                                    <div className="mt-auto w-full">
+                                        {district.mapUrl && district.mapUrl !== "#" ? (
+                                            <a href={district.mapUrl} target="_blank" rel="noreferrer" className="w-full block">
+                                                <Button variant="outline" className="w-full font-bold text-primary border-primary/20 hover:bg-primary/10 hover:text-primary py-6 transition-all duration-300">
+                                                    {t("districts.viewMap")}
+                                                    <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                                                </Button>
+                                            </a>
+                                        ) : (
+                                            <Button variant="outline" className="w-full font-bold text-muted-foreground border-border cursor-default bg-muted/50 py-6 opacity-60">
+                                                {t("districts.noMap")}
+                                            </Button>
+                                        )}
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
                         ))}
                     </div>
                 )}
@@ -110,4 +148,3 @@ export default function Districts() {
         </div>
     );
 }
-

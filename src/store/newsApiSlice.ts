@@ -5,11 +5,12 @@ export interface News {
     title: string;
     content: string;
     category: string;
-    bannerImage: string;
+    images: string[];
     createdAt: string;
     author: { _id: string; name: string };
-    status: "Draft" | "Published";
-    likes: string[];
+    status: "Draft" | "Published" | "Pending";
+    likes: Array<{ _id: string; name: string; avatar?: string; email: string }>;
+    views: number;
 }
 
 export interface NewsResponse {
@@ -26,13 +27,13 @@ export interface CreateNewsPayload {
     title: string;
     content: string;
     category: string;
-    bannerImage?: string;
-    status: 'Draft' | 'Published';
+    images?: string[];
+    status: 'Draft' | 'Published' | 'Pending';
 }
 
 export interface UploadImageResponse {
     success: boolean;
-    url: string;
+    urls: string[];
 }
 
 export const newsApiSlice = apiSlice.injectEndpoints({

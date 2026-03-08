@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useGetPagesBySectionQuery, useDeletePageMutation, type Page } from "../../store/pageApiSlice";
+import { useGetPagesBySectionQuery, useDeletePageMutation, useUpdatePageMutation, type Page } from "../../store/pageApiSlice";
 import type { RootState } from "../../store";
-import { Loader2, Plus, Edit, Trash2, Calendar, Eye, AlertCircle } from "lucide-react";
+import { Loader2, Plus, Edit, Trash2, Calendar, Eye, AlertCircle, Check } from "lucide-react";
 import { Skeleton } from "../../components/ui/skeleton";
 
 interface PageManagementProps {
@@ -21,8 +21,11 @@ export default function PageManagement({ section, title, subtitle, emptyText }: 
     const { user } = useSelector((state: RootState) => state.auth);
     const role = user?.role ?? 0;
 
-    const { data: pages, isLoading, isError, refetch } = useGetPagesBySectionQuery(section);
+    const { data: pages, isLoading, isError, refetch } = useGetPagesBySectionQuery(section, {
+        pollingInterval: 10000,
+    });
     const [deletePage, { isLoading: isDeleting }] = useDeletePageMutation();
+    const [updatePage] = useUpdatePageMutation();
 
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [pageToDelete, setPageToDelete] = useState<string | null>(null);
@@ -42,6 +45,16 @@ export default function PageManagement({ section, title, subtitle, emptyText }: 
                 console.error("Failed to delete:", err);
                 alert("ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ။");
             }
+        }
+    };
+
+    const handleApprove = async (id: string) => {
+        try {
+            await updatePage({ id, data: { status: "Published" } }).unwrap();
+            refetch();
+        } catch (err) {
+            console.error("Failed to approve:", err);
+            alert("အတည်ပြုခြင်း မအောင်မြင်ပါ။");
         }
     };
 
@@ -120,8 +133,12 @@ export default function PageManagement({ section, title, subtitle, emptyText }: 
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase ${item.status === 'Published' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-slate-50 text-slate-600 border border-slate-200'}`}>
-                                                {item.status === 'Published' ? 'လွှင့်တင်ထားသည်' : 'မူကြမ်း'}
+                                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase ${item.status === 'Published' ? 'bg-green-50 text-green-700 border border-green-200' :
+                                                item.status === 'Pending' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                                                    'bg-slate-50 text-slate-600 border border-slate-200'}`}>
+                                                {item.status === 'Published' ? 'လွှင့်တင်ထားသည်' :
+                                                    item.status === 'Pending' ? 'အတည်ပြုရန်စောင့်ဆိုင်းဆဲ' :
+                                                        'မူကြမ်း'}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-slate-600 font-mono text-sm">
@@ -135,6 +152,16 @@ export default function PageManagement({ section, title, subtitle, emptyText }: 
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
+                                                {/* Approve — Admin/Root only */}
+                                                {role >= 2 && item.status === 'Pending' && (
+                                                    <button
+                                                        onClick={() => handleApprove(item._id)}
+                                                        className="p-2 rounded-lg transition-all text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 border border-transparent hover:border-emerald-100"
+                                                        title="အတည်ပြုမည်"
+                                                    >
+                                                        <Check size={18} />
+                                                    </button>
+                                                )}
                                                 <Link to={`/${section}/${item._id}`} target="_blank" className="p-2 rounded-lg transition-colors text-slate-400 hover:text-emerald-600 hover:bg-emerald-50" title="ကြည့်ရှုရန်">
                                                     <Eye size={18} />
                                                 </Link>

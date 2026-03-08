@@ -2,6 +2,11 @@ import { Navigate, Outlet, Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../store";
 import { logout } from "../../store/authSlice";
+import { useGetAllContactsQuery } from "../../store/contactApiSlice";
+import { useGetAllReportsQuery } from "../../store/reportApiSlice";
+import { useGetAllNewsQuery } from "../../store/newsApiSlice";
+import { useGetAllAnnouncementsQuery } from "../../store/announcementApiSlice";
+import { useGetPagesBySectionQuery } from "../../store/pageApiSlice";
 import {
     LayoutDashboard,
     Newspaper,
@@ -17,33 +22,279 @@ import {
     ShieldCheck,
     Shield,
     X,
+    Info,
+    BellRing,
+    Phone,
+    BarChart2,
+    Flag,
+    Clock,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
+const playNotificationSound = () => {
+    try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        // Soft digital bell configuration
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1);
+        oscillator.start(audioCtx.currentTime);
+        oscillator.stop(audioCtx.currentTime + 1);
+    } catch {
+        // Ignore if AudioContext fails/blocked
+    }
+};
+
+const playPendingNotificationSound = () => {
+    try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const playBeep = (time: number, freq: number) => {
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.type = 'triangle';
+            oscillator.frequency.setValueAtTime(freq, time);
+            gainNode.gain.setValueAtTime(0, time);
+            gainNode.gain.linearRampToValueAtTime(0.3, time + 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, time + 0.3);
+            oscillator.start(time);
+            oscillator.stop(time + 0.3);
+        };
+        playBeep(audioCtx.currentTime, 440);
+        playBeep(audioCtx.currentTime + 0.35, 440);
+    } catch { }
+};
 
 export default function AdminLayout() {
     const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
+    const role = user?.role ?? 0;
     const dispatch = useDispatch();
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    // Global Notification State
+    const [toastMessage, setToastMessage] = useState<{ id: string, name: string, subject: string, type?: 'contact' | 'report' | 'pendingPost' } | null>(null);
+    const knownContactIds = useRef<Set<string>>(new Set());
+    const knownReportIds = useRef<Set<string>>(new Set());
+    const knownPendingNewsIds = useRef<Set<string>>(new Set());
+    const knownPendingAnnouncementIds = useRef<Set<string>>(new Set());
+    const knownPendingPageIds = useRef<Set<string>>(new Set());
+
+    // Polling contacts every 10 seconds checking for newly arrived inquiries
+    const { data: contacts } = useGetAllContactsQuery(undefined, {
+        pollingInterval: 10000,
+        skip: !isAuthenticated || role === 0 // Skip polling if not admin
+    });
+
+    // Polling reports every 10 seconds checking for newly arrived content reports
+    const { data: reports } = useGetAllReportsQuery(undefined, {
+        pollingInterval: 10000,
+        skip: !isAuthenticated || role === 0 // Skip polling if not admin
+    });
+
+    // Polling news every 10 seconds checking for newly arrived pending posts (only for admin/root admin)
+    const { data: allNews } = useGetAllNewsQuery(undefined, {
+        pollingInterval: 10000,
+        skip: !isAuthenticated || role < 2
+    });
+
+    const { data: allAnnouncements } = useGetAllAnnouncementsQuery(undefined, {
+        pollingInterval: 10000,
+        skip: !isAuthenticated || role < 2
+    });
+
+    const { data: services } = useGetPagesBySectionQuery("services", {
+        pollingInterval: 10000,
+        skip: !isAuthenticated || role < 2
+    });
+
+    const { data: districts } = useGetPagesBySectionQuery("districts", {
+        pollingInterval: 10000,
+        skip: !isAuthenticated || role < 2
+    });
+
+    useEffect(() => {
+        if (contacts && contacts.length > 0) {
+            let hasNewUnread = false;
+            let newestContact = null;
+
+            contacts.forEach(contact => {
+                if (!knownContactIds.current.has(contact._id)) {
+                    knownContactIds.current.add(contact._id);
+                    if (!contact.isRead) {
+                        hasNewUnread = true;
+                        newestContact = contact;
+                    }
+                }
+            });
+
+            // Trigger alert only if we find a brand new unread message 
+            // after the initial mount (when knownContactIds was > 0 populated)
+            if (hasNewUnread && newestContact && knownContactIds.current.size > contacts.length === false) {
+                playNotificationSound();
+                setToastMessage({
+                    id: (newestContact as any)._id,
+                    name: (newestContact as any).name,
+                    subject: (newestContact as any).subject,
+                    type: 'contact'
+                });
+
+                setTimeout(() => setToastMessage(null), 5000);
+            }
+        }
+    }, [contacts]);
+
+    useEffect(() => {
+        if (reports && reports.length > 0) {
+            let hasNewUnread = false;
+            let newestReport = null;
+
+            reports.forEach(report => {
+                if (!knownReportIds.current.has(report._id)) {
+                    knownReportIds.current.add(report._id);
+                    if (!report.isRead) {
+                        hasNewUnread = true;
+                        newestReport = report;
+                    }
+                }
+            });
+
+            if (hasNewUnread && newestReport && knownReportIds.current.size > reports.length === false) {
+                playNotificationSound();
+                setToastMessage({
+                    id: (newestReport as any)._id,
+                    name: (newestReport as any).reporter?.name || "နှိုင်းမဲ့ အသုံးပြုသူ",
+                    subject: (newestReport as any).reason,
+                    type: 'report'
+                });
+
+                setTimeout(() => setToastMessage(null), 5000);
+            }
+        }
+    }, [reports]);
+
+    useEffect(() => {
+        if (allNews && allNews.length > 0) {
+            let hasNewPending = false;
+            let newestPending = null;
+
+            allNews.forEach(news => {
+                if (news.status === 'Pending') {
+                    if (!knownPendingNewsIds.current.has(news._id)) {
+                        knownPendingNewsIds.current.add(news._id);
+                        hasNewPending = true;
+                        newestPending = news;
+                    }
+                } else {
+                    knownPendingNewsIds.current.delete(news._id);
+                }
+            });
+
+            if (hasNewPending && newestPending && role >= 2) {
+                playPendingNotificationSound();
+                setToastMessage({
+                    id: (newestPending as any)._id,
+                    name: (newestPending as any).author?.name || "ဝန်ထမ်း",
+                    subject: `သတင်းအသစ်: ${(newestPending as any).title}`,
+                    type: 'pendingPost'
+                });
+                setTimeout(() => setToastMessage(null), 8000);
+            }
+        }
+    }, [allNews, role]);
+
+    useEffect(() => {
+        if (allAnnouncements && allAnnouncements.length > 0) {
+            let hasNewPending = false;
+            let newestPending = null;
+
+            allAnnouncements.forEach(ann => {
+                if (ann.status === 'Pending') {
+                    if (!knownPendingAnnouncementIds.current.has(ann._id)) {
+                        knownPendingAnnouncementIds.current.add(ann._id);
+                        hasNewPending = true;
+                        newestPending = ann;
+                    }
+                } else {
+                    knownPendingAnnouncementIds.current.delete(ann._id);
+                }
+            });
+
+            if (hasNewPending && newestPending && role >= 2) {
+                playPendingNotificationSound();
+                setToastMessage({
+                    id: (newestPending as any)._id,
+                    name: "ဝန်ထမ်း",
+                    subject: `ထုတ်ပြန်ချက်အသစ်: ${(newestPending as any).title}`,
+                    type: 'pendingPost'
+                });
+                setTimeout(() => setToastMessage(null), 8000);
+            }
+        }
+    }, [allAnnouncements, role]);
+
+    useEffect(() => {
+        const pages = [...(services || []), ...(districts || [])];
+        if (pages.length > 0) {
+            let hasNewPending = false;
+            let newestPending = null;
+
+            pages.forEach(page => {
+                if (page.status === 'Pending') {
+                    if (!knownPendingPageIds.current.has(page._id)) {
+                        knownPendingPageIds.current.add(page._id);
+                        hasNewPending = true;
+                        newestPending = page;
+                    }
+                } else {
+                    knownPendingPageIds.current.delete(page._id);
+                }
+            });
+
+            if (hasNewPending && newestPending && role >= 2) {
+                playPendingNotificationSound();
+                setToastMessage({
+                    id: (newestPending as any)._id,
+                    name: "ဝန်ထမ်း",
+                    subject: `စာမျက်နှာအသစ်: ${(newestPending as any).title}`,
+                    type: 'pendingPost'
+                });
+                setTimeout(() => setToastMessage(null), 8000);
+            }
+        }
+    }, [services, districts, role]);
 
     // 1. Protection Logic: Must be authenticated
     if (!isAuthenticated || !user) {
         return <Navigate to="/login" replace />;
     }
 
-    // 2. Protection Logic: Block Regular Users (Role 0)
+    // 2. Protection Logic: Regular Users (Role 0) can ONLY access their profile
     if (user.role === 0) {
-        return <Navigate to="/" replace />;
+        if (location.pathname === "/admin") {
+            return <Navigate to="/admin/profile" replace />;
+        }
+        if (!location.pathname.startsWith("/admin/profile")) {
+            return <Navigate to="/" replace />;
+        }
     }
 
     const handleLogout = () => {
         dispatch(logout());
     };
 
-    const role = user.role;
 
     // Role display config
     const roleConfig = {
+        0: { label: "အသုံးပြုသူ", eng: "User", icon: UserCircle, color: "text-slate-400", bg: "bg-slate-500/10" },
         1: { label: "ဝန်ထမ်း", eng: "Staff", icon: Shield, color: "text-blue-400", bg: "bg-blue-500/10" },
         2: { label: "စီမံခန့်ခွဲသူ", eng: "Admin", icon: ShieldCheck, color: "text-slate-400", bg: "bg-slate-500/10" },
         3: { label: "Root Admin", eng: "Root Admin", icon: ShieldCheck, color: "text-emerald-400", bg: "bg-emerald-500/10" },
@@ -53,16 +304,21 @@ export default function AdminLayout() {
     const navLinks = [
         // ── Core ──
         { name: "ပင်မမျက်နှာစာ", path: "/admin", icon: LayoutDashboard, minRole: 1 },
+        { name: "အစီရင်ခံစာများ", path: "/admin/reports", icon: BarChart2, minRole: 1 },
         { name: "သတင်းများ စီမံရန်", path: "/admin/news", icon: Newspaper, minRole: 1 },
+        { name: "ကိန်းဂဏန်းများ စီမံရန်", path: "/admin/statistics", icon: Activity, minRole: 1 },
         { name: "အကောင့်များ စီမံရန်", path: "/admin/users", icon: Users, minRole: 2 },
+        { name: "တိုင်ကြားစာများ (Reports)", path: "/admin/content-reports", icon: Flag, minRole: 1 },
 
         // ── CMS Sections ──
         { name: "လှုပ်ရှားမှုများ", path: "/admin/activities", icon: Activity, minRole: 1, group: "cms" },
         { name: "အထူးသတင်းများ (Ticker)", path: "/admin/hotnews", icon: Megaphone, minRole: 1, group: "cms" },
         { name: "ဝန်ဆောင်မှုများ", path: "/admin/services", icon: Briefcase, minRole: 1, group: "cms" },
         { name: "ခရိုင်များ", path: "/admin/districts", icon: MapPin, minRole: 1, group: "cms" },
-        { name: "ထုတ်ပြန်ချက်များ", path: "/admin/announcements", icon: Megaphone, minRole: 1, group: "cms" },
-        { name: "ဆက်သွယ်ရန်", path: "/admin/contact", icon: Mail, minRole: 2, group: "cms" },
+        { name: "ထုတ်ပြန်ချက်နှင့် ညွှန်ကြားချက်များ", path: "/admin/announcements", icon: Megaphone, minRole: 1, group: "cms" },
+        { name: "ဌာနအကြောင်း", path: "/admin/about", icon: Info, minRole: 1, group: "cms" },
+        { name: "ဆက်သွယ်ရန် (Messages)", path: "/admin/contact", icon: Mail, minRole: 2, group: "cms" },
+        { name: "လိပ်စာနှင့် ဖုန်းနံပါတ်များ", path: "/admin/contact-info", icon: Phone, minRole: 2, group: "cms" },
     ];
 
     return (
@@ -114,7 +370,7 @@ export default function AdminLayout() {
                                     <Link
                                         to={link.path}
                                         className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors ${isActive
-                                            ? "bg-[#808080] text-white"
+                                            ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                                             : "hover:bg-slate-800 hover:text-white"
                                             }`}
                                         onClick={() => setIsSidebarOpen(false)}
@@ -131,7 +387,7 @@ export default function AdminLayout() {
                     <div className="shrink-0 border-t border-slate-800 pt-3 mt-3">
                         <Link
                             to="/admin/profile"
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors ${location.pathname === '/admin/profile' ? 'bg-[#808080] text-white' : 'hover:bg-slate-800 hover:text-white'}`}
+                            className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors ${location.pathname === '/admin/profile' ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20' : 'hover:bg-slate-800 hover:text-white'}`}
                             onClick={() => setIsSidebarOpen(false)}
                         >
                             <UserCircle className="h-5 w-5" />
@@ -157,7 +413,42 @@ export default function AdminLayout() {
             )}
 
             {/* Main Content Area */}
-            <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+
+                {/* Global Notification Toast */}
+                {toastMessage && (
+                    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-top-4 fade-in duration-500">
+                        <div className={`bg-white border-l-4 ${toastMessage.type === 'report' ? 'border-rose-500' : toastMessage.type === 'pendingPost' ? 'border-indigo-500' : 'border-primary'} rounded-xl shadow-2xl p-4 flex items-start gap-4 pr-12 min-w-[300px]`}>
+                            <div className={`${toastMessage.type === 'report' ? 'bg-rose-100 text-rose-600' : toastMessage.type === 'pendingPost' ? 'bg-indigo-100 text-indigo-600' : 'bg-primary/10 text-primary'} p-2 rounded-full shrink-0`}>
+                                {toastMessage.type === 'report' ? (
+                                    <Flag size={20} className="animate-bounce" />
+                                ) : toastMessage.type === 'pendingPost' ? (
+                                    <Clock size={20} className="animate-pulse" />
+                                ) : (
+                                    <BellRing size={20} className="animate-pulse" />
+                                )}
+                            </div>
+                            <div>
+                                <h4 className="text-sm font-bold text-slate-900 padauk-bold">
+                                    {toastMessage.type === 'report' ? 'တိုင်ကြားစာအသစ် ရောက်ရှိပါသည်' :
+                                        toastMessage.type === 'pendingPost' ? 'အတည်ပြုရန် သတင်းအသစ်ရှိပါသည်' :
+                                            'မက်ဆေ့ချ်အသစ်ရောက်ရှိနေပါသည်'}
+                                </h4>
+                                <p className="text-xs text-slate-500 font-medium mt-1">
+                                    <span className="text-slate-700">{toastMessage.name}</span>
+                                    {toastMessage.type === 'report' ? ' မှ တိုင်ကြားထားပါသည်။' :
+                                        toastMessage.type === 'pendingPost' ? ' မှ တင်ပြထားပါသည်။' :
+                                            ' မှ ပေးပို့ထားပါသည်။'}
+                                </p>
+                                <p className="text-xs text-slate-400 mt-1 truncate max-w-[200px] italic">"{toastMessage.subject}"</p>
+                            </div>
+                            <button onClick={() => setToastMessage(null)} className="absolute top-2 right-2 p-1 text-slate-400 hover:text-slate-600">
+                                <X size={16} />
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 {/* Topbar */}
                 <header className="h-16 flex items-center justify-between px-6 bg-white border-b border-slate-200 shadow-sm z-10 shrink-0">
                     <div className="flex items-center gap-4">
@@ -176,12 +467,12 @@ export default function AdminLayout() {
                         <div className="flex items-center gap-3">
                             <div className="flex flex-col text-right">
                                 <span className="text-sm font-bold text-slate-900">{user.name}</span>
-                                <span className={`text-xs font-bold tracking-wide ${role === 3 ? "text-emerald-600" : role === 2 ? "text-[#808080]" : "text-blue-600"
+                                <span className={`text-xs font-bold tracking-wide ${role === 3 ? "text-emerald-600" : role === 2 ? "text-primary" : "text-blue-600"
                                     }`}>
                                     {roleConfig.eng}
                                 </span>
                             </div>
-                            <Link to="/admin/profile" className={`h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center border-2 overflow-hidden shrink-0 hover:ring-2 transition-all ${role === 3 ? "border-emerald-300 hover:ring-emerald-200" : role === 2 ? "border-[#808080] hover:ring-amber-200" : "border-blue-300 hover:ring-blue-200"
+                            <Link to="/admin/profile" className={`h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center border-2 overflow-hidden shrink-0 hover:ring-2 transition-all ${role === 3 ? "border-emerald-300 hover:ring-emerald-200" : role === 2 ? "border-primary hover:ring-primary/20" : "border-blue-300 hover:ring-blue-200"
                                 }`}>
                                 {user.avatar ? (
                                     <img src={user.avatar} alt="avatar" className="w-full h-full object-cover" />

@@ -13,8 +13,8 @@ export default function CreateNews() {
     const [content, setContent] = useState("<p>သတင်းအကြောင်းအရာများကို ဤနေရာတွင် စတင်ရေးသားပါ...</p>");
 
     // ── Image State ─────────────────────────────────────────────────────────
-    const [imageFile, setImageFile] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [imageFiles, setImageFiles] = useState<File[]>([]);
+    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // ── RTK Query Mutations ─────────────────────────────────────────────────
@@ -24,34 +24,48 @@ export default function CreateNews() {
 
     // ── Handlers ────────────────────────────────────────────────────────────
     const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+        const selectedFiles = Array.from(e.target.files || []);
+        if (selectedFiles.length === 0) return;
 
-        // Validate type
-        if (!file.type.startsWith("image/")) {
-            alert("ရွေးချယ်ထားသောဖိုင်သည် ပုံဖိုင် မဟုတ်ပါ။");
+        // Limit to 5 images total
+        if (imageFiles.length + selectedFiles.length > 5) {
+            alert("အများဆုံး ပုံ ၅ ပုံသာ တင်နိုင်ပါသည်။");
             return;
         }
 
-        // Validate size (10 MB cap — matches backend limit)
-        if (file.size > 10 * 1024 * 1024) {
-            alert("ပုံဖိုင်သည် 10MB ထက် မကြီးသင့်ပါ။");
-            return;
-        }
+        const validFiles: File[] = [];
+        const validPreviews: string[] = [];
 
-        setImageFile(file);
+        selectedFiles.forEach((file) => {
+            // Validate type
+            if (!file.type.startsWith("image/")) {
+                alert(`${file.name} သည် ပုံဖိုင် မဟုတ်ပါ။`);
+                return;
+            }
 
-        // Create a local object URL for instant preview
-        const previewUrl = URL.createObjectURL(file);
-        setImagePreview(previewUrl);
+            // Validate size (10 MB cap)
+            if (file.size > 10 * 1024 * 1024) {
+                alert(`${file.name} သည် 10MB ထက် ကြီးနေပါသည်။`);
+                return;
+            }
+
+            validFiles.push(file);
+            validPreviews.push(URL.createObjectURL(file));
+        });
+
+        setImageFiles((prev) => [...prev, ...validFiles]);
+        setImagePreviews((prev) => [...prev, ...validPreviews]);
+
+        // Reset input value to allow re-selecting same file after removal
+        if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
-    const handleRemoveImage = () => {
-        setImageFile(null);
-        if (imagePreview) URL.revokeObjectURL(imagePreview);
-        setImagePreview(null);
-        // Reset the file input so the same file can be reselected
-        if (fileInputRef.current) fileInputRef.current.value = "";
+    const handleRemoveImage = (index: number) => {
+        // Revoke URL to prevent memory leaks
+        URL.revokeObjectURL(imagePreviews[index]);
+
+        setImageFiles((prev) => prev.filter((_, i) => i !== index));
+        setImagePreviews((prev) => prev.filter((_, i) => i !== index));
     };
 
     /**
@@ -86,29 +100,29 @@ export default function CreateNews() {
         }
 
         try {
-            let bannerImageUrl = "";
+            let bannerImageUrls: string[] = [];
 
-            // ── Step 1: Upload image to S3 (if one was selected) ──────────
-            if (imageFile) {
+            // ── Step 1: Upload images to S3 (if selected) ──────────
+            if (imageFiles.length > 0) {
                 const uploadFormData = new FormData();
-                // The backend's multer is configured to look for a field named "file"
-                uploadFormData.append("file", imageFile);
+                // The backend's multer is configured to look for a field named "images"
+                imageFiles.forEach((file) => {
+                    uploadFormData.append("images", file);
+                });
 
-                // Use RTK Query mutation — auth token is injected automatically by prepareHeaders
+                // Use RTK Query mutation
                 const uploadResult = await uploadImageToS3(uploadFormData).unwrap();
-                console.log("✅ S3 upload result:", uploadResult);
-                bannerImageUrl = uploadResult.url;
+                console.log("✅ S3 upload results:", uploadResult);
+                bannerImageUrls = uploadResult.urls;
             }
 
             // ── Step 2: Create the news article (plain JSON) ──────────────
-            // express.json() on the backend parses this correctly.
-            // bannerImage is the S3 URL string from Step 1 (or empty if no image).
             await createNews({
                 title: title.trim(),
                 category,
                 content,
                 status,
-                bannerImage: bannerImageUrl,
+                images: bannerImageUrls,
             }).unwrap();
 
             // ── Step 3: Redirect on success ────────────────────────────────
@@ -174,11 +188,12 @@ export default function CreateNews() {
                                 className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular"
                             >
                                 <option value="">ရွေးချယ်ပါ</option>
-                                <option value="Politics">နိုင်ငံရေး</option>
-                                <option value="Economy">စီးပွားရေး</option>
-                                <option value="Local">ဒေသတွင်းသတင်း</option>
                                 <option value="Activities">လှုပ်ရှားမှုများ</option>
-                                <option value="Announcements">ထုတ်ပြန်ချက်များ</option>
+                                <option value="Services">ဝန်ဆောင်မှုများ</option>
+                                <option value="Districts">ခရိုင်များ</option>
+                                <option value="Announcements">ထုတ်ပြန်ချက်နှင့် ညွှန်ကြားချက်များ (Announcement & Directives)</option>
+                                <option value="About">ဌာနအကြောင်း</option>
+                                <option value="Contact">ဆက်သွယ်ရန်</option>
                                 <option value="HotNews">အထူးသတင်း (Hot News Ticker)</option>
                             </select>
                         </div>
@@ -188,46 +203,50 @@ export default function CreateNews() {
                     <div className="space-y-2">
                         <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2">
                             <ImageIcon size={16} className="text-[#808080]" />
-                            Banner ပုံ (ရွေးချယ်မှုပြု)
+                            သတင်းဓာတ်ပုံများ (အများဆုံး ၅ ပုံ)
                         </label>
 
-                        {imagePreview ? (
-                            /* Image Preview Card */
-                            <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
-                                <img
-                                    src={imagePreview}
-                                    alt="Banner preview"
-                                    className="w-full max-h-64 object-cover"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={handleRemoveImage}
-                                    className="absolute top-3 right-3 p-1.5 bg-white/90 backdrop-blur-sm rounded-full shadow-md text-slate-600 hover:text-red-500 hover:bg-white transition-all"
-                                    title="ပုံဖျက်မည်"
-                                >
-                                    <X size={16} />
-                                </button>
-                                <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1 text-xs text-slate-600 shadow-sm">
-                                    {imageFile?.name} ({(imageFile!.size / 1024).toFixed(0)} KB)
+                        {/* Image Preview Grid */}
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                            {imagePreviews.map((preview, index) => (
+                                <div key={index} className="relative group aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                                    <img
+                                        src={preview}
+                                        alt={`Preview ${index}`}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveImage(index)}
+                                        className="absolute top-2 right-2 p-1.5 bg-white/90 backdrop-blur-sm rounded-full shadow-md text-slate-600 hover:text-red-500 hover:bg-white transition-all opacity-0 group-hover:opacity-100"
+                                        title="ပုံဖျက်မည်"
+                                    >
+                                        <X size={14} />
+                                    </button>
                                 </div>
-                            </div>
-                        ) : (
-                            /* Drop Zone */
-                            <div
-                                onClick={() => fileInputRef.current?.click()}
-                                className="border-2 border-dashed border-slate-200 rounded-xl p-8 text-center cursor-pointer hover:border-[#808080] hover:bg-[#808080]/5 transition-all group"
-                            >
-                                <UploadCloud
-                                    size={40}
-                                    className="mx-auto mb-3 text-slate-300 group-hover:text-[#808080] transition-colors"
-                                />
-                                <p className="text-slate-500 text-sm padauk-regular">
-                                    ပုံဖိုင် ရွေးချယ်ရန် နှိပ်ပါ
-                                </p>
-                                <p className="text-slate-400 text-xs mt-1">
-                                    PNG, JPG, WEBP — 10MB အထိ
-                                </p>
-                            </div>
+                            ))}
+
+                            {/* Drop Zone / Add Button */}
+                            {imageFiles.length < 5 && (
+                                <div
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="border-2 border-dashed border-slate-200 rounded-xl aspect-square flex flex-col items-center justify-center cursor-pointer hover:border-[#808080] hover:bg-[#808080]/5 transition-all group"
+                                >
+                                    <UploadCloud
+                                        size={24}
+                                        className="mb-2 text-slate-300 group-hover:text-[#808080] transition-colors"
+                                    />
+                                    <p className="text-slate-500 text-[10px] padauk-regular">
+                                        ထပ်တိုးရန်
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+
+                        {imageFiles.length === 0 && (
+                            <p className="text-slate-400 text-xs mt-1">
+                                PNG, JPG, WEBP — 10MB အထိ (၅ ပုံအထိ တင်နိုင်သည်)
+                            </p>
                         )}
 
                         {/* Hidden file input */}
@@ -235,6 +254,7 @@ export default function CreateNews() {
                             ref={fileInputRef}
                             id="news-image"
                             type="file"
+                            multiple
                             accept="image/*"
                             onChange={handleImageSelect}
                             className="hidden"

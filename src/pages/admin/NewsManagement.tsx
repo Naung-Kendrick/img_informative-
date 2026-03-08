@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useGetAllNewsQuery, useDeleteNewsMutation, type News } from "../../store/newsApiSlice";
+import { useGetAllNewsQuery, useDeleteNewsMutation, useUpdateNewsMutation, type News } from "../../store/newsApiSlice";
 import type { RootState } from "../../store";
-import { Loader2, Plus, Edit, Trash2, Calendar, AlertCircle, Eye } from "lucide-react";
+import { Loader2, Plus, Edit, Trash2, Calendar, AlertCircle, Eye, BarChart2, Check } from "lucide-react";
 import { Skeleton } from "../../components/ui/skeleton";
 
 export default function NewsManagement() {
     const { user } = useSelector((state: RootState) => state.auth);
     const role = user?.role ?? 0;
 
-    const { data: news, isLoading, isError, refetch } = useGetAllNewsQuery();
+    const { data: news, isLoading, isError, refetch } = useGetAllNewsQuery(undefined, {
+        pollingInterval: 10000, // Poll every 10 seconds to catch status updates (e.g. Admin approval)
+    });
     const [deleteNews, { isLoading: isDeleting }] = useDeleteNewsMutation();
+    const [updateNews] = useUpdateNewsMutation();
 
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [newsToDelete, setNewsToDelete] = useState<string | null>(null);
@@ -35,11 +38,21 @@ export default function NewsManagement() {
         }
     };
 
+    const handleApprove = async (id: string) => {
+        try {
+            await updateNews({ id, data: { status: "Published" } }).unwrap();
+            refetch();
+        } catch (err) {
+            console.error("Failed to approve news:", err);
+            alert("အတည်ပြုခြင်း မအောင်မြင်ပါ။");
+        }
+    };
+
     return (
         <div className="container mx-auto px-4 py-8 animate-in fade-in duration-500">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 border-l-4 border-[#808080] pl-3 padauk-bold">
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 border-l-4 border-primary pl-3 padauk-bold">
                         သတင်းများ စီမံခန့်ခွဲရန်
                     </h1>
                     <p className="text-slate-500 mt-1 padauk-regular">
@@ -49,7 +62,7 @@ export default function NewsManagement() {
                 {/* All roles can create */}
                 <Link
                     to="/admin/news/new"
-                    className="flex items-center gap-2 bg-[#808080] hover:bg-[#555555] text-white px-5 py-2.5 rounded-xl font-bold transition-colors shadow-sm padauk-bold shrink-0"
+                    className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-5 py-2.5 rounded-xl font-bold transition-colors shadow-sm padauk-bold shrink-0"
                 >
                     <Plus size={20} />
                     သတင်းအသစ်တင်မည်
@@ -118,18 +131,40 @@ export default function NewsManagement() {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase ${item.status === 'Published' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-slate-50 text-slate-600 border border-slate-200'}`}>
-                                                {item.status === 'Published' ? 'လွှင့်တင်ထားသည်' : 'မူကြမ်း'}
+                                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase ${item.status === 'Published' ? 'bg-green-50 text-green-700 border border-green-200' :
+                                                item.status === 'Pending' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                                                    'bg-slate-50 text-slate-600 border border-slate-200'}`}>
+                                                {item.status === 'Published' ? 'လွှင့်တင်ထားသည်' :
+                                                    item.status === 'Pending' ? 'အတည်ပြုရန်စောင့်ဆိုင်းဆဲ' :
+                                                        'မူကြမ်း'}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-slate-500 font-medium">
-                                            <div className="flex items-center gap-2">
-                                                <Calendar size={14} className="text-slate-400" />
-                                                {new Date(item.createdAt || Date.now()).toLocaleDateString("en-GB")}
+                                            <div className="flex flex-col gap-1">
+                                                <div className="flex items-center gap-2">
+                                                    <Calendar size={12} className="text-slate-400" />
+                                                    <span className="text-sm">{new Date(item.createdAt || Date.now()).toLocaleDateString("en-GB")}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 ml-5">
+                                                    <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                                                        {new Date(item.createdAt || Date.now()).toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit', hour12: true })}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
+                                                {/* Approve — Admin (2) and Root Admin (3) only */}
+                                                {canEdit && item.status === 'Pending' && (
+                                                    <button
+                                                        onClick={() => handleApprove(item._id)}
+                                                        className="p-2 rounded-lg transition-all text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 border border-transparent hover:border-emerald-100"
+                                                        title="အတည်ပြုမည်"
+                                                    >
+                                                        <Check size={18} />
+                                                    </button>
+                                                )}
+
                                                 {/* View — all roles can view */}
                                                 <Link
                                                     to={`/news/${item._id}`}
@@ -138,6 +173,15 @@ export default function NewsManagement() {
                                                     title="ကြည့်ရှုရန်"
                                                 >
                                                     <Eye size={18} />
+                                                </Link>
+
+                                                {/* View Interactions */}
+                                                <Link
+                                                    to={`/admin/news/interactions/${item._id}`}
+                                                    className="p-2 rounded-lg transition-all text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 border border-transparent hover:border-indigo-100"
+                                                    title="အပြန်အလှန်တုံ့ပြန်မှုများ"
+                                                >
+                                                    <BarChart2 size={18} />
                                                 </Link>
 
                                                 {/* Edit — Admin (2) and Root Admin (3) only */}

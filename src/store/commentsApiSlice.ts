@@ -31,10 +31,19 @@ export const commentsApiSlice = apiSlice.injectEndpoints({
             // Invalidate specifically the comments bound to the current News item
             invalidatesTags: (_, __, arg) => [{ type: 'Comment', id: arg.newsId }],
         }),
+
+        deleteComment: builder.mutation<{ success: boolean; message: string }, { commentId: string, newsId: string }>({
+            query: ({ commentId }) => ({
+                url: `/comments/${commentId}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: (_, __, arg) => [{ type: 'Comment', id: arg.newsId }],
+        }),
     }),
 });
 
 export const {
     useGetCommentsByNewsIdQuery,
     useAddCommentMutation,
+    useDeleteCommentMutation,
 } = commentsApiSlice;
