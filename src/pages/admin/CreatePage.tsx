@@ -83,7 +83,7 @@ export default function CreatePage() {
                 const uploadFormData = new FormData();
                 uploadFormData.append("file", imageFile);
                 const uploadResult = await uploadImageToS3(uploadFormData).unwrap();
-                bannerImageUrl = uploadResult.url;
+                bannerImageUrl = uploadResult.urls[0];
             }
 
             // ── Step 2: Create the page (plain JSON) ──────────────

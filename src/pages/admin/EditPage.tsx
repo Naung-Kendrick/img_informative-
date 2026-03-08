@@ -14,7 +14,7 @@ export default function EditPage() {
     const [title, setTitle] = useState("");
     const [section, setSection] = useState<"services" | "districts">("services");
     const [content, setContent] = useState("");
-    const [status, setStatus] = useState<"Draft" | "Published">("Draft");
+    const [status, setStatus] = useState<"Draft" | "Published" | "Pending">("Draft");
     const [order, setOrder] = useState<number>(0);
 
     // Sync state once data is fetched successfully

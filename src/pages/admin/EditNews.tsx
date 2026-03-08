@@ -14,7 +14,7 @@ export default function EditNews() {
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
     const [content, setContent] = useState("");
-    const [status, setStatus] = useState<"Draft" | "Published">("Draft");
+    const [status, setStatus] = useState<"Draft" | "Published" | "Pending">("Draft");
 
     // Sync state once data is fetched successfully
     useEffect(() => {

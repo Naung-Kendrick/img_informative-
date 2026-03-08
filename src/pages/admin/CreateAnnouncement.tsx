@@ -84,6 +84,7 @@ export default function CreateAnnouncement() {
                 publishedDate,
                 referenceNumber,
                 documentImages: uploadResult.urls,
+                status: "Published",
             }).unwrap();
 
             navigate("/admin/announcements");

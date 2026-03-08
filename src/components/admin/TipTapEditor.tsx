@@ -57,8 +57,8 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
                 const result = await uploadImageToS3(formData).unwrap();
 
                 // Insert remote S3 URL directly into Editor's html tree!
-                if (result.success && result.url) {
-                    editor.chain().focus().setImage({ src: result.url }).run();
+                if (result.success && result.urls && result.urls.length > 0) {
+                    editor.chain().focus().setImage({ src: result.urls[0] }).run();
                 }
             } catch (err) {
                 console.error("Image upload failed:", err);
