@@ -148,7 +148,7 @@ export default function Navbar() {
                         {/* Identity Module */}
                         <Link to="/" className="flex items-center gap-3 sm:gap-4 lg:gap-5 group min-w-0">
                             <div className="relative flex-shrink-0">
-                                <img src="/logo1-removebg-preview.png" alt="Dept Seal" className="h-14 sm:h-16 lg:h-[4.5rem] w-auto object-contain drop-shadow-md" />
+                                <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="Dept Seal" className="h-14 sm:h-16 lg:h-[4.5rem] w-auto object-contain drop-shadow-md" />
                             </div>
                             <div className="flex flex-col min-w-0 justify-center">
                                 <span className="text-[15px] sm:text-[18px] lg:text-[22px] font-[800] leading-[1.3] lg:leading-tight text-slate-800 group-hover:text-primary transition-colors pr-2">
@@ -273,7 +273,7 @@ export default function Navbar() {
                                 </DropdownMenu>
                             ) : (
                                 <Button asChild className="font-bold px-6 rounded-lg shadow-lg shadow-primary/20 transition-all active:scale-95 text-xs tracking-widest">
-                                    <Link to="/login">PORTAL LOGIN</Link>
+                                    <Link to="/login">LOGIN</Link>
                                 </Button>
                             )}
                         </div>

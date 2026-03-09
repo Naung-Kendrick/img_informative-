@@ -81,7 +81,7 @@ export default function CreatePage() {
             // ── Step 1: Upload image to S3 (if one was selected) ──────────
             if (imageFile) {
                 const uploadFormData = new FormData();
-                uploadFormData.append("file", imageFile);
+                uploadFormData.append("images", imageFile); // API expects 'images' field
                 const uploadResult = await uploadImageToS3(uploadFormData).unwrap();
                 bannerImageUrl = uploadResult.urls[0];
             }

@@ -75,41 +75,34 @@ export default function Login() {
             <div className="w-full max-w-[900px] bg-card rounded-2xl md:rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] overflow-hidden grid grid-cols-1 md:grid-cols-2 border border-border mt-8 mb-8">
 
                 {/* Left Side - Graphic & Welcome */}
-                <div className="bg-gradient-to-br from-[#021024] via-[#052659] to-[#1e3a8a] p-10 md:p-14 text-white flex flex-col justify-between relative overflow-hidden min-h-[400px]">
-                    {/* Decorative abstract wave pattern (mimicking the image's background) */}
+                <div className="bg-gradient-to-br from-[#021024] via-[#052659] to-[#1e3a8a] p-10 md:p-14 text-white flex flex-col justify-center items-center text-center relative overflow-hidden min-h-[500px] border-r border-white/5">
+                    {/* Professional Geometric Background Elements */}
+                    <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-primary/20 rounded-full blur-[100px] opacity-40"></div>
+                    <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] bg-blue-400/10 rounded-full blur-[120px] opacity-30"></div>
+
+                    {/* Stylish Wave Overlays */}
                     <div className="absolute top-1/2 left-[-20%] right-[-20%] h-[200px] border-t border-white/10 rounded-[100%] shadow-[0_-20px_50px_rgba(255,255,255,0.05)] transform -rotate-[15deg]"></div>
                     <div className="absolute top-[45%] left-[-10%] right-[-30%] h-[300px] border-t border-white/5 rounded-[100%] transform -rotate-[5deg]"></div>
 
-                    {/* Logo Area */}
-                    <div className="relative z-10 flex items-center gap-3">
-                        <div className="h-10 w-10 flex items-center justify-center relative">
-                            {/* Recreating the circle and dot logo from the image */}
-
-
-                        </div>
-                        <div className="flex flex-col ">
-                            <img src="public/logo1-removebg-preview.png" alt="logo" className="w-30 h-" />
-
+                    {/* Logo Area - Professional & Stylish */}
+                    <div className="relative z-10 animate-in zoom-in-95 duration-1000">
+                        <div className="h-36 w-36 md:h-44 md:w-44 bg-white rounded-[2.5rem] flex items-center justify-center shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-4 border-white/20 p-6 group transition-all duration-500 hover:scale-105">
+                            <img
+                                src="/photo_2026-03-09_14-35-44-removebg-preview.png"
+                                alt="Department Seal"
+                                className="w-full h-full object-contain"
+                            />
                         </div>
                     </div>
 
-                    <div className="relative z-10 mt-16 mb-12">
-                        <h2 className="text-4xl md:text-[3.25rem] font-bold mb-4 leading-[1.1] tracking-tight text-white">
-                            {isRegistering ? (
-                                <>Join our<br />network!</>
-                            ) : (
-                                <>Hello,<br />welcome!</>
-                            )}
+                    {/* Clear, Minimalist Text */}
+                    <div className="relative z-10 mt-12 animate-in slide-in-from-bottom-8 duration-1000 delay-200 text-center">
+                        <h2 className="text-5xl md:text-6xl font-bold tracking-[-0.03em] text-white/95 leading-tight mb-4 drop-shadow-xl" style={{ fontFamily: "'Times New Roman', serif" }}>
+                            Welcome Back
                         </h2>
-                        <p className="text-white/70 text-sm max-w-[250px] leading-relaxed mt-6">
-                            Official secure portal for Ta'ang Land Federal Unit Government Immigration Department.
-                        </p>
-                    </div>
-
-                    <div className="relative z-10 mt-auto">
-                        <Link to="/" className="inline-flex bg-white/10 hover:bg-white/20 border border-white/20 transition-colors rounded-full px-6 py-2.5 text-xs font-semibold backdrop-blur-md text-white">
-                            View more
-                        </Link>
+                        <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent mx-auto overflow-hidden">
+                            <div className="w-full h-full bg-white/40 animate-pulse"></div>
+                        </div>
                     </div>
                 </div>
 

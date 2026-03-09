@@ -19,7 +19,7 @@ const resources = {
                 profileSettings: "Profile Settings",
                 logout: "Logout",
                 deptTitle: "Ta'ang Land Federal Unit Government Immigration Department",
-                deptSubtitle: "Immigration Department • Ta'ang Land Federal Unit",
+                deptSubtitle: "တအာင်းပြည် ဖက်ဒရယ်ယူနစ် အစိုးရ လူဝင်မှုကြီးကြပ်‌ရေး ဌာန",
                 searchPlaceholder: "Search documents...",
                 noSearchRes: "No results."
             },
@@ -102,7 +102,7 @@ const resources = {
                 smartcardTitle: "Apply for Smartcard",
                 smartcardDesc: "You can apply for a new Smart Identity Card and renew it.",
                 smartcardFeature1: "Full data security",
-                smartcardFeature2: "Can be connected via e-ID system",
+                smartcardFeature2: "Can be connected via Digital system",
                 householdTitle: "Apply for Household Registration",
                 householdDesc: "You can apply online for new household registration, adding/removing members, and making amendments.",
                 householdFeature1: "Can issue new household registration",
@@ -162,7 +162,9 @@ const resources = {
                 privacy: "Privacy Policy",
                 terms: "Terms of Service",
                 location: "Headquarters Location",
-                address: "Ta'ang Region, Northern Shan State"
+                address: "Ta'ang Region, Northern Shan State",
+                phone: "Phone Number",
+                email: "Email"
             },
             searchModal: {
                 placeholder: "Search news, category, author...",
@@ -214,7 +216,7 @@ const resources = {
                 profileSettings: "ကိုယ်ရေးအချက်အလက်",
                 logout: "ထွက်မည်",
                 deptTitle: "တအာင်းပြည် ဖက်ဒရယ်ယူနစ် အစိုးရ လူဝင်မှုကြီးကြပ်‌ရေး ဌာန",
-                deptSubtitle: "Immigration Department • Ta'ang Land Federal Unit",
+                deptSubtitle: "Immigration Department • Ta'ang Land Federal Unit Government",
                 searchPlaceholder: "စာရွက်စာတမ်းများ ရှာဖွေပါ...",
                 noSearchRes: "ရလဒ်မရှိပါ။"
             },
@@ -297,7 +299,7 @@ const resources = {
                 smartcardTitle: "Smartcard ပြုလုပ်ရန်",
                 smartcardDesc: "နိုင်ငံသားစိစစ်ရေးကတ်ပြားအစား ခေတ်မီစမတ်ကတ် (Smart Identity Card) အသစ်လျှောက်ထားခြင်းနှင့် သက်တမ်းတိုးခြင်းများကို လုပ်ဆောင်နိုင်ပါသည်။",
                 smartcardFeature1: "အချက်အလက် လုံခြုံမှု အပြည့်အဝရှိခြင်း",
-                smartcardFeature2: "e-ID စနစ်ဖြင့် ချိတ်ဆက်အသုံးပြုနိုင်ခြင်း",
+                smartcardFeature2: "ဒီဂျစ်တယ်စနစ်ဖြင့် ချိတ်ဆက်အသုံးပြုနိုင်ခြင်း",
                 householdTitle: "အိမ်ထောင်စုစာရင်း ပြုလုပ်ရန်",
                 householdDesc: "အိမ်ထောင်စုလူဦးရေစာရင်း အသစ်ပြုလုပ်ခြင်း၊ မိသားစုဝင် တိုး/လျော့ စာရင်းသွင်းခြင်းနှင့် ပြင်ဆင်ခြင်းများကို အွန်လိုင်းမှ လျှောက်ထားနိုင်ပါသည်။",
                 householdFeature1: "အိမ်ထောင်စုစာရင်း အသစ်ထုတ်ယူနိုင်ခြင်း",
@@ -357,7 +359,9 @@ const resources = {
                 privacy: "ကိုယ်ရေးအချက်အလက်မူဝါဒ",
                 terms: "စည်းကမ်းချက်များ",
                 location: "ရုံးချုပ်တည်နေရာ",
-                address: "တအာင်းဒေသ၊ ရှမ်းပြည်နယ်မြောက်ပိုင်း"
+                address: "တအာင်းဒေသ၊ ရှမ်းပြည်နယ်မြောက်ပိုင်း",
+                phone: "ဖုန်းနံပါတ်",
+                email: "အီးမေးလ်"
             },
             searchModal: {
                 placeholder: "သတင်း၊ ကဏ္ဍ၊ ရေးသားသူ ရှာဖွေပါ...",

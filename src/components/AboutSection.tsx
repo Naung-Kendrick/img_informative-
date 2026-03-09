@@ -60,14 +60,7 @@ export default function AboutSection() {
                         <div className="absolute -top-16 -right-16 w-80 h-80 bg-primary/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
                         <div className="absolute -bottom-16 -left-16 w-[30rem] h-[30rem] bg-primary/5 rounded-full blur-3xl -z-10 animate-pulse delay-700"></div>
 
-                        {/* Premium Info Badge */}
-                        <div className="absolute -bottom-12 -right-10 z-20 bg-white p-10 rounded-[2.5rem] shadow-[0_45px_100px_-20px_rgba(0,0,0,0.25)] border border-slate-100 hidden md:block transform hover:-translate-y-2 transition-transform duration-500 cursor-default">
-                            <div className="flex flex-col items-center">
-                                <div className="text-primary font-black text-5xl mb-1 tracking-tighter">e-ID</div>
-                                <div className="text-[11px] text-slate-400 font-bold uppercase tracking-[0.4em] text-center whitespace-nowrap">NATIONAL STANDARD</div>
-                                <div className="mt-4 px-4 py-1.5 bg-primary/5 rounded-full text-primary font-bold text-[9px] uppercase tracking-widest border border-primary/10 self-stretch text-center">TRUSTED AUTHORITY</div>
-                            </div>
-                        </div>
+
 
                         {/* Framing Element (Physicality Effect) */}
                         <div className="absolute top-12 left-12 -right-12 -bottom-12 bg-slate-100 rounded-[3rem] -z-20 border border-slate-200 shadow-inner"></div>

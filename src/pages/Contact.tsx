@@ -109,7 +109,7 @@ export default function Contact() {
                                 </div>
                             </div>
 
-                            <img src="/logo1-removebg-preview.png" alt="" className="absolute -bottom-10 -right-10 w-48 opacity-[0.08] grayscale invert rotate-12 pointer-events-none" />
+                            <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="" className="absolute -bottom-10 -right-10 w-48 opacity-[0.05] grayscale invert rotate-12 pointer-events-none" />
                         </div>
 
                         {/* Administrative Hours */}

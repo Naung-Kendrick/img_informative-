@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import TipTapEditor from "../../components/admin/TipTapEditor";
-import { useGetNewsByIdQuery, useUpdateNewsMutation } from "../../store/newsApiSlice";
-import { Loader2, ArrowLeft, Save } from "lucide-react";
+import { useGetNewsByIdQuery, useUpdateNewsMutation, useUploadImageToS3Mutation } from "../../store/newsApiSlice";
+import { Loader2, ArrowLeft, Save, ImageIcon, X, UploadCloud } from "lucide-react";
 
 export default function EditNews() {
     const { id } = useParams();
@@ -10,11 +10,17 @@ export default function EditNews() {
 
     const { data: article, isLoading: isFetching } = useGetNewsByIdQuery(id as string, { skip: !id });
     const [updateNews, { isLoading: isUpdating }] = useUpdateNewsMutation();
+    const [uploadImageToS3, { isLoading: isUploading }] = useUploadImageToS3Mutation();
 
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
     const [content, setContent] = useState("");
     const [status, setStatus] = useState<"Draft" | "Published" | "Pending">("Draft");
+
+    // ── Image State ─────────────────────────────────────────────────────────
+    const [imageFiles, setImageFiles] = useState<File[]>([]);
+    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Sync state once data is fetched successfully
     useEffect(() => {
@@ -23,8 +29,41 @@ export default function EditNews() {
             setCategory(article.category);
             setContent(article.content);
             setStatus(article.status);
+            setImagePreviews(article.images || []);
         }
     }, [article]);
+
+    // ── Image Handlers ────────────────────────────────────────────────────────
+    const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || []);
+        if (files.length === 0) return;
+
+        const validFiles = files.filter(file => file.type.startsWith("image/"));
+        if (validFiles.length < files.length) {
+            alert("အချို့ဖိုင်များသည် ပုံဖိုင်များ မဟုတ်ကြပါ။");
+        }
+
+        setImageFiles(prev => [...prev, ...validFiles]);
+        const newPreviews = validFiles.map(file => URL.createObjectURL(file));
+        setImagePreviews(prev => [...prev, ...newPreviews]);
+
+        if (fileInputRef.current) fileInputRef.current.value = "";
+    };
+
+    const handleRemoveImage = (index: number) => {
+        const previewToRemove = imagePreviews[index];
+
+        // If it's a local object URL, revoke it
+        if (previewToRemove.startsWith("blob:")) {
+            URL.revokeObjectURL(previewToRemove);
+            // Also remove from imageFiles (need to find its relative index)
+            // This is slightly complex but let's just match by index if we keep them synced
+            const localFileIndex = imagePreviews.slice(0, index).filter(p => p.startsWith("blob:")).length;
+            setImageFiles(prev => prev.filter((_, i) => i !== localFileIndex));
+        }
+
+        setImagePreviews(prev => prev.filter((_, i) => i !== index));
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -34,13 +73,31 @@ export default function EditNews() {
         }
 
         try {
-            await updateNews({ id: id as string, data: { title, category, content, status } }).unwrap();
-            navigate("/admin/news"); // Go back to management page on success
+            // ── Step 1: Handle Images ──────────────────────────────
+            let finalImageUrls = imagePreviews.filter(p => !p.startsWith("blob:")); // Keep existing S3 URLs
+
+            if (imageFiles.length > 0) {
+                const uploadFormData = new FormData();
+                imageFiles.forEach(file => uploadFormData.append("images", file));
+
+                const uploadResult = await uploadImageToS3(uploadFormData).unwrap();
+                finalImageUrls = [...finalImageUrls, ...uploadResult.urls];
+            }
+
+            // ── Step 2: Update News ──────────────────────────────────
+            await updateNews({
+                id: id as string,
+                data: { title, category, content, status, images: finalImageUrls }
+            }).unwrap();
+
+            navigate("/admin/news");
         } catch (err) {
             console.error("Failed to update news:", err);
             alert("သတင်းပြင်ဆင်ခြင်း မအောင်မြင်ပါ။");
         }
     };
+
+    const isLoading = isFetching || isUpdating || isUploading;
 
     if (isFetching) {
         return (
@@ -82,9 +139,8 @@ export default function EditNews() {
                     </div>
                 </div>
 
-                {/* Helper Badge showing current status */}
-                <div className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border ${status === 'Published' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-slate-100 text-slate-600 border-slate-200'}`}>
-                    ယခုအခြေအနေ: {status === 'Published' ? 'လွှင့်တင်ထားသည်' : 'မူကြမ်း'}
+                <div className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border ${status === 'Published' ? 'bg-green-50 text-green-700 border-green-200' : status === 'Pending' ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-slate-100 text-slate-600 border-slate-200'}`}>
+                    ယခုအခြေအနေ: {status === 'Published' ? 'လွှင့်တင်ထားသည်' : status === 'Pending' ? 'အတည်ပြုရန်စောင့်ဆိုင်းဆဲ' : 'မူကြမ်း'}
                 </div>
             </div>
 
@@ -130,24 +186,64 @@ export default function EditNews() {
                                 </label>
                                 <select
                                     value={status}
-                                    onChange={(e) => setStatus(e.target.value as "Draft" | "Published")}
+                                    onChange={(e) => setStatus(e.target.value as any)}
                                     className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all font-semibold"
                                 >
                                     <option value="Draft">Draft (မူကြမ်း)</option>
+                                    <option value="Pending">Pending (အတည်ပြုရန်)</option>
                                     <option value="Published">Published (လွှင့်မည်)</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
+                    {/* ── Banner Images Update ───────────────────────────── */}
+                    <div className="space-y-4">
+                        <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2">
+                            <ImageIcon size={16} className="text-[#808080]" />
+                            သတင်းဓာတ်ပုံများ (News Images)
+                        </label>
+
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            {imagePreviews.map((src, index) => (
+                                <div key={index} className="relative group aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-50 shadow-sm">
+                                    <img src={src} alt="" className="w-full h-full object-cover" />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveImage(index)}
+                                        className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                                    >
+                                        <X size={14} />
+                                    </button>
+                                    {src.startsWith("blob:") && (
+                                        <div className="absolute bottom-0 inset-x-0 bg-blue-600/80 text-[8px] text-white py-0.5 text-center font-bold uppercase">New</div>
+                                    )}
+                                </div>
+                            ))}
+
+                            <div
+                                onClick={() => fileInputRef.current?.click()}
+                                className="aspect-square rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center cursor-pointer hover:border-[#808080] hover:bg-[#808080]/5 transition-all group"
+                            >
+                                <UploadCloud size={24} className="text-slate-300 group-hover:text-[#808080] mb-1" />
+                                <span className="text-[10px] font-bold text-slate-400 group-hover:text-slate-600 uppercase">Add Image</span>
+                            </div>
+                        </div>
+
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={handleImageSelect}
+                            className="hidden"
+                        />
+                    </div>
+
                     <div className="space-y-2 min-h-[400px]">
                         <label className="text-sm font-semibold text-slate-700 padauk-bold">
                             သတင်းအပြည့်အစုံ <span className="text-red-500">*</span>
                         </label>
-                        {/* 
-              Tiptap must receive initial content. 
-              We only mount Tiptap once `content` is fully populated by useEffect, otherwise it mounts empty.
-            */}
                         {content && <TipTapEditor content={content} onChange={setContent} />}
                     </div>
 
@@ -160,11 +256,11 @@ export default function EditNews() {
                         </button>
                         <button
                             onClick={handleSubmit}
-                            disabled={isUpdating}
-                            className="px-6 py-3 font-semibold text-white bg-green-600 border border-green-600 rounded-xl hover:bg-green-700 transition-colors flex items-center gap-2 padauk-bold shadow-md shadow-green-600/20"
+                            disabled={isLoading}
+                            className="px-6 py-3 font-semibold text-white bg-green-600 border border-green-600 rounded-xl hover:bg-green-700 transition-colors flex items-center gap-2 padauk-bold shadow-md shadow-green-600/20 disabled:opacity-60"
                         >
-                            {isUpdating ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
-                            {isUpdating ? "သိမ်းဆည်းနေသည်..." : "ပြင်ဆင်ထားချက်များကို သိမ်းမည်"}
+                            {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+                            {isLoading ? "သိမ်းဆည်းနေသည်..." : "ပြင်ဆင်ထားချက်များကို သိမ်းမည်"}
                         </button>
                     </div>
 

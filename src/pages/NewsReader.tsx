@@ -287,7 +287,7 @@ export default function NewsReader() {
                                         </div>
                                     </div>
                                 </div>
-                                <img src="/logo1-removebg-preview.png" alt="" className="absolute -bottom-4 -right-4 w-24 opacity-[0.03] grayscale rotate-12 pointer-events-none" />
+                                <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="" className="absolute -bottom-4 -right-4 w-24 opacity-[0.03] grayscale rotate-12 pointer-events-none" />
                             </div>
 
                         </div>

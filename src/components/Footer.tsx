@@ -17,14 +17,16 @@ const Footer = () => {
                     {/* Column 1: Department Identity */}
                     <div className="flex flex-col gap-6 lg:col-span-1">
                         <div className="flex items-center gap-4">
-                            <img src="/logo1-removebg-preview.png" alt="Dept Seal" className="h-14 w-auto grayscale brightness-200 contrast-125" />
+                            <div className="h-20 w-20 bg-white rounded-full flex items-center justify-center shadow-xl border-4 border-white/20 shrink-0">
+                                <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="Dept Seal" className="h-16 w-16 object-contain" />
+                            </div>
                             <div className="flex flex-col">
                                 <span className="text-background font-bold leading-tight tracking-tight uppercase text-sm">Immigration Department</span>
-                                <span className="p-small text-primary">Ta'ang Land Federal Unit</span>
+                                <span className="p-small text-primary">Ta'ang Land Federal Unit Government</span>
                             </div>
                         </div>
                         <p className="p-muted text-background/60 leading-relaxed">
-                            The official portal for immigration services, news, and policy updates of the Ta'ang Land Federal Unit. Committed to security, transparency, and public service excellence.
+                            The official portal for immigration services, news, and policy updates of the Ta'ang Land Federal Unit Government. Committed to security, transparency, and public service excellence.
                         </p>
                         <div className="flex items-center gap-3">
                             {info?.facebook && (
@@ -115,7 +117,7 @@ const Footer = () => {
             <div className="border-t border-background/10 py-8 bg-black/20">
                 <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px] flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="p-small text-background/40">
-                        &copy; {new Date().getFullYear()} Ta'ang Land Federal Unit Immigration. All Rights Reserved.
+                        &copy; {new Date().getFullYear()} Ta'ang Land Federal Unit Government Of Immigration Department. All Rights Reserved.
                     </div>
                     <div className="flex gap-8">
                         <Link to="/privacy-policy" className="p-small text-background/40 hover:text-primary transition-colors">Privacy Policy</Link>

@@ -96,7 +96,7 @@ export default function PageReader() {
                     )}
                     {/* Background Seal Watermark */}
                     <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none invert">
-                        <img src="/logo1-removebg-preview.png" alt="" className="scale-150 rotate-12" />
+                        <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="" className="scale-150 rotate-12" />
                     </div>
                 </div>
 
@@ -206,7 +206,7 @@ export default function PageReader() {
                                     </div>
                                 </div>
                             </div>
-                            <img src="/logo1-removebg-preview.png" alt="" className="absolute -bottom-10 -right-10 w-48 opacity-[0.05] grayscale invert rotate-12 pointer-events-none" />
+                            <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="" className="absolute -bottom-10 -right-10 w-48 opacity-[0.05] grayscale invert rotate-12 pointer-events-none" />
                         </div>
                     </div>
                 </div>

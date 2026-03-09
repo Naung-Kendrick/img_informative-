@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useGetAllNewsQuery } from "../store/newsApiSlice";
 import { useGetAllAnnouncementsQuery } from "../store/announcementApiSlice";
 import { useGetAllDistrictsQuery } from "../store/districtApiSlice";
+import { useGetPagesBySectionQuery } from "../store/pageApiSlice";
 import {
     ArrowRight,
     Calendar,
@@ -29,6 +30,10 @@ const Home = () => {
     const { data: allNews = [], isLoading, isError } = useGetAllNewsQuery();
     const { data: announcements = [], isLoading: isAnnouncementsLoading } = useGetAllAnnouncementsQuery();
     const { data: districts = [], isLoading: isDistrictsLoading } = useGetAllDistrictsQuery();
+    const { data: services = [], isLoading: isServicesLoading } = useGetPagesBySectionQuery("services");
+
+    // Filter for Published services
+    const publishedServices = services.filter(s => s.status === "Published").slice(0, 2);
 
     // Filter for Published news
     const publishedNews = allNews.filter(n => n.status === "Published");
@@ -150,29 +155,32 @@ const Home = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 max-w-5xl mx-auto gap-10">
-                        {/* Service Card 1 */}
-                        <div className="bg-card rounded-[2rem] p-10 shadow-sm border border-border flex flex-col items-center text-center hover:shadow-2xl hover:border-primary/20 transition-all group">
-                            <div className="w-24 h-24 bg-primary/5 text-primary rounded-3xl flex items-center justify-center mb-8 shadow-inner group-hover:bg-primary group-hover:text-white transition-all duration-500 rotate-3 group-hover:rotate-0">
-                                <IdCard size={44} />
+                        {isServicesLoading ? (
+                            [1, 2].map(i => <Skeleton key={i} className="h-96 rounded-[2rem]" />)
+                        ) : publishedServices.length > 0 ? (
+                            publishedServices.map((service, idx) => (
+                                <div key={service._id} className="bg-card rounded-[2rem] p-10 shadow-sm border border-border flex flex-col items-center text-center hover:shadow-2xl hover:border-primary/20 transition-all group">
+                                    <div className={`w-24 h-24 bg-primary/5 text-primary rounded-3xl flex items-center justify-center mb-8 shadow-inner group-hover:bg-primary group-hover:text-white transition-all duration-500 ${idx % 2 === 0 ? 'rotate-3' : '-rotate-3'} group-hover:rotate-0 overflow-hidden`}>
+                                        {service.bannerImage ? (
+                                            <img src={service.bannerImage} alt="" className="w-full h-full object-cover" />
+                                        ) : (
+                                            idx % 2 === 0 ? <IdCard size={44} /> : <Users size={44} />
+                                        )}
+                                    </div>
+                                    <h3 className="h3 mb-6 padauk-bold">{service.title}</h3>
+                                    <p className="text-muted-foreground mb-10 flex-grow leading-relaxed line-clamp-3 padauk-regular"
+                                        dangerouslySetInnerHTML={{ __html: service.content.replace(/<[^>]*>?/gm, '').substring(0, 150) + '...' }}
+                                    />
+                                    <Button className="w-full py-7 rounded-2xl bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground font-bold transition-all shadow-xl" asChild>
+                                        <Link to={`/services/${service._id}`}>{t("hero.readMore") || "CONTINUE READING"} →</Link>
+                                    </Button>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="col-span-full py-20 bg-muted/30 rounded-3xl border border-dashed border-border text-center">
+                                <p className="text-muted-foreground padauk-bold">ဝန်ဆောင်မှုများ မရှိသေးပါ</p>
                             </div>
-                            <h3 className="h3 mb-6">Smartcard ပြုလုပ်ရန်</h3>
-                            <p className="text-muted-foreground mb-10 flex-grow leading-relaxed">နိုင်ငံသားစိစစ်ရေးကတ်ပြားအစား ခေတ်မီစမတ်ကတ်အဖြစ် အသစ်လျှောက်ထားခြင်းနှင့် လဲလှယ်ခြင်း</p>
-                            <Button className="w-full py-7 rounded-2xl bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground font-bold transition-all shadow-xl" asChild>
-                                <Link to="/services/smartcard">START APPLICATION →</Link>
-                            </Button>
-                        </div>
-
-                        {/* Service Card 2 */}
-                        <div className="bg-card rounded-[2rem] p-10 shadow-sm border border-border flex flex-col items-center text-center hover:shadow-2xl hover:border-primary/20 transition-all group">
-                            <div className="w-24 h-24 bg-primary/5 text-primary rounded-3xl flex items-center justify-center mb-8 shadow-inner group-hover:bg-primary group-hover:text-white transition-all duration-500 -rotate-3 group-hover:rotate-0">
-                                <Users size={44} />
-                            </div>
-                            <h3 className="h3 mb-6">အိမ်ထောင်စုစာရင်း ပြုလုပ်ရန်</h3>
-                            <p className="text-muted-foreground mb-10 flex-grow leading-relaxed">အိမ်ထောင်စုလူဦးရေစာရင်း သစ်သွင်းခြင်း၊ ပြောင်းရွှေ့ခြင်း၊ ခွဲထွက်ခြင်းနှင့် ပေါင်းထည့်ခြင်းများပြုလုပ်ရန်</p>
-                            <Button className="w-full py-7 rounded-2xl bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground font-bold transition-all shadow-xl" asChild>
-                                <Link to="/services/household">START APPLICATION →</Link>
-                            </Button>
-                        </div>
+                        )}
                     </div>
                 </div>
             </section>
