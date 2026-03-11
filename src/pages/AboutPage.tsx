@@ -32,16 +32,16 @@ export default function AboutPage() {
     return (
         <div className="page-container bg-white animate-in fade-in duration-700">
             {/* ── SIMPLE CLEAN HEADER ────────────────────────────────────────── */}
-            <div className="bg-slate-50 border-b border-slate-100 py-16 md:py-24">
+            <div className="bg-slate-50 border-b border-slate-100 py-12 md:py-16">
                 <div className="container-custom text-center">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-6 border border-primary/20 shadow-sm">
                         <Building2 size={14} />
                         {t("about.badge") || "ADMINISTRATIVE BODY"}
                     </div>
-                    <h1 className="h1 text-slate-900 mb-6 font-heading">
+                    <h1 className="h1 text-slate-900 mb-4 font-heading">
                         {about.title || t("about.title")}
                     </h1>
-                    <div className="w-20 h-1 bg-primary mx-auto rounded-full mb-8" />
+                    <div className="w-16 h-1 bg-primary mx-auto rounded-full mb-6" />
                     <p className="p-lead max-w-2xl mx-auto text-slate-600 font-sans leading-[1.8]">
                         {t("about.subtitle")}
                     </p>
@@ -49,7 +49,7 @@ export default function AboutPage() {
             </div>
 
             {/* ── MAIN CONTENT (STORY) ────────────────────────────────────────── */}
-            <div className="container-custom py-24 md:py-32">
+            <div className="container-custom py-16 md:py-20">
                 <div className="max-w-5xl mx-auto flex flex-col gap-16 md:gap-24 items-center">
 
                     {/* Image Section - Premium Redesign */}
@@ -68,7 +68,7 @@ export default function AboutPage() {
                     </div>
 
                     {/* Text Section - Centered Elegance */}
-                    <div className="space-y-12 text-center max-w-4xl px-4">
+                    <div className="space-y-8 text-center max-w-4xl px-4">
                         <div className="flex flex-col items-center gap-6">
                             <div className="w-20 h-1 bg-primary/20 rounded-full" />
                             <span className="text-primary font-bold text-xs md:text-sm uppercase tracking-[0.5em] leading-none">
@@ -76,7 +76,7 @@ export default function AboutPage() {
                             </span>
                         </div>
 
-                        <h2 className="text-4xl md:text-6xl font-black text-slate-900 leading-[1.1] padauk-bold tracking-tight">
+                        <h2 className="text-3xl md:text-5xl font-black text-slate-900 leading-[1.1] padauk-bold tracking-tight">
                             {about.title || t("about.title")}
                         </h2>
 
@@ -90,7 +90,7 @@ export default function AboutPage() {
             </div>
 
             {/* ── POLICY & OBJECTIVES (SIMPLE CARDS) ─────────────────────────── */}
-            <div className="bg-slate-50 py-24 md:py-32 border-t border-slate-100">
+            <div className="bg-slate-50 py-16 md:py-20 border-t border-slate-100">
                 <div className="container-custom">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                         {/* Policy Card */}

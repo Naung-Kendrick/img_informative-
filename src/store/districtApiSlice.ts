@@ -6,7 +6,9 @@ export interface District {
     coverImage: string;
     address: string;
     phone: string;
+    officerInCharge?: string;
     mapUrl?: string;
+    order: number;
     createdAt: string;
 }
 
@@ -76,6 +78,15 @@ export const districtApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: [{ type: 'District', id: 'LIST' }],
         }),
 
+        reorderDistricts: builder.mutation<{ success: boolean; message: string }, { id: string; order: number }[]>({
+            query: (data) => ({
+                url: '/districts/reorder',
+                method: 'PATCH',
+                body: data,
+            }),
+            invalidatesTags: [{ type: 'District', id: 'LIST' }],
+        }),
+
         uploadDistrictImage: builder.mutation<{ success: boolean; url: string }, FormData>({
             query: (formData) => ({
                 url: '/districts/upload',
@@ -98,5 +109,6 @@ export const {
     useCreateDistrictMutation,
     useUpdateDistrictMutation,
     useDeleteDistrictMutation,
+    useReorderDistrictsMutation,
     useUploadDistrictImageMutation, // if needed
 } = districtApiSlice;

@@ -11,8 +11,8 @@ import {
     Phone,
     Mail,
     Facebook,
-    Twitter,
-    Instagram,
+    MessageCircle, // for Viber
+    Send, // for Telegram
     Clock,
     Globe,
     Loader2,
@@ -34,8 +34,8 @@ export default function ContactInfoManagement() {
         phone: "",
         email: "",
         facebook: "",
-        twitter: "",
-        instagram: "",
+        telegram: "",
+        viber: "",
         working_hours_en: "",
         working_hours_mm: "",
         map_embed_url: ""
@@ -49,8 +49,8 @@ export default function ContactInfoManagement() {
                 phone: contactInfo.phone || "",
                 email: contactInfo.email || "",
                 facebook: contactInfo.facebook || "",
-                twitter: contactInfo.twitter || "",
-                instagram: contactInfo.instagram || "",
+                telegram: contactInfo.telegram || "",
+                viber: contactInfo.viber || "",
                 working_hours_en: contactInfo.working_hours_en || "",
                 working_hours_mm: contactInfo.working_hours_mm || "",
                 map_embed_url: contactInfo.map_embed_url || ""
@@ -193,28 +193,28 @@ export default function ContactInfoManagement() {
                             </div>
                             <div>
                                 <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-                                    <Twitter size={18} className="text-sky-500" /> Twitter URL
+                                    <Send size={18} className="text-[#0088cc]" /> Telegram URL
                                 </label>
                                 <input
                                     type="text"
-                                    name="twitter"
-                                    value={formData.twitter}
+                                    name="telegram"
+                                    value={formData.telegram}
                                     onChange={handleChange}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
-                                    placeholder="https://twitter.com/..."
+                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#0088cc]/20 focus:border-[#0088cc] transition-all"
+                                    placeholder="https://t.me/..."
                                 />
                             </div>
                             <div>
                                 <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-                                    <Instagram size={18} className="text-pink-600" /> Instagram URL
+                                    <MessageCircle size={18} className="text-[#7360f2]" /> Viber URL
                                 </label>
                                 <input
                                     type="text"
-                                    name="instagram"
-                                    value={formData.instagram}
+                                    name="viber"
+                                    value={formData.viber}
                                     onChange={handleChange}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-pink-500/20 focus:border-pink-500 transition-all"
-                                    placeholder="https://instagram.com/..."
+                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#7360f2]/20 focus:border-[#7360f2] transition-all"
+                                    placeholder="https://viber.click/..."
                                 />
                             </div>
                         </div>

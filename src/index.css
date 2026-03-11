@@ -79,8 +79,8 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 24 94% 50%;
-    /* Burnt Orange #ea580c */
+    --accent: 224 76% 33%;
+    /* Same as Primary for consistency */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
@@ -114,8 +114,7 @@
     --muted: 0 0% 14.9%;
     --muted-foreground: 0 0% 63.9%;
 
-    --accent: 24 94% 50%;
-    /* Burnt Orange #ea580c */
+    --accent: 224 76% 33%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62.8% 30.6%;
@@ -142,7 +141,7 @@
   */
 
   .h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.3];
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground leading-[1.3];
     font-family: var(--font-heading);
   }
 
@@ -191,7 +190,7 @@
   }
 
   .section-padding {
-    @apply py-16 md:py-24;
+    @apply py-10 md:py-16;
   }
 
   .container-custom {

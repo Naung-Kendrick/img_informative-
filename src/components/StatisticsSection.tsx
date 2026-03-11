@@ -72,7 +72,7 @@ const CountUp = ({ end, duration = 2000 }: { end: number, duration?: number }) =
 };
 
 export default function StatisticsSection() {
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { data: statistics, isLoading } = useGetAllStatisticsQuery();
 
     if (isLoading || !statistics || statistics.length === 0) {
@@ -94,7 +94,7 @@ export default function StatisticsSection() {
             <div className="container-custom relative z-10">
                 <div className="text-center mb-16 max-w-3xl mx-auto">
                     <h2 className="text-sm font-bold tracking-widest text-primary uppercase mb-3">
-                        {currentLang === 'en' ? 'Our Reach' : 'ကျွန်ုပ်တို့၏ လက်လှမ်းမီမှု'}
+                        {t("stats.reach")}
                     </h2>
                     <h1 className="text-3xl md:text-4xl font-extrabold text-white padauk-bold mb-6">
                         {currentLang === 'en' ? 'Ta\'ang Land Population & Registration Statistics' : 'တအာင်းပြည်နယ် လူဦးရေ နှင့် မှတ်ပုံတင် စာရင်း'}
@@ -122,8 +122,8 @@ export default function StatisticsSection() {
                                     </div>
 
                                     {(currentLang === 'en' ? stat.date_en : stat.date_mm) && (
-                                        <div className="text-[10px] font-bold text-primary/80 uppercase tracking-widest mb-4 bg-primary/5 px-2 py-0.5 rounded border border-primary/10">
-                                            {currentLang === 'en' ? stat.date_en : stat.date_mm}
+                                        <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-4 bg-slate-900/60 px-3 py-1 rounded-full border border-slate-700/50 shadow-inner">
+                                            {t("stats.asOf")} {currentLang === 'en' ? stat.date_en : stat.date_mm}
                                         </div>
                                     )}
 

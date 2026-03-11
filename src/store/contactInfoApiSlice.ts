@@ -7,8 +7,8 @@ export interface ContactInfo {
     phone: string;
     email: string;
     facebook: string;
-    twitter: string;
-    instagram: string;
+    telegram: string;
+    viber: string;
     working_hours_en: string;
     working_hours_mm: string;
     map_embed_url: string;

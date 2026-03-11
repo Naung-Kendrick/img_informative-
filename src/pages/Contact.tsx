@@ -52,16 +52,16 @@ export default function Contact() {
         <div className="page-container bg-background animate-in fade-in duration-500">
             <div className="container-custom section-padding pb-32">
                 {/* Page Header */}
-                <div className="mb-16 text-center max-w-2xl mx-auto flex flex-col items-center">
-                    <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-6 border border-primary/20">
+                <div className="mb-10 text-center max-w-2xl mx-auto flex flex-col items-center">
+                    <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4 border border-primary/20">
                         <Send size={14} />
                         Official Communication
                     </div>
-                    <h1 className="h1 mb-8 relative inline-block pb-4">
+                    <h1 className="h1 mb-6 relative inline-block pb-4">
                         {t("contact.title")}
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h1>
-                    <p className="p-lead mt-6">
+                    <p className="p-lead mt-4">
                         {t("contact.subtitle")}
                     </p>
                 </div>

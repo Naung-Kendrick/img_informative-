@@ -4,6 +4,8 @@ import { useGetAllNewsQuery } from "../../store/newsApiSlice";
 import { useGetUsersQuery } from "../../store/usersApiSlice";
 import { useGetPagesBySectionQuery } from "../../store/pageApiSlice";
 import { useGetAllContactsQuery } from "../../store/contactApiSlice";
+import { useGetAllDistrictsQuery } from "../../store/districtApiSlice";
+import { useGetAllAnnouncementsQuery } from "../../store/announcementApiSlice";
 import { Link } from "react-router-dom";
 import {
     Newspaper, Users as UsersIcon, CheckCircle2, FileEdit,
@@ -19,14 +21,15 @@ export default function DashboardOverview() {
     const { data: news = [], isLoading: newsLoading } = useGetAllNewsQuery();
     const { data: users = [], isLoading: usersLoading } = useGetUsersQuery(undefined, { skip: role < 2 });
     const { data: servicePages = [], isLoading: servicesLoading } = useGetPagesBySectionQuery("services", { skip: role < 1 });
-    const { data: districtPages = [], isLoading: districtsLoading } = useGetPagesBySectionQuery("districts", { skip: role < 1 });
+    const { data: districts = [], isLoading: districtsLoading } = useGetAllDistrictsQuery(undefined, { skip: role < 1 });
     const { data: contacts = [], isLoading: contactsLoading } = useGetAllContactsQuery(undefined, { skip: role < 2 });
+    const { data: dedicatedAnnouncements = [], isLoading: announcementsLoading } = useGetAllAnnouncementsQuery();
 
     // ── Computed Stats ──
     const publishedCount = news.filter(n => n.status === "Published").length;
     const draftCount = news.filter(n => n.status === "Draft").length;
-    const activitiesCount = news.filter(n => n.category === "Activities" && n.status === "Published").length;
-    const announcementsCount = news.filter(n => n.category === "Announcements" && n.status === "Published").length;
+    const activitiesCount = news.filter(n => n.category?.toLowerCase() === "activities").length;
+    const announcementsCount = dedicatedAnnouncements.length;
     // Staff: only show own news
     const myNewsCount = news.filter(n => n.author?._id === user?._id).length;
     const myPublishedCount = news.filter(n => n.author?._id === user?._id && n.status === "Published").length;
@@ -48,9 +51,9 @@ export default function DashboardOverview() {
         <div className="animate-in fade-in duration-500">
 
             {/* ── Welcome Banner ─────────────────────────────── */}
-            <div className={`mb-8 rounded-2xl p-6 md:p-8 border shadow-sm ${role === 3 ? "bg-gradient-to-r from-slate-900 to-slate-800 border-slate-700" :
-                role === 2 ? "bg-gradient-to-r from-[#808080] to-[#555555] border-slate-600" :
-                    "bg-gradient-to-r from-blue-600 to-indigo-700 border-indigo-600"
+            <div className={`mb-8 rounded-2xl p-6 md:p-8 border shadow-sm ${role === 3 ? "bg-gradient-to-r from-[#1e3a8a] to-[#1e1b4b] border-[#1e3a8a]/50" :
+                role === 2 ? "bg-gradient-to-r from-[#1e40af] to-[#1e3a8a] border-[#1e3a8a]/50" :
+                    "bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] border-blue-500"
                 }`}>
                 <div className="flex items-start justify-between flex-wrap gap-4">
                     <div>
@@ -112,7 +115,7 @@ export default function DashboardOverview() {
                         <MiniStat icon={<TrendingUp size={18} />} label="စုစုပေါင်း သတင်းများ" value={newsLoading ? "-" : publishedCount} color="text-slate-600" />
                         <MiniStat icon={<Zap size={18} />} label="လှုပ်ရှားမှုများ" value={newsLoading ? "-" : activitiesCount} color="text-slate-600" />
                         <MiniStat icon={<Briefcase size={18} />} label="ဝန်ဆောင်မှုများ" value={servicesLoading ? "-" : servicePages.length} color="text-violet-600" />
-                        <MiniStat icon={<Megaphone size={18} />} label="ထုတ်ပြန်ချက်များ" value={newsLoading ? "-" : announcementsCount} color="text-rose-600" />
+                        <MiniStat icon={<Megaphone size={18} />} label="ထုတ်ပြန်ချက်များ" value={announcementsLoading ? "-" : announcementsCount} color="text-rose-600" />
                     </div>
 
                     {/* Staff Quick Actions */}
@@ -181,8 +184,8 @@ export default function DashboardOverview() {
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
                         <MiniStat icon={<Zap size={18} />} label="လှုပ်ရှားမှုများ" value={newsLoading ? "-" : activitiesCount} color="text-slate-600" />
                         <MiniStat icon={<Briefcase size={18} />} label="ဝန်ဆောင်မှုများ" value={servicesLoading ? "-" : servicePages.length} color="text-violet-600" />
-                        <MiniStat icon={<MapPin size={18} />} label="ခရိုင်များ" value={districtsLoading ? "-" : districtPages.length} color="text-teal-600" />
-                        <MiniStat icon={<Megaphone size={18} />} label="ထုတ်ပြန်ချက်များ" value={newsLoading ? "-" : announcementsCount} color="text-rose-600" />
+                        <MiniStat icon={<MapPin size={18} />} label="လူဝင်မှုကြီးကြပ်ရေးရုံးများ" value={districtsLoading ? "-" : districts.length} color="text-teal-600" />
+                        <MiniStat icon={<Megaphone size={18} />} label="ထုတ်ပြန်ချက်များ" value={announcementsLoading ? "-" : announcementsCount} color="text-rose-600" />
                         <Link to="/admin/contact" className="relative">
                             <MiniStat icon={<Mail size={18} />} label="ဆက်သွယ်ချက်များ" value={contactsLoading ? "-" : contacts.length} color="text-sky-600" />
                             {unreadContacts > 0 && (
@@ -277,8 +280,8 @@ export default function DashboardOverview() {
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
                         <MiniStat icon={<Zap size={18} />} label="လှုပ်ရှားမှုများ" value={newsLoading ? "-" : activitiesCount} color="text-slate-600" />
                         <MiniStat icon={<Briefcase size={18} />} label="ဝန်ဆောင်မှုများ" value={servicesLoading ? "-" : servicePages.length} color="text-violet-600" />
-                        <MiniStat icon={<MapPin size={18} />} label="ခရိုင်များ" value={districtsLoading ? "-" : districtPages.length} color="text-teal-600" />
-                        <MiniStat icon={<Megaphone size={18} />} label="ထုတ်ပြန်ချက်များ" value={newsLoading ? "-" : announcementsCount} color="text-rose-600" />
+                        <MiniStat icon={<MapPin size={18} />} label="လူဝင်မှုကြီးကြပ်ရေးရုံးများ" value={districtsLoading ? "-" : districts.length} color="text-teal-600" />
+                        <MiniStat icon={<Megaphone size={18} />} label="ထုတ်ပြန်ချက်များ" value={announcementsLoading ? "-" : announcementsCount} color="text-rose-600" />
                         <Link to="/admin/contact" className="relative">
                             <MiniStat icon={<Mail size={18} />} label="ဆက်သွယ်ချက်များ" value={contactsLoading ? "-" : contacts.length} color="text-sky-600" />
                             {unreadContacts > 0 && (
@@ -370,8 +373,8 @@ function QuickAction({ to, icon, title, subtitle, variant, badge }: {
         <Link
             to={to}
             className={`group relative p-6 rounded-2xl border shadow-sm hover:shadow-lg transition-all flex flex-col ${isDark
-                ? 'bg-gradient-to-br from-slate-900 to-slate-800 border-slate-700'
-                : 'bg-gradient-to-br from-primary to-primary/80 border-primary/20 shadow-primary/20'
+                ? 'bg-[#1e1b4b] border-[#1e3a8a]/50'
+                : 'bg-gradient-to-br from-[#1e3a8a] to-[#1e40af] border-[#1e3a8a]/20 shadow-primary/20'
                 }`}
         >
             {badge ? (
@@ -379,7 +382,7 @@ function QuickAction({ to, icon, title, subtitle, variant, badge }: {
                     {badge}
                 </span>
             ) : null}
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform ${isDark ? 'bg-slate-800 border-2 border-primary/40 text-primary' : 'bg-primary/20 border-2 border-white/30 text-white'
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform ${isDark ? 'bg-[#1e3a8a] border-2 border-white/10 text-white' : 'bg-white/10 border-2 border-white/30 text-white'
                 }`}>
                 {icon}
             </div>

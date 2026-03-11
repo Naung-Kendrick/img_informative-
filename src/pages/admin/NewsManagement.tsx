@@ -137,7 +137,7 @@ export default function NewsManagement() {
                     onChange={(e) => setFilterDistrict(e.target.value)}
                     className="pl-3 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular cursor-pointer"
                 >
-                    <option value="">ခရိုင်အားလုံး</option>
+                    <option value="">ရုံးခွဲအားလုံး</option>
                     {districtsList.map(d => (
                         <option key={d._id} value={d.name}>{d.name.trim()}</option>
                     ))}

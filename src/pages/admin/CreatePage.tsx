@@ -123,7 +123,7 @@ export default function CreatePage() {
                         စာမျက်နှာအသစ် ဖန်တီးရန်
                     </h1>
                     <p className="text-slate-500 mt-1 padauk-regular">
-                        ဝန်ဆောင်မှု သို့မဟုတ် ခရိုင်များအတွက် အချက်အလက်စာမျက်နှာ ဖန်တီးပါ။
+                        ဝန်ဆောင်မှု သို့မဟုတ် လူဝင်မှုကြီးကြပ်ရေးရုံးများအတွက် အချက်အလက်စာမျက်နှာ ဖန်တီးပါ။
                     </p>
                 </div>
             </div>
@@ -159,7 +159,7 @@ export default function CreatePage() {
                             >
                                 <option value="">ရွေးချယ်ပါ</option>
                                 <option value="services">ဝန်ဆောင်မှုများ (Services)</option>
-                                <option value="districts">ခရိုင်များ (Districts)</option>
+                                <option value="districts">လူဝင်မှုကြီးကြပ်ရေးရုံးများ (Immigration Offices)</option>
                             </select>
                         </div>
                     </div>

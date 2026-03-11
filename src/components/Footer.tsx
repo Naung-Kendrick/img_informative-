@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react"
+import { Facebook, MessageCircle, Send, Mail, Phone, MapPin } from "lucide-react"
 import { useGetContactInfoQuery } from "../store/contactInfoApiSlice"
 
 const Footer = () => {
@@ -34,17 +34,17 @@ const Footer = () => {
                                     <Facebook size={18} />
                                 </a>
                             )}
-                            {info?.twitter && (
-                                <a href={info.twitter} target="_blank" rel="noreferrer" className="h-10 w-10 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 hover:bg-primary hover:border-primary text-background/50 hover:text-background transition-all duration-300">
-                                    <Twitter size={18} />
+                            {info?.telegram && (
+                                <a href={info.telegram} target="_blank" rel="noreferrer" className="h-10 w-10 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 hover:bg-primary hover:border-primary text-background/50 hover:text-background transition-all duration-300">
+                                    <Send size={18} />
                                 </a>
                             )}
-                            {info?.instagram && (
-                                <a href={info.instagram} target="_blank" rel="noreferrer" className="h-10 w-10 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 hover:bg-primary hover:border-primary text-background/50 hover:text-background transition-all duration-300">
-                                    <Instagram size={18} />
+                            {info?.viber && (
+                                <a href={info.viber} target="_blank" rel="noreferrer" className="h-10 w-10 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 hover:bg-primary hover:border-primary text-background/50 hover:text-background transition-all duration-300">
+                                    <MessageCircle size={18} />
                                 </a>
                             )}
-                            {!info && [Facebook, Twitter, Instagram].map((Icon, idx) => (
+                            {!info && [Facebook, Send, MessageCircle].map((Icon, idx) => (
                                 <a key={idx} href="#" className="h-10 w-10 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 hover:bg-primary hover:border-primary text-background/50 hover:text-background transition-all duration-300">
                                     <Icon size={18} />
                                 </a>

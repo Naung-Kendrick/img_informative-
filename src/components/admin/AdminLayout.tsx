@@ -319,25 +319,25 @@ export default function AdminLayout() {
     // Nav Links with Role-based Access Control
     const navLinks = [
         // ── Core ──
-        { name: "ပင်မမျက်နှာစာ", path: "/admin", icon: LayoutDashboard, minRole: 1 },
+        { name: "admin ပင်မမျက်နှာစာ", path: "/admin", icon: LayoutDashboard, minRole: 1 },
         { name: "အစီရင်ခံစာများ", path: "/admin/reports", icon: BarChart2, minRole: 1 },
         { name: "သတင်းများ စီမံရန်", path: "/admin/news", icon: Newspaper, minRole: 1 },
         { name: "ကိန်းဂဏန်းများ စီမံရန်", path: "/admin/statistics", icon: Activity, minRole: 1 },
         { name: "အကောင့်များ စီမံရန်", path: "/admin/users", icon: Users, minRole: 2 },
         { name: "History Log (Audit Trail)", path: "/admin/audit-logs", icon: Clock, minRole: 3 },
         { name: "တိုင်ကြားစာများ (Reports)", path: "/admin/content-reports", icon: Flag, minRole: 1 },
-        { name: "ပင်မစာမျက်နှာ Layout", path: "/admin/layout", icon: LayoutDashboard, minRole: 2 },
+        { name: "Home layout မျက်နှာစာ", path: "/admin/layout", icon: LayoutDashboard, minRole: 2 },
 
         // ── CMS Sections ──
         { name: "ကဏ္ဍများ စီမံရန်", path: "/admin/categories", icon: LayoutDashboard, minRole: 1, group: "cms" },
         { name: "လှုပ်ရှားမှုများ", path: "/admin/activities", icon: Activity, minRole: 1, group: "cms" },
         { name: "အထူးသတင်းများ (Ticker)", path: "/admin/hotnews", icon: Megaphone, minRole: 1, group: "cms" },
         { name: "ဝန်ဆောင်မှုများ", path: "/admin/services", icon: Briefcase, minRole: 1, group: "cms" },
-        { name: "ခရိုင်များ", path: "/admin/districts", icon: MapPin, minRole: 1, group: "cms" },
+        { name: "လူဝင်မှုကြီးကြပ်ရေးရုံးများ", path: "/admin/districts", icon: MapPin, minRole: 1, group: "cms" },
         { name: "ထုတ်ပြန်ချက်နှင့် ညွှန်ကြားချက်များ", path: "/admin/announcements", icon: Megaphone, minRole: 1, group: "cms" },
         { name: "ဌာနအကြောင်း", path: "/admin/about", icon: Info, minRole: 1, group: "cms" },
         { name: "FAQ စီမံခန့်ခွဲမှု", path: "/admin/faq", icon: HelpCircle, minRole: 1, group: "cms" },
-        { name: "ဆက်သွယ်ရန် (Messages)", path: "/admin/contact", icon: Mail, minRole: 2, group: "cms" },
+        { name: "ဆက်သွယ်မှုများ စီမံရန်", path: "/admin/contact", icon: Mail, minRole: 2, group: "cms" },
         { name: "လိပ်စာနှင့် ဖုန်းနံပါတ်များ", path: "/admin/contact-info", icon: Phone, minRole: 2, group: "cms" },
     ];
 

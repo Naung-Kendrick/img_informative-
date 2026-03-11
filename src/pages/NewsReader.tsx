@@ -16,10 +16,10 @@ import {
     Eye,
     Share2,
     Flag,
-    ChevronLeft,
     Send
 } from "lucide-react";
 import { useModal } from "../context/ModalContext";
+import { useTranslation } from "react-i18next";
 
 /**
  * Senior UI/UX Redesign: Professional 2-Column News Reader
@@ -31,6 +31,7 @@ export default function NewsReader() {
     const [lightboxImage, setLightboxImage] = useState<string | null>(null);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const { showSuccess, showError } = useModal();
+    const { t } = useTranslation();
 
     const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
 
@@ -98,10 +99,11 @@ export default function NewsReader() {
             )}
 
             {/* Breadcrumb / Top Navigation */}
-            <div className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-40">
+            <div className="border-b border-slate-200 bg-white/80 backdrop-blur-md sticky top-0 z-40">
                 <div className="container-custom py-4">
-                    <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors p-small">
-                        <ChevronLeft size={16} /> နောက်သို့ ပြန်သွားရန်
+                    <Link to="/" className="inline-flex items-center gap-3 text-[#1e3a8a] bg-white border-2 border-[#1e3a8a] px-6 py-2 rounded-lg text-[15px] transition-all padauk-bold shadow-sm hover:bg-[#1e3a8a] hover:text-white active:scale-95 w-fit group">
+                        <ArrowLeft size={18} className="transition-transform duration-300 group-hover:-translate-x-1" /> 
+                        {t('newsReader.back')}
                     </Link>
                 </div>
             </div>
@@ -126,7 +128,7 @@ export default function NewsReader() {
                                     <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center border border-border">
                                         <User size={14} className="text-muted-foreground" />
                                     </div>
-                                    <span className="text-xs font-bold text-foreground">{article.author?.name || "Official Admin"}</span>
+                                    <span className="text-xs font-bold text-foreground">{article.author?.name || t('newsReader.admin')}</span>
                                 </div>
                                 <div className="hidden sm:block w-[1px] h-3 bg-border" />
                                 <div className="flex items-center gap-2 text-muted-foreground">
@@ -187,10 +189,16 @@ export default function NewsReader() {
                             <button
                                 onClick={handleToggleLike}
                                 disabled={isLiking}
-                                className={`flex items-center gap-2.5 px-8 h-12 rounded-xl text-sm font-bold transition-all shadow-md active:scale-95 bg-[#1e3a8a] text-white hover:bg-[#1e3a8a]/90`}
+                                className={`flex items-center gap-2.5 px-8 h-12 rounded-xl text-[15px] font-bold transition-all shadow-sm active:scale-95 border-2 ${
+                                    isLiked 
+                                    ? "bg-red-50 text-red-600 border-red-200 hover:bg-red-100" 
+                                    : "bg-white text-slate-700 border-slate-200 hover:border-red-200 hover:text-red-500 hover:bg-slate-50"
+                                }`}
                             >
-                                <Heart size={20} fill="white" className={isLiked ? "animate-pulse" : ""} />
-                                <span className="padauk-bold">Like</span>
+                                <Heart size={20} className={`transition-colors duration-300 ${isLiked ? "fill-red-500 text-red-500" : "fill-transparent text-current"}`} />
+                                <span className="padauk-bold">
+                                    {t('newsReader.like')} {article?.likes?.length ? `(${article.likes.length})` : ""}
+                                </span>
                             </button>
 
                             <div className="flex items-center gap-3">
@@ -249,7 +257,7 @@ export default function NewsReader() {
                                 className="ml-auto flex items-center gap-2.5 text-[#adb5bd] hover:text-destructive transition-all text-[11px] font-black uppercase tracking-[0.15em]"
                             >
                                 <Flag size={16} strokeWidth={2.5} />
-                                <span>REPORT</span>
+                                <span>{t('newsReader.report')}</span>
                             </button>
                         </div>
 
@@ -257,7 +265,7 @@ export default function NewsReader() {
                         <div className="bg-card rounded-xl border border-border p-8 md:p-12 shadow-sm">
                             <h3 className="h3 mb-10 flex items-center gap-4">
                                 <span className="w-8 h-[2px] bg-primary"></span>
-                                Public Interaction
+                                {t('newsReader.publicInteraction')}
                             </h3>
                             <Comments newsId={article._id} />
                         </div>
@@ -277,7 +285,7 @@ export default function NewsReader() {
                             {/* Related News Section */}
                             <div>
                                 <h4 className="p-small text-foreground uppercase mb-8 pb-4 border-b-2 border-primary/20 flex justify-between items-center">
-                                    ဆက်စပ်သတင်းများ
+                                    {t('newsReader.relatedNews')}
                                     <div className="flex gap-1">
                                         <div className="w-1 h-1 bg-primary rounded-full"></div>
                                         <div className="w-1 h-1 bg-primary rounded-full opacity-50"></div>
@@ -309,7 +317,7 @@ export default function NewsReader() {
                                         ))}
                                     </div>
                                 ) : (
-                                    <p className="p-muted italic">No related articles found in this category.</p>
+                                    <p className="p-muted italic">{t('newsReader.noRelated')}</p>
                                 )}
                             </div>
 

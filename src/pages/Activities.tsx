@@ -26,12 +26,22 @@ export default function Activities() {
         if (!isActivity) return false;
 
         const matchesSearch = searchQuery
-            ? item.title?.toLowerCase().includes(searchQuery.toLowerCase()) || item.author?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+            ? (item.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+               item.author?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+               item.district?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+               item.township?.toLowerCase().includes(searchQuery.toLowerCase()))
             : true;
 
-        const matchesDistrict = filterDistrict ? item.district === filterDistrict : true;
+        const matchesDistrict = filterDistrict 
+            ? (
+                (item.district?.toLowerCase().includes(filterDistrict.toLowerCase().trim())) || 
+                (item.township?.toLowerCase().includes(filterDistrict.toLowerCase().trim())) ||
+                (filterDistrict.toLowerCase().trim().includes(item.district?.toLowerCase().trim() || "___")) ||
+                (filterDistrict.toLowerCase().trim().includes(item.township?.toLowerCase().trim() || "___"))
+            )
+            : true;
 
-        const itemDate = new Date(item.createdAt || Date.now()).toISOString().split('T')[0];
+        const itemDate = new Date(item.createdAt).toISOString().split('T')[0];
         const matchesDate = filterDate ? itemDate === filterDate : true;
 
         return matchesSearch && matchesDistrict && matchesDate;
@@ -51,16 +61,16 @@ export default function Activities() {
         <div className="page-container bg-background animate-in fade-in duration-500">
             <div className="container-custom section-padding">
                 {/* Page Header */}
-                <div className="mb-16 text-center max-w-2xl mx-auto flex flex-col items-center">
-                    <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-6 border border-primary/20">
+                <div className="mb-10 text-center max-w-2xl mx-auto flex flex-col items-center">
+                    <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4 border border-primary/20">
                         <Zap size={14} />
                         Engagement & Operations
                     </div>
-                    <h1 className="h1 mb-8 relative inline-block pb-4">
+                    <h1 className="h1 mb-6 relative inline-block pb-4">
                         {t("activities.title")}
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h1>
-                    <p className="p-lead mt-6">
+                    <p className="p-lead mt-4">
                         {t("activities.subtitle")}
                     </p>
                 </div>
@@ -88,8 +98,8 @@ export default function Activities() {
                         onChange={(e) => { setFilterDistrict(e.target.value); setCurrentPage(1); }}
                         className="pl-3 pr-8 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all p-small cursor-pointer"
                     >
-                        <option value="">{t("common.allDistricts", "ခရိုင်အားလုံး")}</option>
-                        {districtsList.map(d => (
+                        <option value="">{t("common.allDistricts", "ရုံးခွဲအားလုံး")}</option>
+                        {[...districtsList].sort((a,b) => a.name.localeCompare(b.name)).map(d => (
                             <option key={d._id} value={d.name}>{d.name.trim()}</option>
                         ))}
                     </select>
@@ -209,7 +219,7 @@ export default function Activities() {
                                     <button
                                         key={idx}
                                         onClick={() => handlePageChange(idx + 1)}
-                                        className={`w-12 h-12 rounded-lg p-small transition-all ${currentPage === idx + 1
+                                        className={`w-12 h-12 rounded-xl p-small transition-all ${currentPage === idx + 1
                                             ? "bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-110 z-10"
                                             : "bg-card border border-border text-muted-foreground hover:bg-muted/50 hover:text-primary"
                                             }`}

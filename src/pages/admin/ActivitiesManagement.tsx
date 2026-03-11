@@ -22,7 +22,7 @@ export default function ActivitiesManagement() {
     const [deleteNews, { isLoading: isDeleting }] = useDeleteNewsMutation();
     const [updateNews] = useUpdateNewsMutation();
 
-    const news = allNews?.filter((item) => item.category === "Activities") || [];
+    const news = allNews?.filter((item) => item.category?.toLowerCase() === "activities") || [];
 
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [newsToDelete, setNewsToDelete] = useState<string | null>(null);
@@ -61,7 +61,7 @@ export default function ActivitiesManagement() {
         <div className="container mx-auto px-4 py-8 animate-in fade-in duration-500">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 border-l-4 border-primary pl-3 padauk-bold">
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 border-l-4 border-[#808080] pl-3 padauk-bold">
                         လှုပ်ရှားမှုများ စီမံရန်
                     </h1>
                     <p className="text-slate-500 mt-1 padauk-regular">
@@ -70,7 +70,7 @@ export default function ActivitiesManagement() {
                 </div>
                 <Link
                     to="/admin/news/new"
-                    className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-5 py-2.5 rounded-xl font-bold transition-colors shadow-sm padauk-bold shrink-0"
+                    className="flex items-center gap-2 bg-[#808080] hover:bg-[#555555] text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-md shadow-[#808080]/20 padauk-bold shrink-0"
                 >
                     <Plus size={20} />
                     လှုပ်ရှားမှုအသစ်တင်မည်

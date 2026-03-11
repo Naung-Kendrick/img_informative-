@@ -1,6 +1,6 @@
 import { useGetAllDistrictsQuery } from "../store/districtApiSlice";
 import type { District } from "../store/districtApiSlice";
-import { MapPin, Phone, Building, ArrowRight } from "lucide-react";
+import { MapPin, Phone, Building, ArrowRight, UserCircle } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Skeleton } from "../components/ui/skeleton";
 import { useTranslation } from "react-i18next";
@@ -12,7 +12,7 @@ export default function Districts() {
     const fallbackDistricts = [
         {
             _id: "1",
-            name: "နမ့်ဆန်ခရိုင်",
+            name: "နမ့်ဆန်မြို့နယ်ရုံး",
             address: "ခရိုင်အထွေထွေအုပ်ချုပ်ရေးဦးစီးဌာနရုံး၊ နမ့်ဆန်မြို့",
             phone: "09-xxxxxxxxx",
             coverImage: "https://images.unsplash.com/photo-1596401057633-54a8fe8ef647?q=80&w=800&auto=format&fit=crop",
@@ -20,7 +20,7 @@ export default function Districts() {
         },
         {
             _id: "2",
-            name: "မန်တုံခရိုင်",
+            name: "မန်တုံမြို့နယ်ရုံး",
             address: "ခရိုင်အထွေထွေအုပ်ချုပ်ရေးဦးစီးဌာနရုံး၊ မန်တုံမြို့",
             phone: "09-xxxxxxxxx",
             coverImage: "https://images.unsplash.com/photo-1582298538104-efa9acff89ed?q=80&w=800&auto=format&fit=crop",
@@ -28,7 +28,7 @@ export default function Districts() {
         },
         {
             _id: "3",
-            name: "နမ့်ခမ်းခရိုင်",
+            name: "နမ့်ခမ်းမြို့နယ်ရုံး",
             address: "ခရိုင်အထွေထွေအုပ်ချုပ်ရေးဦးစီးဌာနရုံး၊ နမ့်ခမ်းမြို့",
             phone: "09-xxxxxxxxx",
             coverImage: "https://images.unsplash.com/photo-1542361345-89e58247f2d5?q=80&w=800&auto=format&fit=crop",
@@ -45,16 +45,16 @@ export default function Districts() {
 
             <div className="container-custom section-padding">
                 {/* Page Header */}
-                <div className="mb-16 text-center max-w-2xl mx-auto flex flex-col items-center">
-                    <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-6 border border-primary/20">
+                <div className="mb-10 text-center max-w-2xl mx-auto flex flex-col items-center">
+                    <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4 border border-primary/20">
                         <Building size={14} />
                         {t("districts.badge")}
                     </div>
-                    <h1 className="h1 mb-8 relative inline-block pb-4">
+                    <h1 className="h1 mb-6 relative inline-block pb-4">
                         {t("districts.adminOffices")}
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h1>
-                    <p className="p-lead mt-6">
+                    <p className="p-lead mt-4">
                         {t("districts.adminOfficesDesc")}
                     </p>
                 </div>
@@ -122,6 +122,17 @@ export default function Districts() {
                                                 {district.phone}
                                             </p>
                                         </div>
+
+                                        {district.officerInCharge && (
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
+                                                    <UserCircle size={16} className="text-primary" />
+                                                </div>
+                                                <p className="text-foreground font-semibold text-[14px]">
+                                                    {district.officerInCharge}
+                                                </p>
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* Action Button */}

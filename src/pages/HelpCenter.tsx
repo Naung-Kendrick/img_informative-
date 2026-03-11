@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
     ChevronDown,
@@ -105,7 +106,7 @@ const HelpCenter = () => {
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section */}
-            <section className="relative pt-32 pb-20 overflow-hidden bg-slate-900">
+            <section className="relative pt-20 pb-16 overflow-hidden bg-slate-900">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/10 opacity-50" />
                 <div className="absolute top-0 left-0 w-full h-full opacity-[0.05] pointer-events-none select-none">
                     <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="" className="w-[800px] h-auto absolute -top-40 -right-40 rotate-12" />
@@ -172,9 +173,9 @@ const HelpCenter = () => {
                                 <p className="text-muted-foreground">{t("help.contactDesc")}</p>
                             </div>
                         </div>
-                        <button className="px-10 py-4 bg-foreground text-background rounded-full font-bold hover:bg-slate-800 transition-all active:scale-95 whitespace-nowrap">
+                        <Link to="/contact" className="px-10 py-4 bg-foreground text-background rounded-full font-bold hover:bg-slate-800 transition-all active:scale-95 whitespace-nowrap">
                             Contact Support
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </section>

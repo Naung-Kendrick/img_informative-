@@ -142,19 +142,19 @@ export default function Navbar() {
     return (
         <header className="sticky top-0 z-40 w-full shadow-md transition-all duration-300">
             {/* Top Tier: Official Identity & Critical Actions */}
-            <div className="bg-white border-b border-slate-100 py-3 lg:py-5">
+            <div className="bg-white border-b border-slate-100 py-2 lg:py-3">
                 <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px]">
                     <div className="flex items-center justify-between gap-3 lg:gap-8">
                         {/* Identity Module */}
                         <Link to="/" className="flex items-center gap-3 sm:gap-4 lg:gap-5 group min-w-0">
                             <div className="relative flex-shrink-0">
-                                <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="Dept Seal" className="h-14 sm:h-16 lg:h-[4.5rem] w-auto object-contain drop-shadow-md" />
+                                <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="Dept Seal" className="h-12 sm:h-14 lg:h-16 w-auto object-contain drop-shadow-md" />
                             </div>
                             <div className="flex flex-col min-w-0 justify-center">
-                                <span className="text-[15px] sm:text-[18px] lg:text-[22px] font-[800] leading-[1.3] lg:leading-tight text-slate-800 group-hover:text-primary transition-colors pr-2">
+                                <span className="text-[14px] sm:text-[16px] lg:text-[20px] font-[800] leading-[1.3] lg:leading-tight text-slate-800 group-hover:text-primary transition-colors pr-2">
                                     {t("nav.deptTitle")}
                                 </span>
-                                <span className="text-[8.5px] sm:text-[11px] lg:text-[13px] text-slate-500 font-bold tracking-[0.15em] lg:tracking-[0.2em] uppercase mt-0.5 sm:mt-1 opacity-90">
+                                <span className="text-[8px] sm:text-[10px] lg:text-[12px] text-slate-500 font-bold tracking-[0.1em] lg:tracking-[0.15em] uppercase mt-0.5 opacity-90">
                                     {t("nav.deptSubtitle")}
                                 </span>
                             </div>
@@ -396,7 +396,7 @@ export default function Navbar() {
             {/* Bottom Tier: Navigational Backbone */}
             <div className="bg-primary hidden lg:block border-b border-white/5">
                 <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px]">
-                    <nav className="flex justify-between items-center h-14">
+                    <nav className="flex justify-between items-center h-12">
                         {links.map((link) => (
                             <Link
                                 key={link.name}

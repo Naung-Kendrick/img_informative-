@@ -171,7 +171,7 @@ export default function EditPage() {
                                     className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular"
                                 >
                                     <option value="services">ဝန်ဆောင်မှုများ (Services)</option>
-                                    <option value="districts">ခရိုင်များ (Districts)</option>
+                                    <option value="districts">လူဝင်မှုကြီးကြပ်ရေးရုံးများ (Immigration Offices)</option>
                                 </select>
                             </div>
 

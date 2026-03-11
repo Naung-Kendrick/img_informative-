@@ -124,7 +124,7 @@ const Home = () => {
                         </p>
 
                         <div className="flex flex-wrap gap-5 items-center animate-in slide-in-from-bottom duration-1000 delay-300">
-                            <Button asChild className="bg-primary hover:bg-primary/90 text-white px-10 py-7 h-auto text-sm font-bold tracking-widest rounded-xl shadow-2xl shadow-primary/20 transition-all transform active:scale-95">
+                            <Button asChild className="bg-primary hover:bg-primary/90 text-white px-10 py-7 h-auto text-sm font-bold tracking-widest rounded-xl shadow-xl shadow-primary/20 transition-all transform active:scale-95">
                                 <Link to={`/news/${heroNews._id}`}>READ FULL STATEMENT</Link>
                             </Button>
                             <div className="flex items-center gap-4 pl-6 border-l border-white/10">
@@ -157,7 +157,7 @@ const Home = () => {
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h2>
                     <p className="p-lead text-muted-foreground max-w-2xl mx-auto mt-6">
-                        အောက်ပါဝန်ဆောင်မှုများကို အွန်လိုင်းမှတစ်ဆင့် လွယ်ကူလျင်မြန်စွာ လျှောက်ထားရယူနိုင်ပါသည်။
+                        စမက်ကတ် နှင့် အိမ်ထောင်စုစာရင်းများ လျှောက်ထားနိုင်ရန်အတွက် လိုအပ်သော အချက်အလက်များ
                     </p>
                 </div>
 
@@ -199,7 +199,7 @@ const Home = () => {
                                     />
                                     <div className="mt-auto w-full">
                                         <Link to={`/services/${service._id}`} className="w-full block">
-                                            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold py-7 text-base lg:text-lg rounded-2xl transition-all duration-500 shadow-md hover:shadow-xl hover:shadow-primary/20 flex items-center justify-center gap-3 active:scale-[0.98]">
+                                            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/80 font-bold py-7 text-base lg:text-lg rounded-2xl transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-primary/20 flex items-center justify-center gap-3 active:scale-[0.98]">
                                                 {t("services.applyBtn") || "လျှောက်ထားရန်"}
                                                 <ArrowRight size={20} className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-500" />
                                             </Button>
@@ -223,14 +223,14 @@ const Home = () => {
             <div className="container-custom">
                 <div className="text-center mb-16 flex flex-col items-center">
                     <div className="inline-flex items-center justify-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.2em] mb-4">
-                        Regional Immigration Offices
+                        {t("districts.regionalOffices")}
                     </div>
                     <h2 className="h2 mb-8 relative inline-block pb-4">
-                        ခရိုင်လူဝင်မှုကြီးကြပ်ရေးရုံးများ
+                        {t("districts.title")}
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h2>
                     <p className="p-lead text-muted-foreground max-w-2xl mx-auto mt-6">
-                        ဒေသအလိုက် ခရိုင်ရုံးများနှင့် ဆက်သွယ်မေးမြန်းနိုင်သော အချက်အလက်များ
+                        {t("districts.subtitle")}
                     </p>
                 </div>
 
@@ -250,7 +250,7 @@ const Home = () => {
                                     <div className="absolute bottom-6 left-6 right-6">
                                         <h3 className="text-xl font-bold text-white mb-2">{district.name}</h3>
                                         <div className="flex items-center gap-2 text-white/80 text-xs font-bold uppercase tracking-widest group-hover:gap-4 transition-all">
-                                            VIEW DETAILS <ArrowRight size={14} />
+                                            {t("districts.viewDetails")} <ArrowRight size={14} />
                                         </div>
                                     </div>
                                 </div>
@@ -260,8 +260,8 @@ const Home = () => {
                 </div>
 
                 <div className="mt-16 text-center">
-                    <Button variant="outline" asChild className="border-border text-muted-foreground hover:border-primary hover:text-primary font-bold rounded-xl px-10 h-14">
-                        <Link to="/districts">VIEW ALL DISTRICTS</Link>
+                    <Button asChild className="bg-primary hover:bg-primary/90 text-white font-bold rounded-xl px-12 py-7 h-auto text-base shadow-xl shadow-primary/10 transition-all">
+                        <Link to="/districts">{t("common.viewAllDistricts")}</Link>
                     </Button>
                 </div>
             </div>
@@ -365,7 +365,7 @@ const Home = () => {
             <div className="container-custom">
                 <div className="text-center mb-16 flex flex-col items-center">
                     <div className="inline-flex items-center justify-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.2em] mb-4">
-                        Official Directives
+                        Official Announcements
                     </div>
                     <h2 className="h2 mb-8 relative inline-block pb-4">
                         နောက်ဆုံးရ ထုတ်ပြန်ချက်များ
@@ -415,8 +415,8 @@ const Home = () => {
                 )}
 
                 <div className="mt-16 text-center">
-                    <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary/5 font-bold rounded-xl px-10 h-14">
-                        <Link to="/announcements" className="flex items-center gap-2">ကြည့်ရှုရန် <ArrowRight size={18} /></Link>
+                    <Button asChild className="bg-primary hover:bg-primary/90 text-white font-bold rounded-xl px-12 py-7 h-auto text-base shadow-xl shadow-primary/10 transition-all">
+                        <Link to="/announcements" className="flex items-center gap-2">{t("common.viewAllAnnouncements")} <ArrowRight size={18} /></Link>
                     </Button>
                 </div>
             </div>

@@ -10,8 +10,8 @@ const resources = {
                 news: "News",
                 activities: "Activities",
                 services: "Services",
-                districts: "Districts",
-                announcements: "Announcement & Directives",
+                districts: "Immigration Offices",
+                announcements: "Announcements",
                 about: "About Us",
                 contact: "Contact",
                 helpCenter: "Help Center",
@@ -26,15 +26,18 @@ const resources = {
             },
             hero: {
                 title: "Stay Informed with Local Updates",
-                subtitle: "Access the latest news, services, and district information in one place.",
+                subtitle: "Access the latest news, services, and announcement information of Ta'ang Land Immigration Department in one place.",
                 latestNews: "Latest News",
+                readFull: "READ FULL STATEMENT",
+                releasedBy: "Released By",
+                officialMedia: "Official Media Office",
             },
             about: {
                 title: "About Immigration Department",
-                subtitle: "We are systematically recording population statistics related to the security and management of Ta'ang State.",
+                subtitle: "We are systematically recording population statistics related to the security and management of Ta'ang Land.",
                 badge: "OFFICIAL REPOSITORY",
-                pslf: "Palaung State Liberation Front - PSLF / TNLA",
-                description: "We are systematically working to obtain accurate population statistics and indicators that will support the drawing of projects for the security, management, health, education, economy and other matters of Ta'ang State.",
+                pslf: "Ta'ang Land Federal Unit Government",
+                description: "We are systematically working to obtain accurate population statistics and indicators that will support the drawing of projects for the security, management, health, education, economy and other matters of Ta'ang Land.",
                 policyTitle: "Department Policy",
                 policyDesc: "To systematically control and maintain immigration, alien registration and household population activities in accordance with existing laws and procedures.",
                 objectiveTitle: "Main Objectives",
@@ -47,9 +50,13 @@ const resources = {
             common: {
                 readMore: "Read More",
                 allNews: "All News",
-                viewAll: "View All",
                 save: "Save",
                 cancel: "Cancel",
+                viewAllDistricts: "View All Immigration Offices",
+                allDistricts: "All Offices",
+                viewAllAnnouncements: "View All Announcements",
+                pressCenter: "Press Center",
+                archiveImage: "Archive Image",
             },
             contact: {
                 badge: "Contact",
@@ -104,8 +111,10 @@ const resources = {
                 noServicesDesc: "Service information is not available at the moment.",
                 portalBadge: "e-Government Portal",
                 publicServices: "Public Services",
-                publicServicesDesc: "You can easily apply for the following services online.",
+                assistanceCenter: "Public Assistance Center",
+                publicServicesDesc: "Required Documents for smartcard and household registration.",
                 applyBtn: "Apply Now",
+                serviceNode: "Service Node",
                 smartcardTitle: "Apply for Smartcard",
                 smartcardDesc: "You can apply for a new Smart Identity Card and renew it.",
                 smartcardFeature1: "Full data security",
@@ -116,13 +125,15 @@ const resources = {
                 householdFeature2: "Can register move/birth/death"
             },
             districts: {
-                title: "Districts",
-                subtitle: "Offices and information across various districts.",
-                noDistricts: "No District Information Yet",
-                noDistrictsDesc: "District information will be added soon.",
+                title: "Immigration Offices",
+                subtitle: "Information across various Immigration Offices.",
+                noDistricts: "No Immigration Office Information Yet",
+                noDistrictsDesc: "Immigration office information will be added soon.",
                 badge: "REGIONAL IMMIGRATION OFFICE",
-                adminOffices: "District Immigration Offices",
-                adminOfficesDesc: "Public service information and immigration office locations.",
+                regionalOffices: "Regional Immigration Offices",
+                adminOffices: "Local Immigration Offices",
+                viewDetails: "VIEW DETAILS",
+                adminOfficesDesc: "Public service information and local office locations.",
                 noMap: "No Map Information Yet",
                 viewMap: "View Map",
                 networkError: "Network Error",
@@ -134,8 +145,13 @@ const resources = {
                 noAnnouncements: "No Announcements Yet",
                 noAnnouncementsDesc: "There are no official announcements published recently.",
                 badge: "Announcement",
+                officialAnnouncements: "Official Announcements",
                 submittedBy: "Submitted by - ",
                 admin: "Admin"
+            },
+            news: {
+                latestOfficialNews: "Latest Official News",
+                newsDesc: "Stay updated with our official press releases, department activities, and special announcements.",
             },
             newsReader: {
                 preparing: "Preparing to read news...",
@@ -145,7 +161,13 @@ const resources = {
                 download: "Download",
                 author: "Author",
                 admin: "System Admin",
-                loves: "Loves"
+                loves: "Loves",
+                back: "Go Back",
+                like: "Like",
+                report: "REPORT",
+                publicInteraction: "Public Interaction",
+                relatedNews: "Related News",
+                noRelated: "No related articles found in this category."
             },
             notFound: {
                 title: "Page Not Found",
@@ -158,7 +180,7 @@ const resources = {
                 notFound: "Page Not Found",
                 back: "Go Back",
                 service: "Service",
-                districtInfo: "District Information",
+                districtInfo: "Immigration Office Information",
                 download: "Download"
             },
             footer: {
@@ -208,7 +230,8 @@ const resources = {
                 shareFacebook: "Share on Facebook",
                 shareTelegram: "Share on Telegram",
                 copyLink: "Copy Link",
-                linkCopied: "Link copied."
+                linkCopied: "Link copied.",
+                errorFetchingData: "Unable to retrieve information from the secure server.",
             },
             help: {
                 title: "FAQ & Help Center",
@@ -238,6 +261,10 @@ const resources = {
                     placeholder: "Type a message...",
                     online: "Online"
                 }
+            },
+            stats: {
+                asOf: "As of",
+                reach: "Registration Coverage"
             }
         }
     },
@@ -248,8 +275,8 @@ const resources = {
                 news: "သတင်း",
                 activities: "လှုပ်ရှားမှုများ",
                 services: "ဝန်ဆောင်မှုများ",
-                districts: "ခရိုင်များ",
-                announcements: "ထုတ်ပြန်ချက်နှင့် ညွှန်ကြားချက်များ",
+                districts: "လူဝင်မှုကြီးကြပ်ရေးရုံးများ",
+                announcements: "ထုတ်ပြန်ချက်များ",
                 about: "ဌာနအကြောင်း",
                 contact: "ဆက်သွယ်ရန်",
                 helpCenter: "အကူအညီနှင့် မေးခွန်းများ",
@@ -264,8 +291,11 @@ const resources = {
             },
             hero: {
                 title: "ဒေသတွင်းသတင်းများကို အချိန်နှင့်တပြေးညီ သိရှိပါ",
-                subtitle: "သတင်းများ၊ ဝန်ဆောင်မှုများနှင့် ခရိုင်အချက်အလက်များကို တစ်နေရာတည်းတွင် ကြည့်ရှုပါ။",
+                subtitle: "တအာင်းပြည် လူဝင်မှုကြီးကြပ်ရေးနှင့်ပတ်သက်သော သတင်းများ၊ ဝန်ဆောင်မှုများနှင့် အချက်အလက်များကို တစ်နေရာတည်းတွင် ကြည့်ရှုပါ။",
                 latestNews: "နောက်ဆုံးရသတင်းများ",
+                readFull: "ထုတ်ပြန်ချက်အပြည့်အစုံ ဖတ်ရန်",
+                releasedBy: "ထုတ်ပြန်သူ",
+                officialMedia: "တရားဝင် မီဒီယာရုံး",
             },
             about: {
                 title: "လူဝင်မှုကြီးကြပ်ရေးဌာန အကြောင်း",
@@ -285,9 +315,13 @@ const resources = {
             common: {
                 readMore: "ဆက်လက်ဖတ်ရှုရန်",
                 allNews: "သတင်းများအားလုံး",
-                viewAll: "အားလုံးကြည့်မည်",
                 save: "သိမ်းမည်",
                 cancel: "ပယ်ဖျက်မည်",
+                viewAllDistricts: "လူဝင်မှုကြီးကြပ်ရေးရုံးများ အားလုံးကြည့်မည်",
+                allDistricts: "ရုံးခွဲအားလုံး",
+                viewAllAnnouncements: "ထုတ်ပြန်ချက်များ အားလုံးကြည့်မည်",
+                pressCenter: "သတင်းထုတ်ပြန်ချက် ဗဟိုဌာန",
+                archiveImage: "မော်ကွန်းဓာတ်ပုံ",
             },
             contact: {
                 badge: "ဆက်သွယ်ရန်",
@@ -342,8 +376,10 @@ const resources = {
                 noServicesDesc: "လတ်တလော ဝန်ဆောင်မှု အချက်အလက်များ မရှိသေးပါ။",
                 portalBadge: "e-Government Portal",
                 publicServices: "ပြည်သူ့ဝန်ဆောင်မှုများ",
-                publicServicesDesc: "အောက်ပါဝန်ဆောင်မှုများကို အွန်လိုင်းမှတစ်ဆင့် လွယ်ကူလျင်မြန်စွာ လျှောက်ထားရယူနိုင်ပါသည်။",
+                assistanceCenter: "ပြည်သူ့အကူအညီပေးရေး ဗဟိုဌာန",
+                publicServicesDesc: "စမက်ကတ် နှင့် အိမ်ထောင်စုစာရင်းများ လျှောက်ထားနိုင်ရန်အတွက် လိုအပ်သော အချက်အလက်များ",
                 applyBtn: "လျှောက်ထားရန်",
+                serviceNode: "ဝန်ဆောင်မှု ကဏ္ဍ",
                 smartcardTitle: "Smartcard ပြုလုပ်ရန်",
                 smartcardDesc: "နိုင်ငံသားစိစစ်ရေးကတ်ပြားအစား ခေတ်မီစမတ်ကတ် (Smart Identity Card) အသစ်လျှောက်ထားခြင်းနှင့် သက်တမ်းတိုးခြင်းများကို လုပ်ဆောင်နိုင်ပါသည်။",
                 smartcardFeature1: "အချက်အလက် လုံခြုံမှု အပြည့်အဝရှိခြင်း",
@@ -354,12 +390,14 @@ const resources = {
                 householdFeature2: "ပြောင်းရွှေ့/မွေးဖွား/သေဆုံး စာရင်းသွင်းနိုင်ခြင်း"
             },
             districts: {
-                title: "ခရိုင်များ",
-                subtitle: "ခရိုင်အသီးသီးရှိ ရုံးခွဲများနှင့် အချက်အလက်များ။",
-                noDistricts: "ခရိုင်အချက်အလက်များ မရှိသေးပါ",
-                noDistrictsDesc: "ခရိုင်ဆိုင်ရာ အချက်အလက်များ မကြာမီ ထည့်သွင်းပါမည်။",
+                title: "လူဝင်မှုကြီးကြပ်ရေးရုံးများ",
+                subtitle: "လူဝင်မှုကြီးကြပ်ရေးရုံးခွဲများနှင့် အချက်အလက်များ။",
+                noDistricts: "လူဝင်မှုကြီးကြပ်ရေးရုံး အချက်အလက်များ မရှိသေးပါ",
+                noDistrictsDesc: "လူဝင်မှုကြီးကြပ်ရေးရုံးဆိုင်ရာ အချက်အလက်များ မကြာမီ ထည့်သွင်းပါမည်။",
                 badge: "REGIONAL IMMIGRATION OFFICES",
-                adminOffices: "ခရိုင် လူဝင်မှုကြီးကြပ်ရေးရုံး",
+                regionalOffices: "ဒေသဆိုင်ရာ လူဝင်မှုကြီးကြပ်ရေးရုံးများ",
+                adminOffices: "မြို့နယ် လူဝင်မှုကြီးကြပ်ရေးရုံး",
+                viewDetails: "အသေးစိတ်ကြည့်ရန်",
                 adminOfficesDesc: "ပြည်သူ့ဝန်ဆောင်မှု လုပ်ငန်းဆိုင်ရာ အချက်အလက်များနှင့် ရုံးတည်နေရာများ",
                 noMap: "မြေပုံအချက်အလက် မရှိသေးပါ",
                 viewMap: "တည်နေရာပြမြေပုံ",
@@ -371,7 +409,7 @@ const resources = {
                 subtitle: "တရားဝင်ထုတ်ပြန်ချက်များနှင့် ကြေညာချက်များ။",
                 noAnnouncements: "ထုတ်ပြန်ချက်များ မရှိသေးပါ",
                 noAnnouncementsDesc: "လတ်တလော ထုတ်ပြန်ထားသော ကြေညာချက်များ မရှိသေးပါ။",
-                badge: "ထုတ်ပြန်ချက်",
+                officialAnnouncements: "ဌာန၏ တရားဝင် ထုတ်ပြန်ချက်များ",
                 submittedBy: "တင်သွင်းသူ - ",
                 admin: "Admin"
             },
@@ -383,7 +421,13 @@ const resources = {
                 download: "ဒေါင်းလုဒ်ရယူရန်",
                 author: "ရေးသားသူ",
                 admin: "System Admin",
-                loves: "နှစ်သက်သူ"
+                loves: "နှစ်သက်သူ",
+                back: "နောက်သို့ ပြန်သွားရန်",
+                like: "နှစ်သက်သည်",
+                report: "REPORT",
+                publicInteraction: "Public Interaction",
+                relatedNews: "ဆက်စပ်သတင်းများ",
+                noRelated: "ဆက်စပ်သတင်းများ မရှိသေးပါ။"
             },
             notFound: {
                 title: "စာမျက်နှာ ရှာမတွေ့ပါ",
@@ -396,7 +440,7 @@ const resources = {
                 notFound: "စာမျက်နှာ ရှာမတွေ့ပါ",
                 back: "ပြန်သွားမည်",
                 service: "ဝန်ဆောင်မှု",
-                districtInfo: "ခရိုင်အချက်အလက်",
+                districtInfo: "ရုံးအချက်အလက်",
                 download: "ဒေါင်းလုဒ်ရယူရန်"
             },
             footer: {
@@ -446,7 +490,8 @@ const resources = {
                 shareFacebook: "Facebook တွင် ဝေမျှမည်",
                 shareTelegram: "Telegram တွင် ဝေမျှမည်",
                 copyLink: "လင့်ခ်ကို ကူးယူမည်",
-                linkCopied: "လင့်ခ်ကို ကူးယူပြီးပါပြီ။"
+                linkCopied: "လင့်ခ်ကို ကူးယူပြီးပါပြီ။",
+                errorFetchingData: "သတင်းအချက်အလက်များ ရယူရာတွင် အဆင်မပြေမှု ရှိနေပါသည်။",
             },
             help: {
                 title: "အကူအညီနှင့် အမေးများသော မေးခွန်းများ",
@@ -476,6 +521,10 @@ const resources = {
                     placeholder: "မက်ဆေ့ချ် ရိုက်ထည့်ပါ...",
                     online: "Online"
                 }
+            },
+            stats: {
+                asOf: "အခြေအနေ -",
+                reach: "မှတ်ပုံတင်နိုင်မှု အတိုင်းအတာ"
             }
         }
     }

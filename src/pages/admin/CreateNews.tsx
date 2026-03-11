@@ -164,6 +164,7 @@ export default function CreateNews() {
                                     className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular disabled:opacity-50 appearance-none"
                                 >
                                     <option value="">{isCatLoading ? "Loading Categories..." : "ရွေးချယ်ပါ"}</option>
+                                    <option value="HotNews" className="font-bold text-amber-600 bg-amber-50">🔥 အထူးသတင်းများ (Ticker)</option>
                                     {categoriesList.map(cat => (
                                         <option key={cat._id} value={cat.slug}>{cat.title}</option>
                                     ))}
@@ -183,8 +184,8 @@ export default function CreateNews() {
                         <div className="space-y-2">
                             <div className="flex items-center justify-between">
                                 <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2">
-                                    <MapPin size={16} className="text-primary" />
-                                    ခရိုင် (District)
+                                    <MapPin size={16} className="text-[#808080]" />
+                                    ရုံးခွဲ (Immigration Office)
                                 </label>
                                 <button
                                     onClick={() => {
@@ -192,7 +193,7 @@ export default function CreateNews() {
                                         setDistrict("");
                                         setCustomDistrict("");
                                     }}
-                                    className="text-[10px] text-primary hover:underline font-bold flex items-center gap-1"
+                                    className="text-[10px] text-[#808080] hover:underline font-bold flex items-center gap-1"
                                 >
                                     {isCustomDistrict ? <><RotateCcw size={10} /> Default List</> : <><PlusCircle size={10} /> Custom Add</>}
                                 </button>
@@ -204,8 +205,8 @@ export default function CreateNews() {
                                         type="text"
                                         value={customDistrict}
                                         onChange={(e) => setCustomDistrict(e.target.value)}
-                                        placeholder="ခရိုင်အမည် ရိုက်ထည့်ပါ..."
-                                        className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular"
+                                        placeholder="ရုံးခွဲအမည် ရိုက်ထည့်ပါ..."
+                                        className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular"
                                     />
                                 ) : (
                                     <select
@@ -217,15 +218,15 @@ export default function CreateNews() {
                                         disabled={isDistrictsLoading}
                                         className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular cursor-pointer disabled:opacity-50 appearance-none"
                                     >
-                                        <option value="">{isDistrictsLoading ? "Loading Districts..." : "ခရိုင် ရွေးချယ်ပါ"}</option>
-                                        {districtsList.map(d => (
+                                        <option value="">{isDistrictsLoading ? "Loading..." : "ရုံးခွဲ ရွေးချယ်ပါ"}</option>
+                                        {[...districtsList].sort((a,b) => a.name.localeCompare(b.name)).map(d => (
                                             <option key={d._id} value={d.name}>{d.name}</option>
                                         ))}
                                     </select>
                                 )}
                                 {districtsQuery.error && (
                                     <div className="flex items-center gap-1 text-red-500 text-[10px] mt-1">
-                                        <AlertCircle size={10} /> ခရိုင်များ ရယူ၍မရပါ
+                                        <AlertCircle size={10} /> ရုံးခွဲများ ရယူ၍မရပါ
                                     </div>
                                 )}
                             </div>
@@ -235,7 +236,7 @@ export default function CreateNews() {
                         <div className="space-y-2">
                             <div className="flex items-center justify-between">
                                 <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2">
-                                    <MapPin size={16} className="text-primary" />
+                                    <MapPin size={16} className="text-[#808080]" />
                                     မြို့နယ် (Township)
                                 </label>
                             </div>
@@ -244,7 +245,7 @@ export default function CreateNews() {
                                 value={township}
                                 onChange={(e) => setTownship(e.target.value)}
                                 placeholder="မြို့နယ်အမည် ရိုက်ထည့်ပါ... (optional)"
-                                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular"
+                                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular"
                             />
                         </div>
                     </div>
