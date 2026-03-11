@@ -1,12 +1,17 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
 import { useGetNewsByIdQuery } from "../../store/newsApiSlice";
 import { useGetCommentsByNewsIdQuery, useDeleteCommentMutation } from "../../store/commentsApiSlice";
 import { ArrowLeft, Heart, MessageSquare, Loader2, AlertCircle, Clock, Trash2 } from "lucide-react";
+import { useModal } from "../../context/ModalContext";
+
+import ConfirmDeleteModal from "../../components/ui/ConfirmDeleteModal";
 
 export default function NewsInteractionsManagement() {
     const { id } = useParams<{ id: string }>();
+    const { showSuccess, showError } = useModal();
 
     const {
         data: news,
@@ -22,14 +27,24 @@ export default function NewsInteractionsManagement() {
 
     const { user } = useSelector((state: RootState) => state.auth);
     const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentMutation();
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
 
-    const handleDeleteComment = async (commentId: string) => {
-        if (!id || !window.confirm("Are you sure you want to delete this comment?")) return;
+    const handleDeleteComment = (commentId: string) => {
+        setCommentToDelete(commentId);
+        setIsDeleteModalOpen(true);
+    };
+
+    const onConfirmDelete = async () => {
+        if (!id || !commentToDelete) return;
         try {
-            await deleteComment({ commentId, newsId: id }).unwrap();
+            await deleteComment({ commentId: commentToDelete, newsId: id }).unwrap();
+            showSuccess("အောင်မြင်ပါသည်", "မှတ်ချက်ကို ဖျက်သိမ်းပြီးပါပြီ");
+            setIsDeleteModalOpen(false);
+            setCommentToDelete(null);
         } catch (error) {
             console.error("Failed to delete comment:", error);
-            alert("Failed to delete comment");
+            showError("မအောင်မြင်ပါ", "မှတ်ချက်ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ။");
         }
     };
 
@@ -197,6 +212,13 @@ export default function NewsInteractionsManagement() {
                     </div>
                 </div>
             </div>
+            <ConfirmDeleteModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={onConfirmDelete}
+                isDeleting={isDeleting}
+                title="Are you sure you want to delete this comment?"
+            />
         </div>
     );
 }

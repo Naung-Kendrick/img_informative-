@@ -14,6 +14,7 @@ const resources = {
                 announcements: "Announcement & Directives",
                 about: "About Us",
                 contact: "Contact",
+                helpCenter: "Help Center",
                 admin: "Dashboard",
                 login: "Login",
                 profileSettings: "Profile Settings",
@@ -37,12 +38,18 @@ const resources = {
                 policyTitle: "Department Policy",
                 policyDesc: "To systematically control and maintain immigration, alien registration and household population activities in accordance with existing laws and procedures.",
                 objectiveTitle: "Main Objectives",
-                objectiveDesc: "To prevent illegal immigration, eliminate human trafficking and smuggling, and strictly implement the guidelines set by the government."
+                objectiveDesc: "To prevent illegal immigration, eliminate human trafficking and smuggling, and strictly implement the guidelines set by the government.",
+                responsibilitiesTitle: "Working Responsibilities",
+                responsibilitiesDesc: "Systematically carrying out population registration, census collection, and immigration control tasks for the region.",
+                mainTasksTitle: "Two Main Duties of Department",
+                mainTasksDesc: "1. Census and Population Registration\n2. Immigration and Border Control Regulation"
             },
             common: {
                 readMore: "Read More",
                 allNews: "All News",
                 viewAll: "View All",
+                save: "Save",
+                cancel: "Cancel",
             },
             contact: {
                 badge: "Contact",
@@ -113,9 +120,9 @@ const resources = {
                 subtitle: "Offices and information across various districts.",
                 noDistricts: "No District Information Yet",
                 noDistrictsDesc: "District information will be added soon.",
-                badge: "REGIONAL ADMINISTRATION",
-                adminOffices: "District Administration Offices",
-                adminOfficesDesc: "Public service information and administration office locations.",
+                badge: "REGIONAL IMMIGRATION OFFICE",
+                adminOffices: "District Immigration Offices",
+                adminOfficesDesc: "Public service information and immigration office locations.",
                 noMap: "No Map Information Yet",
                 viewMap: "View Map",
                 networkError: "Network Error",
@@ -185,7 +192,12 @@ const resources = {
                 roleRootAdmin: "Root Admin",
                 roleAdmin: "Admin",
                 roleStaff: "Staff",
-                noComments: "No comments yet. Be the first to comment."
+                roleUser: "User",
+                noComments: "No comments yet. Be the first to comment.",
+                edit: "Edit",
+                delete: "Delete",
+                reply: "Reply",
+                confirmDelete: "Are you sure you want to delete this comment?"
             },
             breadcrumbs: {
                 homeTitle: "Home Page",
@@ -197,6 +209,35 @@ const resources = {
                 shareTelegram: "Share on Telegram",
                 copyLink: "Copy Link",
                 linkCopied: "Link copied."
+            },
+            help: {
+                title: "FAQ & Help Center",
+                subtitle: "Find answers to frequently asked questions and get support for immigration procedures.",
+                searchPlaceholder: "Search for help, procedures, or keywords...",
+                categories: {
+                    general: "General Information",
+                    passport: "Passport & Identity",
+                    visa: "Visa & Residency",
+                    security: "Security & Ethics"
+                },
+                faq: {
+                    q1: "How do I apply for a new Smart Identity Card?",
+                    a1: "You can apply through our e-Government Portal under the 'Services' section. You'll need to upload your digital genealogical records and biometric data.",
+                    q2: "What is the processing time for a visa application?",
+                    a2: "Standard processing takes 5-7 working days. Express services are available at the Headquarters for urgent national matters.",
+                    q3: "How can I update my household registration?",
+                    a3: "Changes in residency or family members must be reported via this portal within 48 hours. Visit the 'Household Registration' service to submit amendments.",
+                    q4: "Is my data secure on this portal?",
+                    a4: "Yes, we utilize military-grade encryption to protect all digital identities. Your data is treated as a national security asset."
+                },
+                contactSupport: "Still need help?",
+                contactDesc: "Our support team is available during office hours to assist with complex cases.",
+                chatbot: {
+                    title: "Federal Support AI",
+                    welcome: "Hello! I am the Federal Support Assistant. How can I help you today?",
+                    placeholder: "Type a message...",
+                    online: "Online"
+                }
             }
         }
     },
@@ -211,6 +252,7 @@ const resources = {
                 announcements: "ထုတ်ပြန်ချက်နှင့် ညွှန်ကြားချက်များ",
                 about: "ဌာနအကြောင်း",
                 contact: "ဆက်သွယ်ရန်",
+                helpCenter: "အကူအညီနှင့် မေးခွန်းများ",
                 admin: "စီမံခန့်ခွဲမှု",
                 login: "ဝင်ရောက်ရန်",
                 profileSettings: "ကိုယ်ရေးအချက်အလက်",
@@ -229,17 +271,23 @@ const resources = {
                 title: "လူဝင်မှုကြီးကြပ်ရေးဌာန အကြောင်း",
                 subtitle: "တအာင်းပြည်နယ်၏ လုံခြုံရေး၊ စီမံခန့်ခွဲရေးနှင့် သက်ဆိုင်သော လူဦးရေစာရင်းဇယားများကို စနစ်တကျ မှတ်တမ်းတင် ဆောင်ရွက်လျက်ရှိပါသည်။",
                 badge: "OFFICIAL REPOSITORY",
-                pslf: "ပလောင်ပြည်နယ်လွတ်မြောက်ရေးတပ်ဦး - PSLF / TNLA",
+                pslf: "Ta'ang Land Federal Unit Government",
                 description: "တအာင်းပြည်နယ်၏ လုံခြုံရေး၊ စီမံခန့်ခွဲရေး၊ ကျန်းမာရေး၊ ပညာရေး၊ စီးပွားရေးနှင့် အခြားကိစ္စရပ်များအတွက် စီမံကိန်းများရေးဆွဲရာတွင် အထောက်အကူပြုစေမည့် ခိုင်မာတိကျသော လူဦးရေစာရင်းဇယားများနှင့် အညွှန်းကိန်းများ ရရှိစေရန် စနစ်တကျ ဆောင်ရွက်လျက်ရှိပါသည်။",
                 policyTitle: "ဌာန၏ မူဝါဒ",
                 policyDesc: "လူဝင်မှုကြီးကြပ်ရေး၊ နိုင်ငံခြားသားထိန်းသိမ်းရေး၊ မှတ်ပုံတင်ရေးနှင့် အိမ်ထောင်စုလူဦးရေစာရင်း လုပ်ငန်းများကို တည်ဆဲဥပဒေ၊ လုပ်ထုံးလုပ်နည်းများနှင့်အညီ စနစ်တကျ ထိန်းသိမ်းကြပ်မတ် ဆောင်ရွက်ရန်။",
                 objectiveTitle: "အဓိက ရည်မှန်းချက်များ",
-                objectiveDesc: "တရားမဝင် ဝင်ရောက်နေထိုင်မှုများကို တားဆီးရန်၊ လူကုန်ကူးမှုနှင့် လူမှောင်ခိုပြုလုပ်မှုများ ပပျောက်စေရန်နှင့် အစိုးရမှ ချမှတ်ထားသော လမ်းညွှန်ချက်များအတိုင်း တိကျစွာ အကောင်အထည်ဖော် ဆောင်ရွက်ရန်။"
+                objectiveDesc: "တရားမဝင် ဝင်ရောက်နေထိုင်မှုများကို တားဆီးရန်၊ လူကုန်ကူးမှုနှင့် လူမှောင်ခိုပြုလုပ်မှုများ ပပျောက်စေရန်နှင့် အစိုးရမှ ချမှတ်ထားသော လမ်းညွှန်ချက်များအတိုင်း တိကျစွာ အကောင်အထည်ဖော် ဆောင်ရွက်ရန်။",
+                responsibilitiesTitle: "ဆောင်ရွက်လျက်ရှိသော လုပ်ငန်းတာဝန်",
+                responsibilitiesDesc: "ဒေသတွင်းရှိ လူဦးရေစာရင်း မှတ်တမ်းတင်ခြင်း၊ သန်းခေါင်စာရင်း ကောက်ယူခြင်းနှင့် လူဝင်မှုကြီးကြပ်ရေးဆိုင်ရာ ထိန်းသိမ်းကြပ်မတ်မှု လုပ်ငန်းများကို စနစ်တကျ ဆောင်ရွက်လျက်ရှိပါသည်။",
+                mainTasksTitle: "လူဝင်မှုကြီးကြပ်ရေးဌာန၏ အဓိကလုပ်ငန်းတာဝန်ကြီး(၂)ရပ်",
+                mainTasksDesc: "၁။ လူဦးရေစာရင်းနှင့် သန်းခေါင်စာရင်းစစ်ဆေးခြင်း\n၂။ လူဝင်မှုကြီးကြပ်ရေးနှင့် နယ်စပ်ဖြတ်ကျော်မှု ထိန်းသိမ်းကြပ်မတ်ခြင်း"
             },
             common: {
                 readMore: "ဆက်လက်ဖတ်ရှုရန်",
                 allNews: "သတင်းများအားလုံး",
                 viewAll: "အားလုံးကြည့်မည်",
+                save: "သိမ်းမည်",
+                cancel: "ပယ်ဖျက်မည်",
             },
             contact: {
                 badge: "ဆက်သွယ်ရန်",
@@ -310,9 +358,9 @@ const resources = {
                 subtitle: "ခရိုင်အသီးသီးရှိ ရုံးခွဲများနှင့် အချက်အလက်များ။",
                 noDistricts: "ခရိုင်အချက်အလက်များ မရှိသေးပါ",
                 noDistrictsDesc: "ခရိုင်ဆိုင်ရာ အချက်အလက်များ မကြာမီ ထည့်သွင်းပါမည်။",
-                badge: "REGIONAL ADMINISTRATION",
-                adminOffices: "ခရိုင်အုပ်ချုပ်ရေးရုံးများ",
-                adminOfficesDesc: "ပြည်သူ့ဝန်ဆောင်မှု လုပ်ငန်းဆိုင်ရာ အချက်အလက်များနှင့် အုပ်ချုပ်ရေးရုံး တည်နေရာများ",
+                badge: "REGIONAL IMMIGRATION OFFICES",
+                adminOffices: "ခရိုင် လူဝင်မှုကြီးကြပ်ရေးရုံး",
+                adminOfficesDesc: "ပြည်သူ့ဝန်ဆောင်မှု လုပ်ငန်းဆိုင်ရာ အချက်အလက်များနှင့် ရုံးတည်နေရာများ",
                 noMap: "မြေပုံအချက်အလက် မရှိသေးပါ",
                 viewMap: "တည်နေရာပြမြေပုံ",
                 networkError: "ကွန်ရက်ချို့ယွင်းချက်",
@@ -382,7 +430,12 @@ const resources = {
                 roleRootAdmin: "Root Admin",
                 roleAdmin: "Admin",
                 roleStaff: "Staff",
-                noComments: "မှတ်ချက်များ မရှိသေးပါ။ ပထမဆုံးမှတ်ချက်ပေးသူ ဖြစ်ပါစေ။"
+                roleUser: "အသုံးပြုသူ",
+                noComments: "မှတ်ချက်များ မရှိသေးပါ။ ပထမဆုံးမှတ်ချက်ပေးသူ ဖြစ်ပါစေ။",
+                edit: "ပြင်ဆင်မည်",
+                delete: "ဖျက်မည်",
+                reply: "မှတ်ချက် ပြန်မည်",
+                confirmDelete: "ဤမှတ်ချက်ကို ဖျက်ရန် သေချာပါသလား?"
             },
             breadcrumbs: {
                 homeTitle: "ပင်မစာမျက်နှာ",
@@ -394,6 +447,35 @@ const resources = {
                 shareTelegram: "Telegram တွင် ဝေမျှမည်",
                 copyLink: "လင့်ခ်ကို ကူးယူမည်",
                 linkCopied: "လင့်ခ်ကို ကူးယူပြီးပါပြီ။"
+            },
+            help: {
+                title: "အကူအညီနှင့် အမေးများသော မေးခွန်းများ",
+                subtitle: "လူဝင်မှုကြီးကြပ်ရေး လုပ်ထုံးလုပ်နည်းများနှင့် ပတ်သက်သော အချက်အလက်များကို ဤနေရာတွင် ရှာဖွေနိုင်ပါသည်။",
+                searchPlaceholder: "အကူအညီ၊ လုပ်ထုံးလုပ်နည်း သို့မဟုတ် သော့ချက်စာလုံးများ ရှာဖွေပါ...",
+                categories: {
+                    general: "အထွေထွေ အချက်အလက်",
+                    passport: "နိုင်ငံကူးလက်မှတ်နှင့် မှတ်ပုံတင်",
+                    visa: "ဗီဇာနှင့် နေထိုင်ခွင့်",
+                    security: "လုံခြုံရေးနှင့် ကျင့်ဝတ်"
+                },
+                faq: {
+                    q1: "စမတ်ကတ် (Smart Identity Card) အသစ်ကို ဘယ်လိုလျှောက်ထားရမလဲ?",
+                    a1: "ကျွန်ုပ်တို့၏ e-Government Portal ရှိ 'ဝန်ဆောင်မှုများ' ကဏ္ဍတွင် လျှောက်ထားနိုင်ပါသည်။ သင်၏ ဇီဝဆိုင်ရာ အချက်အလက်များနှင့် မျိုးရိုးဗီဇဆိုင်ရာ မှတ်တမ်းများကို တင်ပြရန် လိုအပ်ပါသည်။",
+                    q2: "ဗီဇာလျှောက်ထားမှုအတွက် ကြာမြင့်ချိန် ဘယ်လောက်ရှိသလဲ?",
+                    a2: "ပုံမှန်အားဖြင့် ရုံးဖွင့်ရက် ၅ ရက်မှ ၇ ရက်အထိ ကြာမြင့်နိုင်ပါသည်။ အရေးကြီးသော ကိစ္စရပ်များအတွက် ရုံးချုပ်တွင် အမြန်ဝန်ဆောင်မှု ရယူနိုင်ပါသည်။",
+                    q3: "အိမ်ထောင်စုစာရင်း ပြင်ဆင်ခြင်းကို ဘယ်လိုလုပ်ဆောင်ရမလဲ?",
+                    a3: "နေရပ်ပြောင်းရွှေ့ခြင်း သို့မဟုတ် မိသားစုဝင် တိုး/လျော့ခြင်းများကို ၄၈ နာရီအတွင်း ဤပေါ်တယ်မှတစ်ဆင့် အကြောင်းကြားရပါမည်။",
+                    q4: "ဤပေါ်တယ်ပေါ်ရှိ ကျွန်ုပ်၏ အချက်အလက်များ လုံခြုံမှု ရှိပါသလား?",
+                    a4: "ရှိပါသည်။ သင်၏ အချက်အလက်များကို စစ်ဘက်အဆင့် ကုဒ်ဝှက်စနစ်ဖြင့် အပြည့်အဝ ကာကွယ်ထားပြီး နိုင်ငံတော်လုံခြုံရေး အဆင့်တွင် ထိန်းသိမ်းထားပါသည်။",
+                },
+                contactSupport: "အကူအညီ ထပ်မံလိုအပ်ပါသလား?",
+                contactDesc: "ရှုပ်ထွေးသော ကိစ္စရပ်များအတွက် ကျွန်ုပ်တို့၏ အကူအညီပေးရေးအဖွဲ့ထံ ရုံးဖွင့်ချိန်အတွင်း ဆက်သွယ်နိုင်ပါသည်။",
+                chatbot: {
+                    title: "Federal Support AI",
+                    welcome: "မင်္ဂလာပါ! ကျွန်ုပ်သည် Federal Support Assistant ဖြစ်ပါသည်။ ဘာများ ကူညီပေးရမလဲခင်ဗျာ?",
+                    placeholder: "မက်ဆေ့ချ် ရိုက်ထည့်ပါ...",
+                    online: "Online"
+                }
             }
         }
     }

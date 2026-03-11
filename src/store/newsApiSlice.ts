@@ -11,6 +11,8 @@ export interface News {
     status: "Draft" | "Published" | "Pending";
     likes: Array<{ _id: string; name: string; avatar?: string; email: string }>;
     views: number;
+    district?: string;
+    township?: string;
 }
 
 export interface NewsResponse {
@@ -29,6 +31,8 @@ export interface CreateNewsPayload {
     category: string;
     images?: string[];
     status: 'Draft' | 'Published' | 'Pending';
+    district?: string;
+    township?: string;
 }
 
 export interface UploadImageResponse {

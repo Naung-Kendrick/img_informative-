@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useGetAllNewsQuery } from "../store/newsApiSlice";
-import { ArrowRight, Calendar, User, Zap } from "lucide-react";
+import { useGetAllDistrictsQuery } from "../store/districtApiSlice";
+import { ArrowRight, Calendar, User, Zap, Search, Filter, X, MapPin } from "lucide-react";
 import { Skeleton } from "../components/ui/skeleton";
 
 const ITEMS_PER_PAGE = 6;
@@ -13,11 +14,28 @@ const ITEMS_PER_PAGE = 6;
 export default function Activities() {
     const { t } = useTranslation();
     const { data: allNews, isLoading, isError } = useGetAllNewsQuery();
+    const { data: districtsList = [] } = useGetAllDistrictsQuery();
     const [currentPage, setCurrentPage] = useState(1);
 
-    const activities = allNews?.filter(
-        (item) => item.category === "Activities" && item.status === "Published"
-    ) || [];
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filterDistrict, setFilterDistrict] = useState("");
+    const [filterDate, setFilterDate] = useState("");
+
+    const activities = allNews?.filter((item) => {
+        const isActivity = item.category?.toLowerCase() === "activities" && item.status === "Published";
+        if (!isActivity) return false;
+
+        const matchesSearch = searchQuery
+            ? item.title?.toLowerCase().includes(searchQuery.toLowerCase()) || item.author?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+            : true;
+
+        const matchesDistrict = filterDistrict ? item.district === filterDistrict : true;
+
+        const itemDate = new Date(item.createdAt || Date.now()).toISOString().split('T')[0];
+        const matchesDate = filterDate ? itemDate === filterDate : true;
+
+        return matchesSearch && matchesDistrict && matchesDate;
+    }) || [];
 
     // Pagination Logic
     const totalPages = Math.ceil(activities.length / ITEMS_PER_PAGE);
@@ -45,6 +63,58 @@ export default function Activities() {
                     <p className="p-lead mt-6">
                         {t("activities.subtitle")}
                     </p>
+                </div>
+
+                {/* Filters */}
+                <div className="mb-12 bg-card border border-border rounded-xl p-4 shadow-sm flex flex-wrap items-center gap-4">
+                    <div className="flex items-center gap-2 text-primary font-bold px-2 border-r border-border mr-2">
+                        <Filter size={18} />
+                        <span className="p-small font-bold hidden md:inline">{t("common.filter", "စစ်ထုတ်ရန်")}</span>
+                    </div>
+
+                    <div className="relative flex-1 min-w-[200px]">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+                        <input
+                            type="text"
+                            placeholder={t("common.search", "ရှာဖွေပါ...")}
+                            value={searchQuery}
+                            onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+                            className="w-full pl-10 pr-4 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all p-small"
+                        />
+                    </div>
+
+                    <select
+                        value={filterDistrict}
+                        onChange={(e) => { setFilterDistrict(e.target.value); setCurrentPage(1); }}
+                        className="pl-3 pr-8 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all p-small cursor-pointer"
+                    >
+                        <option value="">{t("common.allDistricts", "ခရိုင်အားလုံး")}</option>
+                        {districtsList.map(d => (
+                            <option key={d._id} value={d.name}>{d.name.trim()}</option>
+                        ))}
+                    </select>
+
+                    <input
+                        type="date"
+                        value={filterDate}
+                        onChange={(e) => { setFilterDate(e.target.value); setCurrentPage(1); }}
+                        className="px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all p-small cursor-pointer"
+                    />
+
+                    {(searchQuery || filterDistrict || filterDate) && (
+                        <button
+                            onClick={() => {
+                                setSearchQuery("");
+                                setFilterDistrict("");
+                                setFilterDate("");
+                                setCurrentPage(1);
+                            }}
+                            className="flex items-center gap-1.5 px-3 py-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all p-small font-bold uppercase tracking-tight"
+                        >
+                            <X size={14} />
+                            <span>{t("common.reset", "Reset")}</span>
+                        </button>
+                    )}
                 </div>
 
                 {isLoading ? (
@@ -99,11 +169,20 @@ export default function Activities() {
                                     </div>
 
                                     <div className="p-8 flex flex-col flex-grow">
-                                        <div className="flex items-center gap-4 mb-6">
+                                        <div className="flex flex-wrap items-center gap-4 mb-6">
                                             <div className="flex items-center gap-2 p-small text-muted-foreground">
                                                 <Calendar size={12} className="text-primary/70" />
                                                 {new Date(news.createdAt).toLocaleDateString('en-GB')}
                                             </div>
+                                            {(news.district || news.township) && (
+                                                <>
+                                                    <div className="w-[1px] h-3 bg-border" />
+                                                    <div className="flex items-center gap-2 p-small text-muted-foreground">
+                                                        <MapPin size={12} className="text-primary/70" />
+                                                        {news.township ? `${news.township}, ` : ''}{news.district}
+                                                    </div>
+                                                </>
+                                            )}
                                             <div className="w-[1px] h-3 bg-border" />
                                             <div className="flex items-center gap-2 p-small text-muted-foreground">
                                                 <User size={12} className="text-primary/70" />

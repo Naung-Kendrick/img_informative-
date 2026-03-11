@@ -72,10 +72,10 @@ export default function Login() {
 
     return (
         <div className="page-container bg-background flex min-h-[90vh] items-center justify-center p-4 md:p-6 w-full animate-in fade-in duration-700">
-            <div className="w-full max-w-[900px] bg-card rounded-2xl md:rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] overflow-hidden grid grid-cols-1 md:grid-cols-2 border border-border mt-8 mb-8">
+            <div className="w-full max-w-[900px] bg-card rounded-2xl md:rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] overflow-hidden grid grid-cols-1 md:grid-cols-2 border border-border mt-4 mb-4 md:mt-8 md:mb-8">
 
                 {/* Left Side - Graphic & Welcome */}
-                <div className="bg-gradient-to-br from-[#021024] via-[#052659] to-[#1e3a8a] p-10 md:p-14 text-white flex flex-col justify-center items-center text-center relative overflow-hidden min-h-[500px] border-r border-white/5">
+                <div className="bg-gradient-to-br from-[#021024] via-[#052659] to-[#1e3a8a] p-8 md:p-14 text-white flex flex-col justify-center items-center text-center relative overflow-hidden min-h-[300px] md:min-h-[500px] border-r border-white/5">
                     {/* Professional Geometric Background Elements */}
                     <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-primary/20 rounded-full blur-[100px] opacity-40"></div>
                     <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] bg-blue-400/10 rounded-full blur-[120px] opacity-30"></div>
@@ -86,7 +86,7 @@ export default function Login() {
 
                     {/* Logo Area - Professional & Stylish */}
                     <div className="relative z-10 animate-in zoom-in-95 duration-1000">
-                        <div className="h-36 w-36 md:h-44 md:w-44 bg-white rounded-[2.5rem] flex items-center justify-center shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-4 border-white/20 p-6 group transition-all duration-500 hover:scale-105">
+                        <div className="h-24 w-24 md:h-44 md:w-44 bg-white rounded-2xl md:rounded-[2.5rem] flex items-center justify-center shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-4 border-white/20 p-4 md:p-6 group transition-all duration-500 hover:scale-105">
                             <img
                                 src="/photo_2026-03-09_14-35-44-removebg-preview.png"
                                 alt="Department Seal"
@@ -96,18 +96,18 @@ export default function Login() {
                     </div>
 
                     {/* Clear, Minimalist Text */}
-                    <div className="relative z-10 mt-12 animate-in slide-in-from-bottom-8 duration-1000 delay-200 text-center">
-                        <h2 className="text-5xl md:text-6xl font-bold tracking-[-0.03em] text-white/95 leading-tight mb-4 drop-shadow-xl" style={{ fontFamily: "'Times New Roman', serif" }}>
+                    <div className="relative z-10 mt-6 md:mt-12 animate-in slide-in-from-bottom-8 duration-1000 delay-200 text-center">
+                        <h2 className="text-3xl md:text-6xl font-bold tracking-tight text-white/95 leading-tight mb-4 drop-shadow-xl" style={{ fontFamily: "'Times New Roman', serif" }}>
                             Welcome Back
                         </h2>
-                        <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent mx-auto overflow-hidden">
+                        <div className="w-12 md:w-16 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent mx-auto overflow-hidden">
                             <div className="w-full h-full bg-white/40 animate-pulse"></div>
                         </div>
                     </div>
                 </div>
 
                 {/* Right Side - Form */}
-                <div className="p-10 md:p-14 flex flex-col justify-center bg-card relative">
+                <div className="p-8 md:p-14 flex flex-col justify-center bg-card relative">
 
                     {(isError || isRegisterError) && (
                         <div className="bg-destructive/10 text-destructive text-sm p-4 text-center rounded-lg mb-6 border border-destructive/20 animate-in shake">
@@ -191,15 +191,15 @@ export default function Login() {
                             <button
                                 type="submit"
                                 disabled={isLoading || isRegisterLoading || isGoogleLoading}
-                                className="w-full bg-background border border-border hover:bg-muted text-foreground font-bold py-4 rounded-xl shadow-sm transition-all text-sm disabled:opacity-70 disabled:pointer-events-none flex items-center justify-center gap-2"
+                                className="w-full bg-[#1e3a8a] hover:bg-[#1e3a8a]/90 text-white font-bold py-4 rounded-full shadow-lg shadow-blue-900/10 transition-all text-sm disabled:opacity-70 disabled:pointer-events-none flex items-center justify-center gap-2 active:scale-[0.98]"
                             >
                                 {(isLoading || isRegisterLoading) ? (
                                     <>
-                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                        Processing...
+                                        <Loader2 className="h-5 w-5 animate-spin" />
+                                        <span>Processing...</span>
                                     </>
                                 ) : (
-                                    isRegistering ? "Create Account" : "Login"
+                                    <span className="padauk-bold">{isRegistering ? "Create Account" : "Login"}</span>
                                 )}
                             </button>
                         </div>

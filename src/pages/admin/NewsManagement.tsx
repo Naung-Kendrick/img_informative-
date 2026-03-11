@@ -3,24 +3,54 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useGetAllNewsQuery, useDeleteNewsMutation, useUpdateNewsMutation, type News } from "../../store/newsApiSlice";
 import type { RootState } from "../../store";
-import { Loader2, Plus, Edit, Trash2, Calendar, AlertCircle, Eye, BarChart2, Check } from "lucide-react";
+import { Loader2, Plus, Edit, Trash2, Calendar, AlertCircle, Eye, BarChart2, Check, Filter, X, Search, MapPin } from "lucide-react";
 import { Skeleton } from "../../components/ui/skeleton";
+import { useModal } from "../../context/ModalContext";
+import { useGetAllCategoriesQuery } from "../../store/categoryApiSlice";
+import { useGetAllDistrictsQuery } from "../../store/districtApiSlice";
 
 export default function NewsManagement() {
     const { user } = useSelector((state: RootState) => state.auth);
+    const { showSuccess, showError } = useModal();
     const role = user?.role ?? 0;
 
-    const { data: news, isLoading, isError, refetch } = useGetAllNewsQuery(undefined, {
-        pollingInterval: 10000, // Poll every 10 seconds to catch status updates (e.g. Admin approval)
+    const { data: news, isLoading: isNewsLoading, isError, refetch } = useGetAllNewsQuery(undefined, {
+        pollingInterval: 10000,
     });
+
+    const { data: catData, isLoading: isCatLoading } = useGetAllCategoriesQuery();
+    const CATEGORIES = catData?.categories?.map(c => ({ value: c.slug, label: c.title })) || [];
+
+    const { data: districtsList = [] } = useGetAllDistrictsQuery();
+
+    const isLoading = isNewsLoading || isCatLoading;
     const [deleteNews, { isLoading: isDeleting }] = useDeleteNewsMutation();
     const [updateNews] = useUpdateNewsMutation();
 
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [newsToDelete, setNewsToDelete] = useState<string | null>(null);
 
-    // Permission flags based on photo spec:
-    // Staff (1) = create only | Admin (2) = create, edit | Root Admin (3) = create, edit, delete
+    // Filter State
+    const [filterCategory, setFilterCategory] = useState("");
+    const [filterDistrict, setFilterDistrict] = useState("");
+    const [filterDate, setFilterDate] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const filteredNews = news?.filter((item: News) => {
+        const matchesCategory = filterCategory ? item.category === filterCategory : true;
+        const matchesDistrict = filterDistrict ? item.district === filterDistrict : true;
+
+        const itemDate = new Date(item.createdAt || Date.now()).toISOString().split('T')[0];
+        const matchesDate = filterDate ? itemDate === filterDate : true;
+
+        const matchesSearch = searchQuery
+            ? item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.author?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+            : true;
+
+        return matchesCategory && matchesDistrict && matchesDate && matchesSearch;
+    });
+
     const canEdit = role >= 2;
     const canDelete = role >= 3;
 
@@ -28,12 +58,13 @@ export default function NewsManagement() {
         if (newsToDelete) {
             try {
                 await deleteNews(newsToDelete).unwrap();
+                showSuccess("အောင်မြင်ပါသည်", "သတင်းအချက်အလက်ကို ဖျက်သိမ်းပြီးပါပြီ");
                 setDeleteModalOpen(false);
                 setNewsToDelete(null);
                 refetch();
             } catch (err) {
                 console.error("Failed to delete news:", err);
-                alert("ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ။");
+                showError("မအောင်မြင်ပါ", "ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ။");
             }
         }
     };
@@ -41,10 +72,11 @@ export default function NewsManagement() {
     const handleApprove = async (id: string) => {
         try {
             await updateNews({ id, data: { status: "Published" } }).unwrap();
+            showSuccess("အောင်မြင်ပါသည်", "သတင်းကို အတည်ပြုပြီးပါပြီ");
             refetch();
         } catch (err) {
             console.error("Failed to approve news:", err);
-            alert("အတည်ပြုခြင်း မအောင်မြင်ပါ။");
+            showError("မအောင်မြင်ပါ", "အတည်ပြုခြင်း မအောင်မြင်ပါ။");
         }
     };
 
@@ -59,7 +91,6 @@ export default function NewsManagement() {
                         ဝက်ဘ်ဆိုက်ရှိ သတင်းအချက်အလက်များကို ရေးသားခြင်း၊ ပြင်ဆင်ခြင်းများ ပြုလုပ်ပါ။
                     </p>
                 </div>
-                {/* All roles can create */}
                 <Link
                     to="/admin/news/new"
                     className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-5 py-2.5 rounded-xl font-bold transition-colors shadow-sm padauk-bold shrink-0"
@@ -67,6 +98,74 @@ export default function NewsManagement() {
                     <Plus size={20} />
                     သတင်းအသစ်တင်မည်
                 </Link>
+            </div>
+
+            {/* Filter Bar */}
+            <div className="bg-white border border-slate-200 rounded-xl p-4 mb-8 shadow-sm flex flex-wrap items-center gap-4 transition-all">
+                <div className="flex items-center gap-2 text-primary font-bold px-2 border-r border-slate-200 mr-2">
+                    <Filter size={18} />
+                    <span className="padauk-bold text-sm tracking-wide hidden md:inline">စစ်ထုတ်ရန်</span>
+                </div>
+
+                {/* Search Input */}
+                <div className="relative flex-1 min-w-[200px]">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                    <input
+                        type="text"
+                        placeholder="ခေါင်းစဉ်ဖြင့် ရှာဖွေပါ..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular"
+                    />
+                </div>
+
+                {/* Category Filter */}
+                <select
+                    value={filterCategory}
+                    onChange={(e) => setFilterCategory(e.target.value)}
+                    className="pl-3 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular cursor-pointer"
+                >
+                    <option value="">ကဏ္ဍအားလုံး</option>
+                    {CATEGORIES.map(cat => (
+                        <option key={cat.value} value={cat.value}>{cat.label}</option>
+                    ))}
+                </select>
+
+                {/* District Filter - Dynamic from DB */}
+                <select
+                    value={filterDistrict}
+                    onChange={(e) => setFilterDistrict(e.target.value)}
+                    className="pl-3 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular cursor-pointer"
+                >
+                    <option value="">ခရိုင်အားလုံး</option>
+                    {districtsList.map(d => (
+                        <option key={d._id} value={d.name}>{d.name.trim()}</option>
+                    ))}
+                </select>
+
+                {/* Date Filter */}
+                <input
+                    type="date"
+                    value={filterDate}
+                    onChange={(e) => setFilterDate(e.target.value)}
+                    className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular cursor-pointer"
+                />
+
+                {/* Reset Filters */}
+                {(filterCategory || filterDistrict || filterDate || searchQuery) && (
+                    <button
+                        onClick={() => {
+                            setFilterCategory("");
+                            setFilterDistrict("");
+                            setFilterDate("");
+                            setSearchQuery("");
+                        }}
+                        className="flex items-center gap-1.5 px-3 py-2 text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all text-xs font-bold uppercase tracking-tight"
+                    >
+                        <X size={14} />
+                        <span>Reset</span>
+                    </button>
+                )}
             </div>
 
             {isLoading ? (
@@ -77,6 +176,7 @@ export default function NewsManagement() {
                                 <tr>
                                     <th className="px-6 py-4">ခေါင်းစဉ်</th>
                                     <th className="px-6 py-4">ကဏ္ဍ</th>
+                                    <th className="px-6 py-4">တည်နေရာ</th>
                                     <th className="px-6 py-4">အခြေအနေ</th>
                                     <th className="px-6 py-4">အချိန်</th>
                                     <th className="px-6 py-4 text-right">လုပ်ဆောင်ချက်များ</th>
@@ -87,6 +187,7 @@ export default function NewsManagement() {
                                     <tr key={i}>
                                         <td className="px-6 py-4"><Skeleton className="h-6 w-3/4 mb-2" /><Skeleton className="h-4 w-1/4" /></td>
                                         <td className="px-6 py-4"><Skeleton className="h-8 w-20 rounded-lg" /></td>
+                                        <td className="px-6 py-4"><Skeleton className="h-4 w-24" /></td>
                                         <td className="px-6 py-4"><Skeleton className="h-8 w-24 rounded-full" /></td>
                                         <td className="px-6 py-4"><Skeleton className="h-4 w-24" /></td>
                                         <td className="px-6 py-4 text-right"><div className="flex justify-end gap-2"><Skeleton className="h-8 w-8 rounded-lg" /><Skeleton className="h-8 w-8 rounded-lg" /></div></td>
@@ -109,13 +210,14 @@ export default function NewsManagement() {
                                 <tr>
                                     <th className="px-6 py-4">ခေါင်းစဉ်</th>
                                     <th className="px-6 py-4">ကဏ္ဍ</th>
+                                    <th className="px-6 py-4">တည်နေရာ</th>
                                     <th className="px-6 py-4">အခြေအနေ</th>
                                     <th className="px-6 py-4">အချိန်</th>
                                     <th className="px-6 py-4 text-right">လုပ်ဆောင်ချက်များ</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100 padauk-regular text-slate-700">
-                                {news?.map((item: News) => (
+                                {filteredNews?.map((item: News) => (
                                     <tr key={item._id} className="hover:bg-slate-50/50 transition-all duration-200">
                                         <td className="px-6 py-4 min-w-[300px]">
                                             <div className="font-bold text-slate-900 text-base max-w-[400px] truncate" title={item.title}>
@@ -125,12 +227,28 @@ export default function NewsManagement() {
                                                 By <span className="font-semibold text-slate-500">{item.author?.name || "Admin"}</span>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-6 py-4 text-nowrap">
                                             <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-semibold border border-slate-200 shadow-sm">
-                                                {item.category}
+                                                {CATEGORIES.find(c => c.value === item.category)?.label || item.category}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">
+                                            <div className="flex flex-col gap-1">
+                                                {item.district && (
+                                                    <div className="flex items-center gap-1.5 text-slate-600">
+                                                        <MapPin size={12} className="text-primary" />
+                                                        <span className="text-xs font-bold">{item.district}</span>
+                                                    </div>
+                                                )}
+                                                {item.township && (
+                                                    <div className="text-[11px] text-slate-400 ml-5 font-semibold">
+                                                        {item.township}
+                                                    </div>
+                                                )}
+                                                {!item.district && !item.township && <span className="text-slate-300">-</span>}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 text-nowrap">
                                             <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase ${item.status === 'Published' ? 'bg-green-50 text-green-700 border border-green-200' :
                                                 item.status === 'Pending' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
                                                     'bg-slate-50 text-slate-600 border border-slate-200'}`}>
@@ -154,7 +272,6 @@ export default function NewsManagement() {
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
-                                                {/* Approve — Admin (2) and Root Admin (3) only */}
                                                 {canEdit && item.status === 'Pending' && (
                                                     <button
                                                         onClick={() => handleApprove(item._id)}
@@ -165,7 +282,6 @@ export default function NewsManagement() {
                                                     </button>
                                                 )}
 
-                                                {/* View — all roles can view */}
                                                 <Link
                                                     to={`/news/${item._id}`}
                                                     target="_blank"
@@ -175,7 +291,6 @@ export default function NewsManagement() {
                                                     <Eye size={18} />
                                                 </Link>
 
-                                                {/* View Interactions */}
                                                 <Link
                                                     to={`/admin/news/interactions/${item._id}`}
                                                     className="p-2 rounded-lg transition-all text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 border border-transparent hover:border-indigo-100"
@@ -184,7 +299,6 @@ export default function NewsManagement() {
                                                     <BarChart2 size={18} />
                                                 </Link>
 
-                                                {/* Edit — Admin (2) and Root Admin (3) only */}
                                                 {canEdit && (
                                                     <Link
                                                         to={`/admin/news/edit/${item._id}`}
@@ -195,7 +309,6 @@ export default function NewsManagement() {
                                                     </Link>
                                                 )}
 
-                                                {/* Delete — Root Admin (3) only */}
                                                 {canDelete && (
                                                     <button
                                                         onClick={() => {
@@ -213,12 +326,12 @@ export default function NewsManagement() {
                                         </td>
                                     </tr>
                                 ))}
-                                {news?.length === 0 && (
+                                {filteredNews?.length === 0 && (
                                     <tr>
-                                        <td colSpan={5} className="px-6 py-20 text-center text-slate-400 padauk-bold">
+                                        <td colSpan={6} className="px-6 py-20 text-center text-slate-400 padauk-bold">
                                             <div className="flex flex-col items-center gap-3">
                                                 <AlertCircle size={40} className="text-slate-200" />
-                                                <span>တင်ထားသော သတင်းများ မရှိသေးပါ။</span>
+                                                <span>ရှာဖွေမှုနှင့် ကိုက်ညီသော သတင်းများ မရှိသေးပါ။</span>
                                             </div>
                                         </td>
                                     </tr>
@@ -229,10 +342,9 @@ export default function NewsManagement() {
                 </div>
             )}
 
-            {/* Delete Modal — only renders for Root Admin */}
             {deleteModalOpen && canDelete && (
                 <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200 padauk-regular">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 animate-in zoom-in-95 duration-200 border border-slate-200">
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-md p-6 animate-in zoom-in-95 duration-200 border border-slate-200">
                         <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center text-red-600 mb-4 animate-bounce">
                             <Trash2 size={24} />
                         </div>
@@ -266,4 +378,3 @@ export default function NewsManagement() {
         </div>
     );
 }
-

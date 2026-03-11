@@ -58,13 +58,14 @@ export const districtApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: [{ type: 'District', id: 'LIST' }],
         }),
 
-        updateDistrict: builder.mutation<District, { id: string; data: Partial<District> }>({
+        updateDistrict: builder.mutation<District, { id: string; data: FormData }>({
             query: ({ id, data }) => ({
                 url: `/districts/${id}`,
                 method: 'PATCH',
                 body: data,
+                formData: true,
             }),
-            invalidatesTags: (_, __, arg) => [{ type: 'District', id: arg.id }],
+            invalidatesTags: (_, __, arg) => [{ type: 'District', id: arg.id }, { type: 'District', id: 'LIST' }],
         }),
 
         deleteDistrict: builder.mutation<{ success: boolean; message: string }, string>({

@@ -17,7 +17,7 @@ export const apiSlice = createApi({
         },
     }),
     // This allows us to invalidate specific parts of our cache
-    tagTypes: ['User', 'Category', 'News', 'Comment', 'Page', 'Contact', 'Announcement', 'District', 'About', 'Statistic', 'ContactInfo', 'Report'],
+    tagTypes: ['User', 'Category', 'News', 'Comment', 'Page', 'Contact', 'Announcement', 'District', 'About', 'Statistic', 'ContactInfo', 'Report', 'Faq', 'Layout'],
     // Endpoints will be injected in individual api slice extensions
     endpoints: () => ({}),
 });

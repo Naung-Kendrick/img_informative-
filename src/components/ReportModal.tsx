@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, AlertTriangle, CheckCircle2, Loader2, Flag } from 'lucide-react';
 import { useCreateReportMutation } from '../store/reportApiSlice';
+import { useModal } from '../context/ModalContext';
 
 interface ReportModalProps {
     isOpen: boolean;
@@ -21,6 +22,7 @@ const ReportModal: React.FC<ReportModalProps> = ({ isOpen, onClose, newsId, news
     const [reason, setReason] = useState("");
     const [details, setDetails] = useState("");
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const { showError } = useModal();
     const [createReport, { isLoading }] = useCreateReportMutation();
 
     if (!isOpen) return null;
@@ -40,7 +42,7 @@ const ReportModal: React.FC<ReportModalProps> = ({ isOpen, onClose, newsId, news
             }, 3000);
         } catch (error) {
             console.error("Failed to submit report:", error);
-            alert("Report တင်သွင်းမှု မအောင်မြင်ပါ။ နောက်မှ ပြန်လည်ကြိုးစားပေးပါ။");
+            showError("မအောင်မြင်ပါ", "Report တင်သွင်းမှု မအောင်မြင်ပါ။ နောက်မှ ပြန်လည်ကြိုးစားပေးပါ။");
         }
     };
 
@@ -99,8 +101,8 @@ const ReportModal: React.FC<ReportModalProps> = ({ isOpen, onClose, newsId, news
                                         type="button"
                                         onClick={() => setReason(r)}
                                         className={`text-left px-4 py-3 rounded-xl border text-sm font-medium transition-all ${reason === r
-                                                ? "bg-primary/5 border-primary text-primary ring-2 ring-primary/20"
-                                                : "border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                                            ? "bg-primary/5 border-primary text-primary ring-2 ring-primary/20"
+                                            : "border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50"
                                             }`}
                                     >
                                         {r}

@@ -16,8 +16,10 @@ import {
     Eye,
     Share2,
     Flag,
-    ChevronLeft
+    ChevronLeft,
+    Send
 } from "lucide-react";
+import { useModal } from "../context/ModalContext";
 
 /**
  * Senior UI/UX Redesign: Professional 2-Column News Reader
@@ -28,6 +30,7 @@ export default function NewsReader() {
     const articleId = id as string;
     const [lightboxImage, setLightboxImage] = useState<string | null>(null);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const { showSuccess, showError } = useModal();
 
     const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
 
@@ -45,7 +48,7 @@ export default function NewsReader() {
 
     const handleToggleLike = async () => {
         if (!isAuthenticated) {
-            alert("ကျေးဇူးပြု၍ အရင်ဆုံး Login ဝင်ပေးပါ။");
+            showError("အကူအညီ", "ကျေးဇူးပြု၍ အရင်ဆုံး Login ဝင်ပေးပါ။");
             return;
         }
         if (!id || isLiking) return;
@@ -179,30 +182,74 @@ export default function NewsReader() {
                             dangerouslySetInnerHTML={{ __html: article.content }}
                         />
 
-                        {/* Engagement Bar */}
-                        <div className="flex flex-wrap items-center justify-between gap-6 py-8 border-y border-border mb-16">
-                            <div className="flex items-center gap-4">
+                        {/* Redesigned Engagement Bar */}
+                        <div className="flex flex-wrap items-center gap-4 py-8 border-y border-slate-100 mb-12">
+                            <button
+                                onClick={handleToggleLike}
+                                disabled={isLiking}
+                                className={`flex items-center gap-2.5 px-8 h-12 rounded-xl text-sm font-bold transition-all shadow-md active:scale-95 bg-[#1e3a8a] text-white hover:bg-[#1e3a8a]/90`}
+                            >
+                                <Heart size={20} fill="white" className={isLiked ? "animate-pulse" : ""} />
+                                <span className="padauk-bold">Like</span>
+                            </button>
+
+                            <div className="flex items-center gap-3">
+                                {/* Generic Share / Copy */}
                                 <button
-                                    onClick={handleToggleLike}
-                                    disabled={isLiking}
-                                    className={`flex items-center gap-3 px-6 py-3 rounded-lg p-small transition-all border ${isLiked
-                                        ? "bg-primary border-primary text-primary-foreground shadow-lg shadow-primary/20"
-                                        : "bg-card border-border text-muted-foreground hover:border-primary hover:text-primary"
-                                        }`}
+                                    onClick={() => {
+                                        if (navigator.share) {
+                                            navigator.share({ title: article.title, url: window.location.href });
+                                        } else {
+                                            navigator.clipboard.writeText(window.location.href);
+                                            showSuccess("အောင်မြင်ပါသည်", "Link ကို Clipboard သို့ ကူးယူပြီးပါပြီ");
+                                        }
+                                    }}
+                                    className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#f8f9fa] border border-[#f1f3f5] text-slate-600 hover:text-primary hover:border-primary/30 transition-all shadow-sm active:scale-95"
+                                    title="Share or Copy Link"
                                 >
-                                    <Heart size={16} fill={isLiked ? "currentColor" : "none"} className={isLiked ? "animate-pulse" : ""} />
-                                    <span>{article?.likes?.length || 0} Likes</span>
+                                    <Share2 size={20} />
                                 </button>
-                                <button className="flex items-center gap-3 px-6 py-3 rounded-lg p-small bg-card border border-border text-muted-foreground hover:border-foreground hover:text-foreground transition-all">
-                                    <Share2 size={16} />
-                                    <span>Share</span>
-                                </button>
+
+                                {/* Facebook Share */}
+                                <a
+                                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#f8f9fa] border border-[#f1f3f5] text-slate-600 hover:text-[#1877F2] hover:border-[#1877F2]/30 transition-all shadow-sm active:scale-95"
+                                    title="Share on Facebook"
+                                >
+                                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
+                                </a>
+
+                                {/* Telegram Share */}
+                                <a
+                                    href={`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#f8f9fa] border border-[#f1f3f5] text-slate-600 hover:text-[#0088cc] hover:border-[#0088cc]/30 transition-all shadow-sm active:scale-95"
+                                    title="Share on Telegram"
+                                >
+                                    <Send size={20} />
+                                </a>
+
+                                {/* X (Twitter) Share */}
+                                <a
+                                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#f8f9fa] border border-[#f1f3f5] text-slate-600 hover:text-black hover:border-black/30 transition-all shadow-sm active:scale-95"
+                                    title="Share on X"
+                                >
+                                    <X size={20} />
+                                </a>
                             </div>
+
                             <button
                                 onClick={() => setIsReportModalOpen(true)}
-                                className="flex items-center gap-2 text-muted-foreground hover:text-destructive transition-colors p-small"
+                                className="ml-auto flex items-center gap-2.5 text-[#adb5bd] hover:text-destructive transition-all text-[11px] font-black uppercase tracking-[0.15em]"
                             >
-                                <Flag size={14} /> Report Content
+                                <Flag size={16} strokeWidth={2.5} />
+                                <span>REPORT</span>
                             </button>
                         </div>
 
@@ -266,33 +313,8 @@ export default function NewsReader() {
                                 )}
                             </div>
 
-                            {/* Official Verification Widget */}
-                            <div className="bg-slate-50/40 backdrop-blur-sm border border-slate-200/60 p-6 rounded-2xl relative overflow-hidden group shadow-sm">
-                                <div className="relative z-10">
-                                    <div className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
-                                        <div className="w-1 h-1 rounded-full bg-slate-300"></div>
-                                        Internal Records
-                                    </div>
-                                    <p className="text-[11px] text-slate-500 leading-relaxed mb-5 font-medium italic">
-                                        Documentation authorized by the Media Clearance Division.
-                                    </p>
-                                    <div className="space-y-2.5">
-                                        <div className="flex justify-between text-[9px] uppercase tracking-widest pb-2 border-b border-slate-100">
-                                            <span className="text-slate-400 font-semibold">Security Tier</span>
-                                            <span className="text-primary font-bold">Unclassified</span>
-                                        </div>
-                                        <div className="flex justify-between text-[9px] uppercase tracking-widest pt-1">
-                                            <span className="text-slate-400 font-semibold">Source</span>
-                                            <span className="text-slate-700 font-bold">TU Gov News</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="" className="absolute -bottom-4 -right-4 w-24 opacity-[0.03] grayscale rotate-12 pointer-events-none" />
-                            </div>
-
                         </div>
                     </div>
-
                 </div>
             </main>
         </div>

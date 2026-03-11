@@ -4,9 +4,11 @@ import TipTapEditor from "../../components/admin/TipTapEditor";
 import { useCreatePageMutation } from "../../store/pageApiSlice";
 import { useUploadImageToS3Mutation } from "../../store/newsApiSlice"; // Generic S3 upload
 import { Loader2, ArrowLeft, UploadCloud, ImageIcon, X, Hash } from "lucide-react";
+import { useModal } from "../../context/ModalContext";
 
 export default function CreatePage() {
     const navigate = useNavigate();
+    const { showSuccess, showError } = useModal();
     const [searchParams] = useSearchParams();
 
     // ── Form State ──────────────────────────────────────────────────────────
@@ -38,12 +40,12 @@ export default function CreatePage() {
         if (!file) return;
 
         if (!file.type.startsWith("image/")) {
-            alert("ရွေးချယ်ထားသောဖိုင်သည် ပုံဖိုင် မဟုတ်ပါ။");
+            showError("မှားယွင်းမှု", "ရွေးချယ်ထားသောဖိုင်သည် ပုံဖိုင် မဟုတ်ပါ။");
             return;
         }
 
         if (file.size > 10 * 1024 * 1024) {
-            alert("ပုံဖိုင်သည် 10MB ထက် မကြီးသင့်ပါ။");
+            showError("မှားယွင်းမှု", "ပုံဖိုင်သည် 10MB ထက် မကြီးသင့်ပါ။");
             return;
         }
 
@@ -63,15 +65,15 @@ export default function CreatePage() {
         e.preventDefault();
 
         if (!title.trim()) {
-            alert("စာမျက်နှာခေါင်းစဉ် ထည့်သွင်းပါ။");
+            showError("လိုအပ်ချက်", "စာမျက်နှာခေါင်းစဉ် ထည့်သွင်းပါ။");
             return;
         }
         if (!section) {
-            alert("ကဏ္ဍ (Section) ရွေးချယ်ပါ။");
+            showError("လိုအပ်ချက်", "ကဏ္ဍ (Section) ရွေးချယ်ပါ။");
             return;
         }
         if (!content || content === "<p></p>") {
-            alert("အကြောင်းအရာ ရေးသားပါ။");
+            showError("လိုအပ်ချက်", "အကြောင်းအရာ ရေးသားပါ။");
             return;
         }
 
@@ -96,14 +98,12 @@ export default function CreatePage() {
                 order: order || 0,
             }).unwrap();
 
-            // ── Step 3: Redirect on success ────────────────────────────────
-            // Redirect back to the specific management page
-            navigate(`/admin/${section === "services" ? "services" : "districts"}`);
+            showSuccess("အောင်မြင်ပါသည်", "စာမျက်နှာအသစ် ဖန်တီးမှု အောင်မြင်ပါသည်", () => navigate(`/admin/${section === "services" ? "services" : "districts"}`));
 
         } catch (err: any) {
             console.error("❌ Failed to create page:", err);
             const message = err?.data?.message || err?.message || "စာမျက်နှာဖန်တီးခြင်း မအောင်မြင်ပါ။";
-            alert(message);
+            showError("မအောင်မြင်ပါ", message);
         }
     };
 

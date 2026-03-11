@@ -2,9 +2,11 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateDistrictMutation } from "../../store/districtApiSlice";
 import { Loader2, ArrowLeft, Save, UploadCloud, X, MapPin, Phone, Link as LinkIcon, Building } from "lucide-react";
+import { useModal } from "../../context/ModalContext";
 
 export default function CreateDistrict() {
     const navigate = useNavigate();
+    const { showSuccess, showError } = useModal();
     const [createDistrict, { isLoading: isCreating }] = useCreateDistrictMutation();
 
     const [name, setName] = useState("");
@@ -17,12 +19,14 @@ export default function CreateDistrict() {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+
+
     const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
         if (!file.type.startsWith("image/")) {
-            alert(`${file.name} သည် ပုံဖိုင် မဟုတ်ပါ။`);
+            showError("မှားယွင်းမှု", `${file.name} သည် ပုံဖိုင် မဟုတ်ပါ။`);
             return;
         }
 
@@ -42,7 +46,7 @@ export default function CreateDistrict() {
         e.preventDefault();
 
         if (!name || !address || !phone || !imageFile) {
-            alert("ခရိုင်အမည်၊ လိပ်စာ၊ ဖုန်းနံပါတ် နှင့် ဓာတ်ပုံတို့ကို မဖြစ်မနေ ထည့်သွင်းပါ။");
+            showError("လိုအပ်ချက်", "ခရိုင်အမည်၊ လိပ်စာ၊ ဖုန်းနံပါတ် နှင့် ဓာတ်ပုံတို့ကို မဖြစ်မနေ ထည့်သွင်းပါ။");
             return;
         }
 
@@ -56,11 +60,10 @@ export default function CreateDistrict() {
 
             await createDistrict(formData).unwrap();
 
-            alert("ခရိုင်အသစ် ထည့်သွင်းပြီးပါပြီ");
-            navigate("/admin/districts");
+            showSuccess("အောင်မြင်ပါသည်", "ခရိုင်အသစ် ထည့်သွင်းပြီးပါပြီ", () => navigate("/admin/districts"));
         } catch (err: any) {
             console.error(err);
-            alert(err?.data?.message || "ထည့်သွင်းခြင်း မအောင်မြင်ပါ");
+            showError("မအောင်မြင်ပါ", err?.data?.message || "ထည့်သွင်းခြင်း မအောင်မြင်ပါ");
         }
     };
 

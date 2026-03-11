@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useGetPageByIdQuery } from "../store/pageApiSlice";
 import Breadcrumbs from "../components/Breadcrumbs";
 import ShareButtons from "../components/ShareButtons";
-import { Loader2, ArrowLeft, User, MapPin, Briefcase, X, ZoomIn, Download } from "lucide-react";
+import { Loader2, ArrowLeft, MapPin, Briefcase, X, ZoomIn, Download } from "lucide-react";
 
 export default function PageReader() {
     const { t } = useTranslation();
@@ -83,130 +83,71 @@ export default function PageReader() {
                 </div>
             )}
 
-            {/* Banner Section: Institutional Identity */}
-            <div className="w-full relative bg-foreground overflow-hidden border-b border-border">
-                <div className="absolute inset-0 z-0">
-                    {page.bannerImage ? (
-                        <div className="relative w-full h-full">
-                            <img src={page.bannerImage} alt={page.title} className="w-full h-full object-cover opacity-30 grayscale filter" />
-                            <div className="absolute inset-0 bg-gradient-to-b from-foreground/40 via-foreground/80 to-foreground" />
-                        </div>
-                    ) : (
-                        <div className="w-full h-full bg-foreground" />
-                    )}
-                    {/* Background Seal Watermark */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none invert">
-                        <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="" className="scale-150 rotate-12" />
-                    </div>
+            <div className="container-custom py-8">
+                <div className="mb-10">
+                    <Breadcrumbs items={breadcrumbItems} />
                 </div>
 
-                <div className="container-custom relative z-10 py-20 md:py-32 flex flex-col items-center text-center">
-                    <div className="flex flex-col items-center gap-6 mb-10">
-                        <div className="flex items-center gap-2 text-primary p-small">
-                            <span className="w-12 h-[1px] bg-primary/40"></span>
-                            {page.section === "services" ? "DEPARTMENTAL SERVICE" : "DISTRICT ADMINISTRATION"}
-                            <span className="w-12 h-[1px] bg-primary/40"></span>
+                <div className="max-w-4xl mx-auto pb-24">
+                    {/* Header Section */}
+                    <div className="mb-10 pb-6 border-b border-border">
+                        <div className="flex items-center gap-2 text-primary text-xs font-bold uppercase tracking-widest mb-4">
+                            {page.section === "services" ? <Briefcase size={16} /> : <MapPin size={16} />}
+                            {page.section === "services" ? t("pageReader.service", "DEPARTMENTAL SERVICE") : t("pageReader.districtInfo", "DISTRICT ADMINISTRATION")}
                         </div>
-                        <h1 className="h1 text-white mb-0 max-w-4xl">
+                        <h1 className="h1 text-foreground leading-tight mb-0">
                             {page.title}
                         </h1>
                     </div>
 
-                    <div className="flex flex-wrap items-center justify-center gap-6 py-6 border-y border-white/10 w-full max-w-3xl">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-background/10 rounded-sm text-primary">
-                                {page.section === "services" ? <Briefcase size={16} /> : <MapPin size={16} />}
-                            </div>
-                            <span className="p-small text-background/80">
-                                {page.section === "services" ? t("pageReader.service") : t("pageReader.districtInfo")}
-                            </span>
-                        </div>
-                        <div className="w-[1px] h-4 bg-white/10 hidden md:block" />
-                        <div className="flex items-center gap-3 text-background/80">
-                            <User size={16} className="text-primary" />
-                            <span className="p-small leading-none text-background/80">
-                                {page.author?.name || "Official Admin"}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Content Section */}
-            <div className="container-custom -mt-16 sm:-mt-24 relative z-20 pb-20">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                    {/* Main Content Canvas */}
-                    <div className="lg:col-span-8">
-                        <div className="bg-card rounded-xl border border-border p-8 md:p-16 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.08)]">
-                            <div className="mb-12">
-                                <Breadcrumbs items={breadcrumbItems} />
-                            </div>
-
-                            {page.bannerImage && (
-                                <div
-                                    className="relative group mb-12 overflow-hidden rounded-xl cursor-zoom-in border border-border/50"
-                                    onClick={() => setLightboxImage(page.bannerImage)}
-                                >
-                                    <img
-                                        src={page.bannerImage}
-                                        alt={page.title}
-                                        className="w-full aspect-[16/9] object-cover group-hover:scale-[1.02] transition-transform duration-1000"
-                                    />
-                                    <div className="absolute inset-0 bg-foreground/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                        <div className="bg-background/10 backdrop-blur-md border border-background/20 text-background p-4 rounded-full">
-                                            <ZoomIn size={24} />
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            <article
-                                className="prose prose-slate prose-lg max-w-none 
-                                prose-headings:text-foreground prose-headings:font-bold prose-headings:tracking-tight
-                                prose-p:text-muted-foreground prose-p:leading-[1.8] prose-p:mb-8
-                                prose-img:rounded-sm prose-img:shadow-xl prose-img:mx-auto prose-img:cursor-zoom-in prose-img:border prose-img:border-border
-                                prose-strong:text-foreground prose-strong:font-bold
-                                prose-blockquote:border-l-primary prose-blockquote:bg-secondary prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-sm
-                                prose-li:text-muted-foreground"
-                                dangerouslySetInnerHTML={{ __html: page.content }}
+                    {/* Banner Image */}
+                    {page.bannerImage && (
+                        <div
+                            className="relative group mb-12 overflow-hidden rounded-2xl shadow-xl cursor-zoom-in border border-border"
+                            onClick={() => setLightboxImage(page.bannerImage)}
+                        >
+                            <img
+                                src={page.bannerImage}
+                                alt={page.title}
+                                className="w-full aspect-[16/9] object-cover group-hover:scale-[1.02] transition-transform duration-700"
                             />
-
-                            <div className="mt-16 flex items-center justify-between border-t border-border pt-10">
-                                <Link
-                                    to={page.section === "services" ? "/services" : "/districts"}
-                                    className="flex items-center gap-3 px-8 py-4 bg-secondary border border-border rounded-lg p-small text-muted-foreground hover:bg-background hover:text-primary transition-all"
-                                >
-                                    <ArrowLeft size={16} /> {t("pageReader.back")}
-                                </Link>
-
-                                <div className="flex items-center gap-6">
-                                    <span className="p-small text-muted-foreground/50 hidden sm:block font-bold">Public Archive</span>
-                                    <ShareButtons
-                                        url={window.location.href}
-                                        title={page.title}
-                                    />
+                            <div className="absolute inset-0 bg-slate-900/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <div className="bg-white/10 backdrop-blur-md border border-white/20 text-white p-4 rounded-full">
+                                    <ZoomIn size={24} />
                                 </div>
                             </div>
                         </div>
+                    )}
+
+                    {/* Article Body */}
+                    <div className="bg-card rounded-2xl border border-border p-8 md:p-12 shadow-sm mb-12">
+                        <article
+                            className="prose prose-slate prose-lg max-w-none 
+                            prose-headings:text-foreground prose-headings:font-bold prose-headings:tracking-tight
+                            prose-p:text-muted-foreground prose-p:leading-[1.8] prose-p:mb-8
+                            prose-img:rounded-xl prose-img:shadow-lg prose-img:mx-auto prose-img:cursor-zoom-in prose-img:border prose-img:border-border
+                            prose-strong:text-foreground prose-strong:font-bold
+                            prose-blockquote:border-l-primary prose-blockquote:bg-secondary prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-xl
+                            prose-li:text-muted-foreground"
+                            dangerouslySetInnerHTML={{ __html: page.content }}
+                        />
                     </div>
 
-                    {/* Sidebar: Institutional Context */}
-                    <div className="lg:col-span-4 space-y-8">
-                        {/* Official Support Sidebar Card */}
-                        <div className="sticky top-24 bg-foreground text-background p-8 rounded-xl shadow-2xl relative overflow-hidden group">
-                            <div className="relative z-10">
-                                <h4 className="p-small text-primary mb-4">Official Notice</h4>
-                                <p className="text-sm text-background/60 leading-relaxed mb-6 font-medium">
-                                    This page contains official administrative data and service protocols of the Ta'ang Land Federal Unit.
-                                </p>
-                                <div className="p-4 bg-background/5 border border-background/10 rounded-sm">
-                                    <div className="text-[10px] text-background/40 font-bold uppercase tracking-widest mb-1">Documentation Type</div>
-                                    <div className="text-xs font-bold text-background/80">
-                                        {page.section === "services" ? "Public Service Charter" : "District Governance Record"}
-                                    </div>
-                                </div>
-                            </div>
-                            <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="" className="absolute -bottom-10 -right-10 w-48 opacity-[0.05] grayscale invert rotate-12 pointer-events-none" />
+                    {/* Footer Actions */}
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-border pt-8">
+                        <Link
+                            to={page.section === "services" ? "/services" : "/districts"}
+                            className="flex items-center gap-3 px-6 py-3 bg-secondary border border-border rounded-xl font-bold text-sm text-muted-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all shadow-sm"
+                        >
+                            <ArrowLeft size={16} /> {t("pageReader.back")}
+                        </Link>
+
+                        <div className="flex items-center gap-4">
+                            <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest hidden sm:block">Public Archive</span>
+                            <ShareButtons
+                                url={window.location.href}
+                                title={page.title}
+                            />
                         </div>
                     </div>
                 </div>

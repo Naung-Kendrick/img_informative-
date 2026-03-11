@@ -3,16 +3,23 @@ import { useSelector, useDispatch } from "react-redux";
 import { useUpdateProfileMutation, useUpdatePasswordMutation, useUploadAvatarMutation } from "../../store/usersApiSlice";
 import { updateUser } from "../../store/authSlice";
 import type { RootState } from "../../store";
-import { Loader2, User, Mail, Camera, Save, Key, ShieldCheck, MailCheck } from "lucide-react";
+import { User, Mail, Camera, Save, Key, ShieldCheck } from "lucide-react";
+import { useModal } from "../../context/ModalContext";
+
+// Micro-Interaction Components
+import { MotionPage } from "../../components/feedback/MotionPage";
+import { InteractiveCard } from "../../components/feedback/InteractiveCard";
+import { LoadingButton as InteractiveButton } from "../../components/feedback/loading-button";
 
 export default function Profile() {
     const { user } = useSelector((state: RootState) => state.auth);
+    const { showSuccess, showError } = useModal();
     const dispatch = useDispatch();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Mutations
-    const [updateProfile, { isLoading: isUpdatingProfile }] = useUpdateProfileMutation();
-    const [updatePassword, { isLoading: isUpdatingPassword }] = useUpdatePasswordMutation();
+    const [updateProfile] = useUpdateProfileMutation();
+    const [updatePassword] = useUpdatePasswordMutation();
     const [uploadAvatar, { isLoading: isUploadingAvatar }] = useUploadAvatarMutation();
 
     // Form States
@@ -22,39 +29,46 @@ export default function Profile() {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    // Message States
-    const [profileMsg, setProfileMsg] = useState({ type: "", text: "" });
-    const [pwdMsg, setPwdMsg] = useState({ type: "", text: "" });
+    // Status Tracking for Feedback Component
+    const [profileStatus, setProfileStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+    const [passwordStatus, setPasswordStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
     const handleProfileUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
-        setProfileMsg({ type: "", text: "" });
+        setProfileStatus("loading");
         try {
             const result = await updateProfile({ name, email }).unwrap();
-            dispatch(updateUser(result.user)); // Update local storage/redux
-            setProfileMsg({ type: "success", text: "ပရိုဖိုင် အချက်အလက်များကို သိမ်းဆည်းပြီးပါပြီ။" });
+            dispatch(updateUser(result.user));
+            setProfileStatus("success");
+            showSuccess("အောင်မြင်ပါသည်", "ပရိုဖိုင် အချက်အလက်များကို သိမ်းဆည်းပြီးပါပြီ။");
+            setTimeout(() => setProfileStatus("idle"), 3000);
         } catch (err: any) {
-            setProfileMsg({ type: "error", text: err.data?.message || "ပြင်ဆင်ခြင်း မအောင်မြင်ပါ။" });
+            setProfileStatus("error");
+            showError("မအောင်မြင်ပါ", err.data?.message || "ပြင်ဆင်ခြင်း မအောင်မြင်ပါ။");
+            setTimeout(() => setProfileStatus("idle"), 3000);
         }
     };
 
     const handlePasswordUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
-        setPwdMsg({ type: "", text: "" });
-
         if (newPassword !== confirmPassword) {
-            setPwdMsg({ type: "error", text: "စကားဝှက်အသစ်များ တူညီမှုမရှိပါ။" });
+            showError("မှားယွင်းမှု", "စကားဝှက်အသစ်များ တူညီမှုမရှိပါ။");
             return;
         }
 
+        setPasswordStatus("loading");
         try {
             await updatePassword({ oldPassword, newPassword }).unwrap();
             setOldPassword("");
             setNewPassword("");
             setConfirmPassword("");
-            setPwdMsg({ type: "success", text: "စကားဝှက်ကို အောင်မြင်စွာ ပြောင်းလဲပြီးပါပြီ။" });
+            setPasswordStatus("success");
+            showSuccess("အောင်မြင်ပါသည်", "စကားဝှက်ကို အောင်မြင်စွာ ပြောင်းလဲပြီးပါပြီ။");
+            setTimeout(() => setPasswordStatus("idle"), 3000);
         } catch (err: any) {
-            setPwdMsg({ type: "error", text: err.data?.message || "စကားဝှက်ပြောင်းလဲခြင်း မအောင်မြင်ပါ။" });
+            setPasswordStatus("error");
+            showError("မအောင်မြင်ပါ", err.data?.message || "စကားဝှက်ပြောင်းလဲခြင်း မအောင်မြင်ပါ။");
+            setTimeout(() => setPasswordStatus("idle"), 3000);
         }
     };
 
@@ -71,27 +85,27 @@ export default function Profile() {
 
         try {
             const result = await uploadAvatar(formData).unwrap();
-            dispatch(updateUser(result.user)); // result structure based on backend
-            setProfileMsg({ type: "success", text: "ပရိုဖိုင်ပုံကို အောင်မြင်စွာ တင်ပြီးပါပြီ။" });
+            dispatch(updateUser(result.user));
+            showSuccess("အောင်မြင်ပါသည်", "ပရိုဖိုင်ပုံကို အောင်မြင်စွာ တင်ပြီးပါပြီ။");
         } catch (err: any) {
-            setProfileMsg({ type: "error", text: "ပုံတင်ခြင်း မအောင်မြင်ပါ။" });
+            showError("မအောင်မြင်ပါ", "ပုံတင်ခြင်း မအောင်မြင်ပါ။");
         }
     };
 
     if (!user) return null;
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-5xl animate-in fade-in duration-500">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 border-l-4 border-[#808080] pl-3 mb-8 padauk-bold">
+        <MotionPage className="container mx-auto px-4 py-8 max-w-5xl">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 border-l-4 border-primary pl-3 mb-8 padauk-bold">
                 ကိုယ်ရေးအချက်အလက် စီမံရန်
             </h1>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Profile Overview Card */}
                 <div className="lg:col-span-1 space-y-6">
-                    <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm flex flex-col items-center">
+                    <InteractiveCard className="flex flex-col items-center p-8 bg-white">
                         <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
-                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#808080]/20 group-hover:border-[#808080] transition-colors relative">
+                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary/20 group-hover:border-primary transition-all duration-500 relative shadow-inner">
                                 {user.avatar ? (
                                     <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
                                 ) : (
@@ -100,12 +114,12 @@ export default function Profile() {
                                     </div>
                                 )}
                                 {isUploadingAvatar && (
-                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                        <Loader2 className="text-white animate-spin" size={24} />
+                                    <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
+                                        <div className="h-8 w-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
                                     </div>
                                 )}
                             </div>
-                            <div className="absolute bottom-0 right-0 p-2 bg-[#808080] text-white rounded-full shadow-lg border-2 border-white group-hover:scale-110 transition-transform">
+                            <div className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full shadow-lg border-2 border-white group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">
                                 <Camera size={16} />
                             </div>
                             <input
@@ -120,20 +134,20 @@ export default function Profile() {
                         <div className="mt-6 text-center">
                             <h2 className="text-xl font-bold text-slate-900 padauk-bold">{user.name}</h2>
                             <p className="text-slate-500 text-sm mt-1">{user.email}</p>
-                            <span className="inline-flex mt-4 items-center gap-1.5 px-3 py-1 bg-slate-50 text-[#808080] rounded-full text-xs font-bold uppercase tracking-wider border border-slate-100">
+                            <span className="inline-flex mt-4 items-center gap-1.5 px-3 py-1 bg-primary/5 text-primary rounded-full text-xs font-bold uppercase tracking-wider border border-primary/10">
                                 <ShieldCheck size={14} />
                                 {user.role === 3 ? "Root Admin" : user.role === 2 ? "Admin" : user.role === 1 ? "Staff" : "User"}
                             </span>
                         </div>
-                    </div>
+                    </InteractiveCard>
                 </div>
 
                 {/* Edit Forms */}
                 <div className="lg:col-span-2 space-y-8">
                     {/* Basic Info Form */}
-                    <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+                    <InteractiveCard className="bg-white p-8">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="p-2 bg-slate-50 rounded-lg text-slate-600">
+                            <div className="p-2 bg-primary/10 rounded-lg text-primary">
                                 <User size={20} />
                             </div>
                             <h3 className="text-lg font-bold text-slate-900 padauk-bold">ပရိုဖိုင် အချက်အလက်များ</h3>
@@ -143,56 +157,59 @@ export default function Profile() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-semibold text-slate-700 mb-1.5 padauk-bold">အမည်</label>
-                                    <div className="relative">
-                                        <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                    <div className="relative group">
+                                        <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={18} />
                                         <input
                                             type="text"
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
-                                            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all outline-none"
+                                            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
                                             required
+                                            disabled={profileStatus === "loading"}
                                         />
                                     </div>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-slate-700 mb-1.5 padauk-bold">အီးမေးလ်</label>
-                                    <div className="relative">
-                                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                    <div className="relative group">
+                                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={18} />
                                         <input
                                             type="email"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all outline-none"
+                                            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
                                             required
+                                            disabled={profileStatus === "loading"}
                                         />
                                     </div>
                                 </div>
                             </div>
 
-                            {profileMsg.text && (
-                                <div className={`p-4 rounded-xl text-sm font-semibold flex items-center gap-2 ${profileMsg.type === "success" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>
-                                    {profileMsg.type === "success" ? <MailCheck size={18} /> : <ShieldCheck size={18} />}
-                                    {profileMsg.text}
-                                </div>
-                            )}
-
-                            <div className="pt-2">
-                                <button
+                            <div className="pt-4 flex items-center gap-4">
+                                <InteractiveButton
                                     type="submit"
-                                    disabled={isUpdatingProfile}
-                                    className="flex items-center justify-center gap-2 bg-[#808080] hover:bg-[#555555] text-white px-6 py-2.5 rounded-xl font-bold transition-all disabled:opacity-50 shadow-md shadow-slate-200"
+                                    isLoading={profileStatus === "loading"}
+                                    isSuccess={profileStatus === "success"}
+                                    successText="သိမ်းဆည်းပြီးပါပြီ"
+                                    className="gap-2 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold shadow-lg shadow-primary/20"
                                 >
-                                    {isUpdatingProfile ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+                                    <Save size={18} />
                                     အချက်အလက် ပြင်ဆင်မည်
-                                </button>
+                                </InteractiveButton>
+
+                                {profileStatus === "error" && (
+                                    <span className="text-sm font-bold text-rose-600 animate-in fade-in slide-in-from-left-2">
+                                        ပြင်ဆင်ခြင်း မအောင်မြင်ပါ။
+                                    </span>
+                                )}
                             </div>
                         </form>
-                    </div>
+                    </InteractiveCard>
 
                     {/* Change Password Form */}
-                    <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+                    <InteractiveCard className="bg-white p-8">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="p-2 bg-slate-50 rounded-lg text-slate-600">
+                            <div className="p-2 bg-slate-100 rounded-lg text-slate-900">
                                 <Key size={20} />
                             </div>
                             <h3 className="text-lg font-bold text-slate-900 padauk-bold">စကားဝှက် ပြောင်းလဲရန်</h3>
@@ -205,8 +222,9 @@ export default function Profile() {
                                     type="password"
                                     value={oldPassword}
                                     onChange={(e) => setOldPassword(e.target.value)}
-                                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all outline-none"
+                                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
                                     required
+                                    disabled={passwordStatus === "loading"}
                                 />
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -216,9 +234,10 @@ export default function Profile() {
                                         type="password"
                                         value={newPassword}
                                         onChange={(e) => setNewPassword(e.target.value)}
-                                        className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all outline-none"
+                                        className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
                                         required
                                         minLength={6}
+                                        disabled={passwordStatus === "loading"}
                                     />
                                 </div>
                                 <div>
@@ -227,33 +246,36 @@ export default function Profile() {
                                         type="password"
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
-                                        className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all outline-none"
+                                        className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
                                         required
+                                        disabled={passwordStatus === "loading"}
                                     />
                                 </div>
                             </div>
 
-                            {pwdMsg.text && (
-                                <div className={`p-4 rounded-xl text-sm font-semibold ${pwdMsg.type === "success" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>
-                                    {pwdMsg.text}
-                                </div>
-                            )}
-
-                            <div className="pt-2">
-                                <button
+                            <div className="pt-4 flex items-center gap-4">
+                                <InteractiveButton
                                     type="submit"
-                                    disabled={isUpdatingPassword}
-                                    className="flex items-center justify-center gap-2 bg-slate-900 hover:bg-black text-white px-6 py-2.5 rounded-xl font-bold transition-all disabled:opacity-50 shadow-md shadow-slate-200"
+                                    isLoading={passwordStatus === "loading"}
+                                    isSuccess={passwordStatus === "success"}
+                                    successText="ပြောင်းလဲပြီးပါပြီ"
+                                    className="gap-2 bg-slate-900 hover:bg-black text-white rounded-xl font-bold shadow-lg shadow-slate-200"
                                 >
-                                    {isUpdatingPassword ? <Loader2 size={18} className="animate-spin" /> : <Key size={18} />}
+                                    <Key size={18} />
                                     စကားဝှက် ပြောင်းမည်
-                                </button>
+                                </InteractiveButton>
+
+                                {passwordStatus === "error" && (
+                                    <span className="text-sm font-bold text-rose-600 animate-in fade-in slide-in-from-left-2">
+                                        စကားဝှက်ပြောင်းလဲခြင်း မအောင်မြင်ပါ။
+                                    </span>
+                                )}
                             </div>
                         </form>
-                    </div>
+                    </InteractiveCard>
                 </div>
             </div>
-        </div>
+        </MotionPage>
     );
 }
 

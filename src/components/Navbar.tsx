@@ -10,7 +10,6 @@ import {
     Sheet,
     SheetContent,
     SheetTrigger,
-    SheetTitle,
     SheetClose,
 } from "./ui/sheet"
 import { useGetAllNewsQuery } from "../store/newsApiSlice"
@@ -29,6 +28,7 @@ const getLinks = (t: any) => [
     { name: t("nav.announcements"), path: "/announcements" },
     { name: t("nav.about"), path: "/about" },
     { name: t("nav.contact"), path: "/contact" },
+    { name: t("nav.helpCenter"), path: "/help-center" },
 ]
 
 export default function Navbar() {
@@ -164,7 +164,7 @@ export default function Navbar() {
                         <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
                             {/* Integrated Search */}
                             <div className="relative" ref={searchRef}>
-                                <div className={`flex items-center bg-slate-50 border transition-all duration-300 rounded-lg px-3 py-1.5 ${searchOpen ? 'w-80 border-primary ring-2 ring-primary/10' : 'w-48 border-slate-200'}`}>
+                                <div className={`flex items-center bg-slate-50 border transition-all duration-300 rounded-xl px-3 py-1.5 ${searchOpen ? 'w-80 border-primary ring-2 ring-primary/10' : 'w-48 border-slate-200'}`}>
                                     <Search size={18} className="text-slate-400 shrink-0" />
                                     <input
                                         ref={inputRef}
@@ -205,23 +205,23 @@ export default function Navbar() {
                                 <DropdownMenuTrigger asChild>
                                     <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-all text-slate-600 group">
                                         <Languages size={18} className="group-hover:text-primary transition-colors" />
-                                        <span className="text-[11px] font-black uppercase tracking-widest">{i18n.language === 'mm' ? 'မြန်မာ' : 'EN'}</span>
+                                        <span className="text-[11px] font-black uppercase tracking-widest">{i18n.language.startsWith('mm') ? 'မြန်မာ' : 'EN'}</span>
                                     </button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="w-40 rounded-xl border-slate-200 shadow-2xl p-1.5 animate-in fade-in zoom-in-95">
                                     <DropdownMenuItem
                                         onClick={() => toggleLanguage('mm')}
-                                        className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${i18n.language === 'mm' ? 'bg-primary/10 text-primary' : 'hover:bg-slate-50 text-slate-700'}`}
+                                        className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${i18n.language.startsWith('mm') ? 'bg-primary/10 text-primary' : 'hover:bg-slate-50 text-slate-700'}`}
                                     >
                                         <span className="font-bold text-xs uppercase tracking-wide">မြန်မာဘာသာ</span>
-                                        {i18n.language === 'mm' && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
+                                        {i18n.language.startsWith('mm') && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                         onClick={() => toggleLanguage('en')}
-                                        className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${i18n.language === 'en' ? 'bg-primary/10 text-primary' : 'hover:bg-slate-50 text-slate-700'}`}
+                                        className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${i18n.language.startsWith('en') ? 'bg-primary/10 text-primary' : 'hover:bg-slate-50 text-slate-700'}`}
                                     >
                                         <span className="font-bold text-xs uppercase tracking-wide">English</span>
-                                        {i18n.language === 'en' && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
+                                        {i18n.language.startsWith('en') && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -299,10 +299,6 @@ export default function Navbar() {
                                     </Button>
                                 </SheetTrigger>
                                 <SheetContent side="right" className="w-[300px] p-0 border-l border-slate-200">
-                                    <div className="bg-primary p-8 text-primary-foreground">
-                                        <SheetTitle className="text-primary-foreground text-xl font-bold">Menu Navigation</SheetTitle>
-                                        <p className="text-primary-foreground/70 text-sm mt-2 font-medium">Departmental Services</p>
-                                    </div>
                                     <div className="p-4 border-b border-slate-100">
                                         <div className="relative">
                                             <div className="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">

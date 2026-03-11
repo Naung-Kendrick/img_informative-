@@ -2,9 +2,11 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateAnnouncementMutation, useUploadAnnouncementImageToS3Mutation } from "../../store/announcementApiSlice";
 import { Loader2, ArrowLeft, Save, UploadCloud, X, FileText } from "lucide-react";
+import { useModal } from "../../context/ModalContext";
 
 export default function CreateAnnouncement() {
     const navigate = useNavigate();
+    const { showSuccess, showError } = useModal();
 
     const [createAnnouncement, { isLoading: isCreating }] = useCreateAnnouncementMutation();
     const [uploadImage, { isLoading: isUploading }] = useUploadAnnouncementImageToS3Mutation();
@@ -27,11 +29,11 @@ export default function CreateAnnouncement() {
 
         for (const file of files) {
             if (!file.type.startsWith("image/")) {
-                alert(`"${file.name}" သည် ဓာတ်ပုံဖိုင်မဟုတ်ပါ။`);
+                showError("မှားယွင်းမှု", `"${file.name}" သည် ဓာတ်ပုံဖိုင်မဟုတ်ပါ။`);
                 continue;
             }
             if (file.size > 10 * 1024 * 1024) {
-                alert(`"${file.name}" ပမာဏသည် 10MB ထက်ကျော်လွန်နေပါသည်။`);
+                showError("မှားယွင်းမှု", `"${file.name}" ပမာဏသည် 10MB ထက်ကျော်လွန်နေပါသည်။`);
                 continue;
             }
             validFiles.push(file);
@@ -39,7 +41,7 @@ export default function CreateAnnouncement() {
         }
 
         if (imageFiles.length + validFiles.length > 10) {
-            alert("စာမျက်နှာ ၁၀ မျက်နှာထက် ပိုမရွေးချယ်နိုင်ပါ။");
+            showError("ကန့်သတ်ချက်", "စာမျက်နှာ ၁၀ မျက်နှာထက် ပိုမရွေးချယ်နိုင်ပါ။");
             return;
         }
 
@@ -65,7 +67,7 @@ export default function CreateAnnouncement() {
         e.preventDefault();
 
         if (!title || !publishedDate || imageFiles.length === 0) {
-            alert("ခေါင်းစဉ်၊ ရက်စွဲနှင့် စာရွက်စာတမ်း ဓာတ်ပုံတို့ကို မဖြစ်မနေ ဖြည့်သွင်းပါ။");
+            showError("လိုအပ်ချက်", "ခေါင်းစဉ်၊ ရက်စွဲနှင့် စာရွက်စာတမ်း ဓာတ်ပုံတို့ကို မဖြစ်မနေ ဖြည့်သွင်းပါ။");
             return;
         }
 
@@ -87,10 +89,10 @@ export default function CreateAnnouncement() {
                 status: "Published",
             }).unwrap();
 
-            navigate("/admin/announcements");
+            showSuccess("အောင်မြင်ပါသည်", "ထုတ်ပြန်ချက်အသစ် အောင်မြင်စွာ တင်ပြီးပါပြီ", () => navigate("/admin/announcements"));
         } catch (err: any) {
             console.error("Failed to create announcement:", err);
-            alert(err?.data?.message || "ထုတ်ပြန်ချက်အသစ်တင်ခြင်း မအောင်မြင်ပါ။");
+            showError("မအောင်မြင်ပါ", err?.data?.message || "ထုတ်ပြန်ချက်အသစ်တင်ခြင်း မအောင်မြင်ပါ။");
         }
     };
 

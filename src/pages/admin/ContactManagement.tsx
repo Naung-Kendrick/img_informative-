@@ -3,9 +3,11 @@ import { useSelector } from "react-redux";
 import { useGetAllContactsQuery, useDeleteContactMutation, useMarkContactAsReadMutation, type ContactMessage } from "../../store/contactApiSlice";
 import { Loader2, Trash2, Mail, MailOpen, Eye, Calendar } from "lucide-react";
 import type { RootState } from "../../store";
+import { useModal } from "../../context/ModalContext";
 
 export default function ContactManagement() {
     const { user } = useSelector((state: RootState) => state.auth);
+    const { showSuccess, showError } = useModal();
     const userRole = user?.role ?? 0;
 
     const { data: contacts, isLoading, isError, refetch } = useGetAllContactsQuery();
@@ -20,12 +22,13 @@ export default function ContactManagement() {
         if (contactToDelete) {
             try {
                 await deleteContact(contactToDelete).unwrap();
+                showSuccess("အောင်မြင်ပါသည်", "မက်ဆေ့ချ်ကို ဖျက်သိမ်းပြီးပါပြီ");
                 setDeleteModalOpen(false);
                 setContactToDelete(null);
                 refetch();
             } catch (err) {
                 console.error("Failed to delete:", err);
-                alert("ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ။");
+                showError("မအောင်မြင်ပါ", "ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ။");
             }
         }
     };

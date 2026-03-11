@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
     useGetAllReportsQuery,
     useMarkReportAsReadMutation,
@@ -18,18 +18,21 @@ import {
     Check
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import ConfirmDeleteModal from "../../components/ui/ConfirmDeleteModal";
 
 export default function ContentReportsManagement() {
     const { data: reports, isLoading, isError } = useGetAllReportsQuery();
     const [markAsRead] = useMarkReportAsReadMutation();
     const [updateStatus] = useUpdateReportStatusMutation();
-    const [deleteReport] = useDeleteReportMutation();
+    const [deleteReport, { isLoading: isDeleting }] = useDeleteReportMutation();
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [reportToDelete, setReportToDelete] = useState<string | null>(null);
 
     const stats = useMemo(() => {
         if (!reports) return { pending: 0, resolved: 0, total: 0 };
         return {
-            pending: reports.filter(r => r.status === 'Pending').length,
-            resolved: reports.filter(r => r.status === 'Resolved').length,
+            pending: reports.filter((r: any) => r.status === 'Pending').length,
+            resolved: reports.filter((r: any) => r.status === 'Resolved').length,
             total: reports.length
         };
     }, [reports]);
@@ -50,10 +53,17 @@ export default function ContentReportsManagement() {
         }
     };
 
-    const handleDelete = async (id: string) => {
-        if (!window.confirm("ဤတိုင်ကြားစာကို ဖျက်ရန် သေချာပါသလား?")) return;
+    const handleDelete = (id: string) => {
+        setReportToDelete(id);
+        setIsDeleteModalOpen(true);
+    };
+
+    const onConfirmDelete = async () => {
+        if (!reportToDelete) return;
         try {
-            await deleteReport(id).unwrap();
+            await deleteReport(reportToDelete).unwrap();
+            setIsDeleteModalOpen(false);
+            setReportToDelete(null);
         } catch (error) {
             console.error("Failed to delete report:", error);
         }
@@ -211,6 +221,15 @@ export default function ContentReportsManagement() {
                     ))
                 )}
             </div>
+
+            <ConfirmDeleteModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={onConfirmDelete}
+                isDeleting={isDeleting}
+                title="ဤတိုင်ကြားစာကို ဖျက်ရန် သေချာပါသလား?"
+                description="ဖျက်ပြီးသွားပါက ပြန်လည်ရယူနိုင်မည် မဟုတ်ပါ။"
+            />
         </div>
     );
 }

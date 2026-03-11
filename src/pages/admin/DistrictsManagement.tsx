@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useGetAllDistrictsQuery, useDeleteDistrictMutation } from "../../store/districtApiSlice";
 import type { District } from "../../store/districtApiSlice";
-import { Plus, Trash2, MapPin, Phone, Eye } from "lucide-react";
+import { Plus, Trash2, MapPin, Phone, Eye, Edit } from "lucide-react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
+import { useModal } from "../../context/ModalContext";
 
 export default function DistrictsManagement() {
     const { data: districts, isLoading } = useGetAllDistrictsQuery();
+    const { showSuccess, showError } = useModal();
     const [deleteDistrict, { isLoading: isDeleting }] = useDeleteDistrictMutation();
     const [districtToDelete, setDistrictToDelete] = useState<string | null>(null);
 
@@ -18,10 +20,10 @@ export default function DistrictsManagement() {
         if (!districtToDelete) return;
         try {
             await deleteDistrict(districtToDelete).unwrap();
-            alert("ခရိုင် အချက်အလက် ဖျက်သိမ်းပြီးပါပြီ");
+            showSuccess("အောင်မြင်ပါသည်", "ခရိုင် အချက်အလက် ဖျက်သိမ်းပြီးပါပြီ");
             setDistrictToDelete(null);
         } catch (err: any) {
-            alert(err?.data?.message || "ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ");
+            showError("မအောင်မြင်ပါ", err?.data?.message || "ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ");
         }
     };
 
@@ -101,6 +103,13 @@ export default function DistrictsManagement() {
                                                         <Eye size={18} />
                                                     </a>
                                                 )}
+                                                <Link
+                                                    to={`/admin/districts/edit/${district._id}`}
+                                                    className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                                    title="ပြင်ဆင်မည်"
+                                                >
+                                                    <Edit size={18} />
+                                                </Link>
                                                 {canDelete && (
                                                     <button
                                                         onClick={() => setDistrictToDelete(district._id)}

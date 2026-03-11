@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useSubmitContactMutation } from "../store/contactApiSlice";
 import { useGetContactInfoQuery } from "../store/contactInfoApiSlice";
 import { MapPin, Send, Loader2, CheckCircle2, Clock, Phone, Mail } from "lucide-react";
+import { useModal } from "../context/ModalContext";
 
 /**
  * Public Contact page with a working submission form.
@@ -10,6 +11,7 @@ import { MapPin, Send, Loader2, CheckCircle2, Clock, Phone, Mail } from "lucide-
  */
 export default function Contact() {
     const { t, i18n } = useTranslation();
+    const { showSuccess, showError } = useModal();
     const { data: info } = useGetContactInfoQuery();
     const currentLang = i18n.language || "mm";
 
@@ -26,12 +28,13 @@ export default function Contact() {
         e.preventDefault();
 
         if (!name.trim() || !email.trim() || !subject.trim() || !message.trim()) {
-            alert(t("contact.requiredFields"));
+            showError("လိုအပ်ချက်", t("contact.requiredFields"));
             return;
         }
 
         try {
             await submitContact({ name, email, phone, subject, message }).unwrap();
+            showSuccess("အောင်မြင်ပါသည်", t("contact.success"));
             setSuccess(true);
             // Reset form
             setName(""); setEmail(""); setPhone(""); setSubject(""); setMessage("");
@@ -41,7 +44,7 @@ export default function Contact() {
         } catch (err: any) {
             console.error("Failed to submit:", err);
             const msg = err?.data?.message || t("contact.error");
-            alert(msg);
+            showError("မအောင်မြင်ပါ", msg);
         }
     };
 
@@ -136,9 +139,8 @@ export default function Contact() {
                     {/* Right: Submission Portal & Map */}
                     <div className="lg:col-span-8 flex flex-col gap-8">
                         <div className="bg-card border border-border p-8 md:p-12 rounded-[2.5rem] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.05)] border-t-[6px] border-t-primary">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+                            <div className="mb-10">
                                 <h3 className="h3">Formal Inquiry Form</h3>
-                                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] px-3 py-1 bg-secondary rounded-full">Secure Transmission</div>
                             </div>
 
                             {success && (

@@ -39,6 +39,15 @@ export const commentsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (_, __, arg) => [{ type: 'Comment', id: arg.newsId }],
         }),
+
+        updateComment: builder.mutation<Comment, { commentId: string; content: string; newsId: string }>({
+            query: ({ commentId, content }) => ({
+                url: `/comments/${commentId}`,
+                method: 'PATCH',
+                body: { content },
+            }),
+            invalidatesTags: (_, __, arg) => [{ type: 'Comment', id: arg.newsId }],
+        }),
     }),
 });
 
@@ -46,4 +55,5 @@ export const {
     useGetCommentsByNewsIdQuery,
     useAddCommentMutation,
     useDeleteCommentMutation,
+    useUpdateCommentMutation,
 } = commentsApiSlice;

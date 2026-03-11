@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+lint_output.json
+lint_output.txt
+lint_output_utf8.json

@@ -5,6 +5,7 @@ import { useGetAllNewsQuery, useDeleteNewsMutation, useUpdateNewsMutation, type 
 import type { RootState } from "../../store";
 import { Loader2, Plus, Edit, Trash2, Calendar, Eye, AlertCircle, Check } from "lucide-react";
 import { Skeleton } from "../../components/ui/skeleton";
+import { useModal } from "../../context/ModalContext";
 
 /**
  * Activities Management — filters news by category="Activities"
@@ -12,6 +13,7 @@ import { Skeleton } from "../../components/ui/skeleton";
  */
 export default function ActivitiesManagement() {
     const { user } = useSelector((state: RootState) => state.auth);
+    const { showSuccess, showError } = useModal();
     const role = user?.role ?? 0;
 
     const { data: allNews, isLoading, isError, refetch } = useGetAllNewsQuery(undefined, {
@@ -33,12 +35,13 @@ export default function ActivitiesManagement() {
         if (newsToDelete) {
             try {
                 await deleteNews(newsToDelete).unwrap();
+                showSuccess("အောင်မြင်ပါသည်", "လှုပ်ရှားမှုသတင်းကို ဖျက်သိမ်းပြီးပါပြီ");
                 setDeleteModalOpen(false);
                 setNewsToDelete(null);
                 refetch();
             } catch (err) {
                 console.error("Failed to delete:", err);
-                alert("ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ။");
+                showError("မအောင်မြင်ပါ", "ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ။");
             }
         }
     };
@@ -46,10 +49,11 @@ export default function ActivitiesManagement() {
     const handleApprove = async (id: string) => {
         try {
             await updateNews({ id, data: { status: "Published" } }).unwrap();
+            showSuccess("အောင်မြင်ပါသည်", "လှုပ်ရှားမှုသတင်းကို အတည်ပြုပြီးပါပြီ");
             refetch();
         } catch (err) {
             console.error("Failed to approve:", err);
-            alert("အတည်ပြုခြင်း မအောင်မြင်ပါ။");
+            showError("မအောင်မြင်ပါ", "အတည်ပြုခြင်း မအောင်မြင်ပါ။");
         }
     };
 

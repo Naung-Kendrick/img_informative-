@@ -59,11 +59,11 @@ const Footer = () => {
                             <span className="w-8 h-[1px] bg-primary"></span>
                         </h4>
                         <ul className="flex flex-col gap-4">
-                            {["home", "activities", "services", "districts", "announcements"].map((item) => (
+                            {["home", "activities", "services", "districts", "announcements", "help-center"].map((item) => (
                                 <li key={item}>
                                     <Link to={`/${item === "home" ? "" : item}`} className="text-sm font-semibold hover:text-primary transition-colors flex items-center group">
                                         <span className="w-0 group-hover:w-3 h-[1px] bg-primary transition-all duration-300 mr-0 group-hover:mr-2"></span>
-                                        {t(`nav.${item}`)}
+                                        {t(`nav.${item === "help-center" ? "helpCenter" : item}`)}
                                     </Link>
                                 </li>
                             ))}

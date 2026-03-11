@@ -9,9 +9,11 @@ import {
     type Statistic
 } from "../../store/statisticApiSlice";
 import { AlertCircle, Edit, Loader2, Plus, Trash2, X, BarChart2 } from "lucide-react";
+import { useModal } from "../../context/ModalContext";
 
 export default function StatisticsManagement() {
     const { user } = useSelector((state: RootState) => state.auth);
+    const { showSuccess, showError } = useModal();
     // Role 2 and 3 usually have CMS edit access.
     const canEdit = (user?.role ?? 0) >= 2;
 
@@ -63,7 +65,7 @@ export default function StatisticsManagement() {
         e.preventDefault();
 
         if (!titleEn || !titleMm || !value) {
-            alert("Please complete all required fields.");
+            showError("လိုအပ်ချက်", "လိုအပ်သော ကွက်လပ်အားလုံးကို ဖြည့်သွင်းပါ။");
             return;
         }
 
@@ -80,14 +82,16 @@ export default function StatisticsManagement() {
         try {
             if (editingStat) {
                 await updateStatistic({ id: editingStat._id, data }).unwrap();
+                showSuccess("အောင်မြင်ပါသည်", "ကိန်းဂဏန်း ပြင်ဆင်ပြီးပါပြီ");
             } else {
                 await createStatistic(data).unwrap();
+                showSuccess("အောင်မြင်ပါသည်", "ကိန်းဂဏန်းအသစ် ထည့်သွင်းပြီးပါပြီ");
             }
             setIsModalOpen(false);
             setEditingStat(null);
             refetch();
         } catch (err: any) {
-            alert(err?.data?.message || "Failed to save statistic");
+            showError("မအောင်မြင်ပါ", err?.data?.message || "လုပ်ဆောင်မှု မအောင်မြင်ပါ။");
         }
     };
 
@@ -95,11 +99,12 @@ export default function StatisticsManagement() {
         if (statToDelete) {
             try {
                 await deleteStatistic(statToDelete).unwrap();
+                showSuccess("အောင်မြင်ပါသည်", "ကိန်းဂဏန်းကို ဖျက်သိမ်းပြီးပါပြီ");
                 setDeleteModalOpen(false);
                 setStatToDelete(null);
                 refetch();
             } catch (err: any) {
-                alert(err?.data?.message || "Failed to delete statistic.");
+                showError("မအောင်မြင်ပါ", err?.data?.message || "ဖျက်သိမ်းရန် မအောင်မြင်ပါ။");
             }
         }
     };

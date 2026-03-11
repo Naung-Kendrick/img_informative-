@@ -1,5 +1,6 @@
 import { Navigate, Outlet, Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import type { RootState } from "../../store";
 import { logout } from "../../store/authSlice";
 import { useGetAllContactsQuery } from "../../store/contactApiSlice";
@@ -22,14 +23,22 @@ import {
     ShieldCheck,
     Shield,
     X,
+    HelpCircle,
     Info,
     BellRing,
     Phone,
     BarChart2,
     Flag,
     Clock,
+    Languages,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 const playNotificationSound = () => {
     try {
@@ -74,6 +83,9 @@ const playPendingNotificationSound = () => {
 };
 
 export default function AdminLayout() {
+    const { i18n } = useTranslation();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    void i18n; // used in language switcher below
     const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
     const role = user?.role ?? 0;
     const dispatch = useDispatch();
@@ -291,6 +303,10 @@ export default function AdminLayout() {
         dispatch(logout());
     };
 
+    const toggleLanguage = (lng: string) => {
+        i18n.changeLanguage(lng);
+    };
+
 
     // Role display config
     const roleConfig = {
@@ -308,15 +324,19 @@ export default function AdminLayout() {
         { name: "သတင်းများ စီမံရန်", path: "/admin/news", icon: Newspaper, minRole: 1 },
         { name: "ကိန်းဂဏန်းများ စီမံရန်", path: "/admin/statistics", icon: Activity, minRole: 1 },
         { name: "အကောင့်များ စီမံရန်", path: "/admin/users", icon: Users, minRole: 2 },
+        { name: "History Log (Audit Trail)", path: "/admin/audit-logs", icon: Clock, minRole: 3 },
         { name: "တိုင်ကြားစာများ (Reports)", path: "/admin/content-reports", icon: Flag, minRole: 1 },
+        { name: "ပင်မစာမျက်နှာ Layout", path: "/admin/layout", icon: LayoutDashboard, minRole: 2 },
 
         // ── CMS Sections ──
+        { name: "ကဏ္ဍများ စီမံရန်", path: "/admin/categories", icon: LayoutDashboard, minRole: 1, group: "cms" },
         { name: "လှုပ်ရှားမှုများ", path: "/admin/activities", icon: Activity, minRole: 1, group: "cms" },
         { name: "အထူးသတင်းများ (Ticker)", path: "/admin/hotnews", icon: Megaphone, minRole: 1, group: "cms" },
         { name: "ဝန်ဆောင်မှုများ", path: "/admin/services", icon: Briefcase, minRole: 1, group: "cms" },
         { name: "ခရိုင်များ", path: "/admin/districts", icon: MapPin, minRole: 1, group: "cms" },
         { name: "ထုတ်ပြန်ချက်နှင့် ညွှန်ကြားချက်များ", path: "/admin/announcements", icon: Megaphone, minRole: 1, group: "cms" },
         { name: "ဌာနအကြောင်း", path: "/admin/about", icon: Info, minRole: 1, group: "cms" },
+        { name: "FAQ စီမံခန့်ခွဲမှု", path: "/admin/faq", icon: HelpCircle, minRole: 1, group: "cms" },
         { name: "ဆက်သွယ်ရန် (Messages)", path: "/admin/contact", icon: Mail, minRole: 2, group: "cms" },
         { name: "လိပ်စာနှင့် ဖုန်းနံပါတ်များ", path: "/admin/contact-info", icon: Phone, minRole: 2, group: "cms" },
     ];
@@ -459,12 +479,40 @@ export default function AdminLayout() {
                             <Menu className="h-6 w-6" />
                         </button>
                         <h2 className="text-xl font-bold text-slate-800 hidden sm:block padauk-bold">
-                            Ta'ang News
+                            Management Center
                         </h2>
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-3">
+                        {/* Language Selector */}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-all text-slate-600 group">
+                                    <Languages size={18} className="group-hover:text-primary transition-colors" />
+                                    <span className="text-[11px] font-black uppercase tracking-widest">{i18n.language.startsWith('mm') ? 'မြန်မာ' : 'EN'}</span>
+                                </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-40 rounded-xl border-slate-200 shadow-2xl p-1.5 animate-in fade-in zoom-in-95">
+                                <DropdownMenuItem
+                                    onClick={() => toggleLanguage('mm')}
+                                    className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${i18n.language.startsWith('mm') ? 'bg-primary/10 text-primary' : 'hover:bg-slate-50 text-slate-700'}`}
+                                >
+                                    <span className="font-bold text-xs uppercase tracking-wide">မြန်မာဘာသာ</span>
+                                    {i18n.language.startsWith('mm') && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => toggleLanguage('en')}
+                                    className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${i18n.language.startsWith('en') ? 'bg-primary/10 text-primary' : 'hover:bg-slate-50 text-slate-700'}`}
+                                >
+                                    <span className="font-bold text-xs uppercase tracking-wide">English</span>
+                                    {i18n.language.startsWith('en') && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+
+                        <div className="h-6 w-px bg-slate-200 mx-1" />
+
+                        <div className="flex items-center gap-4">
                             <div className="flex flex-col text-right">
                                 <span className="text-sm font-bold text-slate-900">{user.name}</span>
                                 <span className={`text-xs font-bold tracking-wide ${role === 3 ? "text-emerald-600" : role === 2 ? "text-primary" : "text-blue-600"

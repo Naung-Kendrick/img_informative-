@@ -16,12 +16,13 @@ import {
     Clock,
     Globe,
     Loader2,
-    CheckCircle2,
     Info
 } from "lucide-react";
+import { useModal } from "../../context/ModalContext";
 
 export default function ContactInfoManagement() {
     const { user } = useSelector((state: RootState) => state.auth);
+    const { showSuccess, showError } = useModal();
     const canEdit = (user?.role ?? 0) >= 2;
 
     const { data: contactInfo, isLoading } = useGetContactInfoQuery();
@@ -39,8 +40,6 @@ export default function ContactInfoManagement() {
         working_hours_mm: "",
         map_embed_url: ""
     });
-
-    const [showSuccess, setShowSuccess] = useState(false);
 
     useEffect(() => {
         if (contactInfo) {
@@ -68,10 +67,9 @@ export default function ContactInfoManagement() {
         e.preventDefault();
         try {
             await updateContactInfo(formData).unwrap();
-            setShowSuccess(true);
-            setTimeout(() => setShowSuccess(false), 3000);
+            showSuccess("အောင်မြင်ပါသည်", "ဆက်သွယ်ရန် အချက်အလက်များကို သိမ်းဆည်းပြီးပါပြီ။");
         } catch (err: any) {
-            alert(err?.data?.message || "Failed to update contact information");
+            showError("မအောင်မြင်ပါ", err?.data?.message || "Failed to update contact information");
         }
     };
 
@@ -92,13 +90,6 @@ export default function ContactInfoManagement() {
                         ဝက်ဘ်ဆိုက်အောက်ခြေ (Footer) နှင့် ဆက်သွယ်ရန်စာမျက်နှာရှိ အချက်အလက်များကို ပြင်ဆင်ပါ။
                     </p>
                 </div>
-
-                {showSuccess && (
-                    <div className="bg-green-50 text-green-700 px-6 py-3 rounded-2xl border border-green-200 flex items-center gap-3 animate-in slide-in-from-top-4 duration-300">
-                        <CheckCircle2 size={24} />
-                        <span className="font-bold">သိမ်းဆည်းပြီးပါပြီ</span>
-                    </div>
-                )}
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-8">

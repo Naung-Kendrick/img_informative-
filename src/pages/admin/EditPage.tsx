@@ -4,10 +4,12 @@ import TipTapEditor from "../../components/admin/TipTapEditor";
 import { useGetPageByIdQuery, useUpdatePageMutation } from "../../store/pageApiSlice";
 import { useUploadImageToS3Mutation } from "../../store/newsApiSlice"; // Generic S3 upload
 import { Loader2, ArrowLeft, Save, Hash, ImageIcon, X, UploadCloud } from "lucide-react";
+import { useModal } from "../../context/ModalContext";
 
 export default function EditPage() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { showSuccess, showError } = useModal();
 
     const { data: page, isLoading: isFetching } = useGetPageByIdQuery(id as string, { skip: !id });
     const [updatePage, { isLoading: isUpdating }] = useUpdatePageMutation();
@@ -43,7 +45,7 @@ export default function EditPage() {
         if (!file) return;
 
         if (!file.type.startsWith("image/")) {
-            alert("ရွေးချယ်ထားသောဖိုင်သည် ပုံဖိုင် မဟုတ်ပါ။");
+            showError("မှားယွင်းမှု", "ရွေးချယ်ထားသောဖိုင်သည် ပုံဖိုင် မဟုတ်ပါ။");
             return;
         }
 
@@ -67,7 +69,7 @@ export default function EditPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!title || !content) {
-            alert("အချက်အလက်အားလုံး ပြည့်စုံစွာ ဖြည့်သွင်းပါ။");
+            showError("လိုအပ်ချက်", "အချက်အလက်အားလုံး ပြည့်စုံစွာ ဖြည့်သွင်းပါ။");
             return;
         }
 
@@ -88,11 +90,10 @@ export default function EditPage() {
                 data: { title, section, content, status, order, bannerImage: bannerImageUrl }
             }).unwrap();
 
-            // Redirect back to the correct management section
-            navigate(`/admin/${section}`);
+            showSuccess("အောင်မြင်ပါသည်", "စာမျက်နှာ ပြင်ဆင်မှု အောင်မြင်ပါသည်", () => navigate(`/admin/${section}`));
         } catch (err) {
             console.error("Failed to update page:", err);
-            alert("ပြင်ဆင်ခြင်း မအောင်မြင်ပါ။");
+            showError("မအောင်မြင်ပါ", "ပြင်ဆင်ခြင်း မအောင်မြင်ပါ။");
         }
     };
 

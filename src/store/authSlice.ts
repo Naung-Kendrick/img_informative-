@@ -7,6 +7,7 @@ export interface User {
     email: string;
     role: number;    // 0=Regular User, 1=Staff, 2=Admin, 3=Root_Admin
     active: boolean; // Active/Inactive Status
+    lastLogin?: string;
     avatar?: string;
 }
 

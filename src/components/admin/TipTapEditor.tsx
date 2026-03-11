@@ -4,6 +4,7 @@ import Image from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
 import { Bold, Italic, List, ListOrdered, Image as ImageIcon, Link as LinkIcon } from 'lucide-react'
 import { useUploadImageToS3Mutation } from '../../store/newsApiSlice'
+import { useModal } from '../../context/ModalContext'
 
 interface TipTapEditorProps {
     content: string;
@@ -12,6 +13,7 @@ interface TipTapEditorProps {
 
 export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
     const [uploadImageToS3] = useUploadImageToS3Mutation();
+    const { showError } = useModal();
 
     const editor = useEditor({
         extensions: [
@@ -62,7 +64,7 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
                 }
             } catch (err) {
                 console.error("Image upload failed:", err);
-                alert("ဓာတ်ပုံတင်ရာတွင် ချို့ယွင်းချက်ဖြစ်ပေါ်နေပါသည်။"); // Burmese: Image upload error
+                showError("မအောင်မြင်ပါ", "ဓာတ်ပုံတင်ရာတွင် ချို့ယွင်းချက်ဖြစ်ပေါ်နေပါသည်။"); // Burmese: Image upload error
             }
         };
     };

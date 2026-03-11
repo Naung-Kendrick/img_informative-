@@ -5,11 +5,13 @@ import {
 } from "../../store/aboutApiSlice";
 import { useUploadImageToS3Mutation } from "../../store/newsApiSlice";
 import { Loader2, UploadCloud, ImageIcon, X, Save } from "lucide-react";
+import { useModal } from "../../context/ModalContext";
 
 export default function AboutManagement() {
     const { data, isLoading: isFetching } = useGetAboutContentQuery({});
     const [saveAboutContent, { isLoading: isSaving }] = useSaveAboutContentMutation();
     const [uploadImageToS3, { isLoading: isUploading }] = useUploadImageToS3Mutation();
+    const { showSuccess, showError } = useModal();
 
     const isLoading = isSaving || isUploading || isFetching;
 
@@ -18,6 +20,8 @@ export default function AboutManagement() {
     const [description, setDescription] = useState("");
     const [policy, setPolicy] = useState("");
     const [objective, setObjective] = useState("");
+    const [duty, setDuty] = useState("");
+    const [mainTasks, setMainTasks] = useState("");
 
     // ── Image State ─────────────────────────────────────────────────────────
     const [imageFile, setImageFile] = useState<File | null>(null);
@@ -31,6 +35,8 @@ export default function AboutManagement() {
             setDescription(data.about.description || "");
             setPolicy(data.about.policy || "");
             setObjective(data.about.objective || "");
+            setDuty(data.about.duty || "");
+            setMainTasks(data.about.mainTasks || "");
             setImagePreview(data.about.imageUrl || "");
         }
     }, [data]);
@@ -42,11 +48,11 @@ export default function AboutManagement() {
 
         // Validate type & size (10 MB cap)
         if (!file.type.startsWith("image/")) {
-            alert(`${file.name} သည် ပုံဖိုင် မဟုတ်ပါ။`);
+            showError("မှားယွင်းသော ဖိုင်အမျိုးအစား", `${file.name} သည် ပုံဖိုင် မဟုတ်ပါ။`);
             return;
         }
         if (file.size > 10 * 1024 * 1024) {
-            alert(`${file.name} သည် 10MB ထက် ကြီးနေပါသည်။`);
+            showError("ဖိုင်အရွယ်အစား ကြီးလွန်းသည်", `${file.name} သည် 10MB ထက် ကြီးနေပါသည်။`);
             return;
         }
 
@@ -65,8 +71,8 @@ export default function AboutManagement() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!title.trim() || !description.trim() || !policy.trim() || !objective.trim()) {
-            alert("အချက်အလက်အားလုံး ပြည့်စုံစွာ ထည့်သွင်းပါ။");
+        if (!title.trim() || !description.trim() || !policy.trim() || !objective.trim() || !duty.trim() || !mainTasks.trim()) {
+            showError("အချက်အလက် မပြည့်စုံပါ", "အချက်အလက်အားလုံး ပြည့်စုံစွာ ထည့်သွင်းပါ။");
             return;
         }
 
@@ -90,10 +96,12 @@ export default function AboutManagement() {
                 description: description.trim(),
                 policy: policy.trim(),
                 objective: objective.trim(),
+                duty: duty.trim(),
+                mainTasks: mainTasks.trim(),
                 imageUrl: finalImageUrl,
             }).unwrap();
 
-            alert("ဌာနအကြောင်း အချက်အလက်များ အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ။");
+            showSuccess("အောင်မြင်ပါသည်", "ဌာနအကြောင်း အချက်အလက်များ အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ။");
             // After save, the imageFile state should ideally be cleared since it's now uploaded and tracked via URL
             setImageFile(null);
             setImagePreview(finalImageUrl);
@@ -101,7 +109,7 @@ export default function AboutManagement() {
         } catch (err: any) {
             console.error("❌ Failed to save about content:", err);
             const message = err?.data?.message || err?.message || "သိမ်းဆည်းခြင်း မအောင်မြင်ပါ။";
-            alert(message);
+            showError("မအောင်မြင်ပါ", message);
         }
     };
 
@@ -181,6 +189,32 @@ export default function AboutManagement() {
                                 className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular resize-none"
                             />
                         </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-700 padauk-bold">
+                            ဆောင်ရွက်လျက်ရှိသော လုပ်ငန်းတာဝန် (Responsibilities) <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                            value={duty}
+                            onChange={(e) => setDuty(e.target.value)}
+                            rows={4}
+                            placeholder="ဆောင်ရွက်လျက်ရှိသော လုပ်ငန်းတာဝန်များကို ရေးသားပါ..."
+                            className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular resize-none"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-700 padauk-bold">
+                            အဓိကလုပ်ငန်းတာဝန်ကြီး(၂)ရပ် (Main Tasks) <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                            value={mainTasks}
+                            onChange={(e) => setMainTasks(e.target.value)}
+                            rows={4}
+                            placeholder="အဓိကလုပ်ငန်းတာဝန်ကြီး(၂)ရပ်ကို ရေးသားပါ..."
+                            className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular resize-none"
+                        />
                     </div>
                 </div>
 

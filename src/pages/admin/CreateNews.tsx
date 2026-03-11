@@ -2,14 +2,27 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import TipTapEditor from "../../components/admin/TipTapEditor";
 import { useCreateNewsMutation, useUploadImageToS3Mutation } from "../../store/newsApiSlice";
-import { Loader2, ArrowLeft, UploadCloud, ImageIcon, X } from "lucide-react";
+import { useGetAllCategoriesQuery } from "../../store/categoryApiSlice";
+import { useGetAllDistrictsQuery } from "../../store/districtApiSlice";
+import { Loader2, ArrowLeft, UploadCloud, ImageIcon, X, MapPin, PlusCircle, RotateCcw, AlertCircle } from "lucide-react";
+import { useModal } from "../../context/ModalContext";
 
 export default function CreateNews() {
     const navigate = useNavigate();
+    const { showSuccess, showError } = useModal();
 
     // ── Form State ──────────────────────────────────────────────────────────
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
+
+    // District State
+    const [district, setDistrict] = useState("");
+    const [customDistrict, setCustomDistrict] = useState("");
+    const [isCustomDistrict, setIsCustomDistrict] = useState(false);
+
+    // Township State - free text input
+    const [township, setTownship] = useState("");
+
     const [content, setContent] = useState("<p>သတင်းအကြောင်းအရာများကို ဤနေရာတွင် စတင်ရေးသားပါ...</p>");
 
     // ── Image State ─────────────────────────────────────────────────────────
@@ -20,16 +33,22 @@ export default function CreateNews() {
     // ── RTK Query Mutations ─────────────────────────────────────────────────
     const [createNews, { isLoading: isCreating }] = useCreateNewsMutation();
     const [uploadImageToS3, { isLoading: isUploading }] = useUploadImageToS3Mutation();
-    const isLoading = isCreating || isUploading;
+    const catQuery = useGetAllCategoriesQuery();
+    const districtsQuery = useGetAllDistrictsQuery();
+    const { isLoading: isCatLoading } = catQuery;
+    const { isLoading: isDistrictsLoading } = districtsQuery;
+
+    const isLoading = isCreating || isUploading || isCatLoading || isDistrictsLoading;
+    const categoriesList = catQuery.data?.categories || [];
+    const districtsList = districtsQuery.data || [];
 
     // ── Handlers ────────────────────────────────────────────────────────────
     const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFiles = Array.from(e.target.files || []);
         if (selectedFiles.length === 0) return;
 
-        // Limit to 5 images total
         if (imageFiles.length + selectedFiles.length > 5) {
-            alert("အများဆုံး ပုံ ၅ ပုံသာ တင်နိုင်ပါသည်။");
+            showError("ပမာဏ များပြားနေပါသည်", "အများဆုံး ပုံ ၅ ပုံသာ တင်နိုင်ပါသည်။");
             return;
         }
 
@@ -37,113 +56,74 @@ export default function CreateNews() {
         const validPreviews: string[] = [];
 
         selectedFiles.forEach((file) => {
-            // Validate type
             if (!file.type.startsWith("image/")) {
-                alert(`${file.name} သည် ပုံဖိုင် မဟုတ်ပါ။`);
+                showError("မှားယွင်းမှု", `${file.name} သည် ပုံဖိုင် မဟုတ်ပါ။`);
                 return;
             }
-
-            // Validate size (10 MB cap)
             if (file.size > 10 * 1024 * 1024) {
-                alert(`${file.name} သည် 10MB ထက် ကြီးနေပါသည်။`);
+                showError("ဖိုင်အရွယ်အစား ကြီးလွန်းသည်", `${file.name} သည် 10MB ထက် ကြီးနေပါသည်။`);
                 return;
             }
-
             validFiles.push(file);
             validPreviews.push(URL.createObjectURL(file));
         });
 
         setImageFiles((prev) => [...prev, ...validFiles]);
         setImagePreviews((prev) => [...prev, ...validPreviews]);
-
-        // Reset input value to allow re-selecting same file after removal
         if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
     const handleRemoveImage = (index: number) => {
-        // Revoke URL to prevent memory leaks
         URL.revokeObjectURL(imagePreviews[index]);
-
         setImageFiles((prev) => prev.filter((_, i) => i !== index));
         setImagePreviews((prev) => prev.filter((_, i) => i !== index));
     };
 
-    /**
-     * Main submit handler.
-     *
-     * Strategy:
-     *   1. Build a FormData containing all fields INCLUDING the image file.
-     *   2. The backend's `createNews` controller reads text fields from `req.body`
-     *      — BUT multipart requests populate req.body differently.
-     *
-     *   Since our backend currently receives JSON for createNews and a separate
-     *   /upload endpoint for the image, we use a TWO-STEP approach:
-     *     Step 1 → POST /news/upload   → returns S3 URL
-     *     Step 2 → POST /news          → sends JSON with the returned URL
-     *
-     *   This keeps the backend clean and avoids rewriting the createNews controller.
-     */
     const handleSubmit = async (e: React.MouseEvent, status: "Draft" | "Published") => {
         e.preventDefault();
 
-        if (!title.trim()) {
-            alert("သတင်းခေါင်းစဉ် ထည့်သွင်းပါ။");
-            return;
-        }
-        if (!category) {
-            alert("ကဏ္ဍ ရွေးချယ်ပါ။");
-            return;
-        }
-        if (!content || content === "<p></p>") {
-            alert("သတင်းအကြောင်းအရာ ရေးသားပါ။");
-            return;
-        }
+        if (!title.trim()) { showError("လိုအပ်ချက်", "သတင်းခေါင်းစဉ် ထည့်သွင်းပါ။"); return; }
+        if (!category) { showError("လိုအပ်ချက်", "ကဏ္ဍ ရွေးချယ်ပါ။"); return; }
+        if (!content || content === "<p></p>") { showError("လိုအပ်ချက်", "သတင်းအကြောင်းအရာ ရေးသားပါ။"); return; }
 
         try {
             let bannerImageUrls: string[] = [];
-
-            // ── Step 1: Upload images to S3 (if selected) ──────────
             if (imageFiles.length > 0) {
                 const uploadFormData = new FormData();
-                // The backend's multer is configured to look for a field named "images"
-                imageFiles.forEach((file) => {
-                    uploadFormData.append("images", file);
-                });
-
-                // Use RTK Query mutation
+                imageFiles.forEach((file) => uploadFormData.append("images", file));
                 const uploadResult = await uploadImageToS3(uploadFormData).unwrap();
-                console.log("✅ S3 upload results:", uploadResult);
                 bannerImageUrls = uploadResult.urls;
             }
 
-            // ── Step 2: Create the news article (plain JSON) ──────────────
+            // Determine final values
+            const finalDistrict = isCustomDistrict ? customDistrict : district;
+            const finalTownship = township;
+
             await createNews({
                 title: title.trim(),
                 category,
                 content,
                 status,
                 images: bannerImageUrls,
+                district: finalDistrict || undefined,
+                township: finalTownship || undefined,
             }).unwrap();
 
-            // ── Step 3: Redirect on success ────────────────────────────────
-            navigate("/admin/news");
-
+            showSuccess(
+                "အောင်မြင်ပါသည်",
+                status === "Published" ? "သတင်းကို အောင်မြင်စွာ လွှင့်တင်ပြီးပါပြီ" : "သတင်းကို မူကြမ်းအဖြစ် သိမ်းဆည်းပြီးပါပြီ",
+                () => navigate("/admin/news")
+            );
         } catch (err: any) {
             console.error("❌ Failed to post news:", err);
-            const message = err?.data?.message || err?.message || "သတင်းတင်ခြင်း မအောင်မြင်ပါ။";
-            alert(message);
+            showError("မအောင်မြင်ပါ", err?.data?.message || err?.message || "သတင်းတင်ခြင်း မအောင်မြင်ပါ။");
         }
     };
 
     return (
         <div className="container mx-auto max-w-5xl py-8 animate-in fade-in duration-500">
-
-            {/* ── Page Header ─────────────────────────────────────────── */}
             <div className="flex items-center gap-4 mb-8">
-                <button
-                    onClick={() => navigate("/admin/news")}
-                    className="p-2 rounded-full hover:bg-slate-100 text-slate-500 transition-colors"
-                >
+                <button onClick={() => navigate("/admin/news")} className="p-2 rounded-full hover:bg-slate-100 text-slate-500 transition-colors">
                     <ArrowLeft size={24} />
                 </button>
                 <div>
@@ -158,16 +138,12 @@ export default function CreateNews() {
 
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
                 <div className="space-y-6">
-
-                    {/* ── Title & Category Row ──────────────────────────── */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Title */}
                         <div className="space-y-2">
                             <label className="text-sm font-semibold text-slate-700 padauk-bold">
                                 သတင်းခေါင်းစဉ် <span className="text-red-500">*</span>
                             </label>
                             <input
-                                id="news-title"
                                 type="text"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
@@ -176,92 +152,127 @@ export default function CreateNews() {
                             />
                         </div>
 
-                        {/* Category */}
-                        <div className="space-y-2">
+                    <div className="space-y-2">
                             <label className="text-sm font-semibold text-slate-700 padauk-bold">
                                 ကဏ္ဍ (Category) <span className="text-red-500">*</span>
                             </label>
-                            <select
-                                id="news-category"
-                                value={category}
-                                onChange={(e) => setCategory(e.target.value)}
-                                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular"
-                            >
-                                <option value="">ရွေးချယ်ပါ</option>
-                                <option value="Activities">လှုပ်ရှားမှုများ</option>
-                                <option value="Services">ဝန်ဆောင်မှုများ</option>
-                                <option value="Districts">ခရိုင်များ</option>
-                                <option value="Announcements">ထုတ်ပြန်ချက်နှင့် ညွှန်ကြားချက်များ (Announcement & Directives)</option>
-                                <option value="About">ဌာနအကြောင်း</option>
-                                <option value="Contact">ဆက်သွယ်ရန်</option>
-                                <option value="HotNews">အထူးသတင်း (Hot News Ticker)</option>
-                            </select>
+                            <div className="relative">
+                                <select
+                                    value={category}
+                                    onChange={(e) => setCategory(e.target.value)}
+                                    disabled={isCatLoading}
+                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular disabled:opacity-50 appearance-none"
+                                >
+                                    <option value="">{isCatLoading ? "Loading Categories..." : "ရွေးချယ်ပါ"}</option>
+                                    {categoriesList.map(cat => (
+                                        <option key={cat._id} value={cat.slug}>{cat.title}</option>
+                                    ))}
+                                </select>
+                                {catQuery.error && (
+                                    <div className="flex items-center gap-1 text-red-500 text-[10px] mt-1">
+                                        <AlertCircle size={10} /> ဖွင့်၍မရပါ
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
 
-                    {/* ── Banner Image Upload ───────────────────────────── */}
+                    {/* ── District & Township Row ────────────────────────── */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* District */}
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2">
+                                    <MapPin size={16} className="text-primary" />
+                                    ခရိုင် (District)
+                                </label>
+                                <button
+                                    onClick={() => {
+                                        setIsCustomDistrict(!isCustomDistrict);
+                                        setDistrict("");
+                                        setCustomDistrict("");
+                                    }}
+                                    className="text-[10px] text-primary hover:underline font-bold flex items-center gap-1"
+                                >
+                                    {isCustomDistrict ? <><RotateCcw size={10} /> Default List</> : <><PlusCircle size={10} /> Custom Add</>}
+                                </button>
+                            </div>
+
+                            <div className="relative">
+                                {isCustomDistrict ? (
+                                    <input
+                                        type="text"
+                                        value={customDistrict}
+                                        onChange={(e) => setCustomDistrict(e.target.value)}
+                                        placeholder="ခရိုင်အမည် ရိုက်ထည့်ပါ..."
+                                        className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular"
+                                    />
+                                ) : (
+                                    <select
+                                        value={district}
+                                        onChange={(e) => {
+                                            setDistrict(e.target.value);
+                                            setTownship("");
+                                        }}
+                                        disabled={isDistrictsLoading}
+                                        className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular cursor-pointer disabled:opacity-50 appearance-none"
+                                    >
+                                        <option value="">{isDistrictsLoading ? "Loading Districts..." : "ခရိုင် ရွေးချယ်ပါ"}</option>
+                                        {districtsList.map(d => (
+                                            <option key={d._id} value={d.name}>{d.name}</option>
+                                        ))}
+                                    </select>
+                                )}
+                                {districtsQuery.error && (
+                                    <div className="flex items-center gap-1 text-red-500 text-[10px] mt-1">
+                                        <AlertCircle size={10} /> ခရိုင်များ ရယူ၍မရပါ
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Township - plain text input since districts are flat in DB */}
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2">
+                                    <MapPin size={16} className="text-primary" />
+                                    မြို့နယ် (Township)
+                                </label>
+                            </div>
+                            <input
+                                type="text"
+                                value={township}
+                                onChange={(e) => setTownship(e.target.value)}
+                                placeholder="မြို့နယ်အမည် ရိုက်ထည့်ပါ... (optional)"
+                                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular"
+                            />
+                        </div>
+                    </div>
+
                     <div className="space-y-2">
                         <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2">
                             <ImageIcon size={16} className="text-[#808080]" />
                             သတင်းဓာတ်ပုံများ (အများဆုံး ၅ ပုံ)
                         </label>
-
-                        {/* Image Preview Grid */}
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                             {imagePreviews.map((preview, index) => (
                                 <div key={index} className="relative group aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
-                                    <img
-                                        src={preview}
-                                        alt={`Preview ${index}`}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => handleRemoveImage(index)}
-                                        className="absolute top-2 right-2 p-1.5 bg-white/90 backdrop-blur-sm rounded-full shadow-md text-slate-600 hover:text-red-500 hover:bg-white transition-all opacity-0 group-hover:opacity-100"
-                                        title="ပုံဖျက်မည်"
-                                    >
+                                    <img src={preview} alt={`Preview ${index}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                    <button type="button" onClick={() => handleRemoveImage(index)} className="absolute top-2 right-2 p-1.5 bg-white/90 backdrop-blur-sm rounded-full shadow-md text-slate-600 hover:text-red-500 hover:bg-white transition-all opacity-0 group-hover:opacity-100">
                                         <X size={14} />
                                     </button>
                                 </div>
                             ))}
-
-                            {/* Drop Zone / Add Button */}
                             {imageFiles.length < 5 && (
-                                <div
-                                    onClick={() => fileInputRef.current?.click()}
-                                    className="border-2 border-dashed border-slate-200 rounded-xl aspect-square flex flex-col items-center justify-center cursor-pointer hover:border-[#808080] hover:bg-[#808080]/5 transition-all group"
-                                >
-                                    <UploadCloud
-                                        size={24}
-                                        className="mb-2 text-slate-300 group-hover:text-[#808080] transition-colors"
-                                    />
-                                    <p className="text-slate-500 text-[10px] padauk-regular">
-                                        ထပ်တိုးရန်
-                                    </p>
+                                <div onClick={() => fileInputRef.current?.click()} className="border-2 border-dashed border-slate-200 rounded-xl aspect-square flex flex-col items-center justify-center cursor-pointer hover:border-[#808080] hover:bg-[#808080]/5 transition-all group">
+                                    <UploadCloud size={24} className="mb-2 text-slate-300 group-hover:text-[#808080] transition-colors" />
+                                    <p className="text-slate-500 text-[10px] padauk-regular">ထပ်တိုးရန်</p>
                                 </div>
                             )}
                         </div>
-
-                        {imageFiles.length === 0 && (
-                            <p className="text-slate-400 text-xs mt-1">
-                                PNG, JPG, WEBP — 10MB အထိ (၅ ပုံအထိ တင်နိုင်သည်)
-                            </p>
-                        )}
-
-                        {/* Hidden file input */}
-                        <input
-                            ref={fileInputRef}
-                            id="news-image"
-                            type="file"
-                            multiple
-                            accept="image/*"
-                            onChange={handleImageSelect}
-                            className="hidden"
-                        />
+                        <input ref={fileInputRef} type="file" multiple accept="image/*" onChange={handleImageSelect} className="hidden" />
                     </div>
 
-                    {/* ── Rich Text Editor ──────────────────────────────── */}
                     <div className="space-y-2">
                         <label className="text-sm font-semibold text-slate-700 padauk-bold">
                             သတင်းအပြည့်အစုံ <span className="text-red-500">*</span>
@@ -269,7 +280,6 @@ export default function CreateNews() {
                         <TipTapEditor content={content} onChange={setContent} />
                     </div>
 
-                    {/* ── Action Buttons ─────────────────────────────────── */}
                     <div className="flex items-center justify-end gap-4 pt-4 border-t border-slate-100">
                         <button
                             type="button"
@@ -289,10 +299,8 @@ export default function CreateNews() {
                             {isLoading ? "တင်နေသည်..." : "လွှင့်တင်မည်"}
                         </button>
                     </div>
-
                 </div>
             </div>
         </div>
     );
 }
-

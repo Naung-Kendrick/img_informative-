@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useGetUsersQuery, useUpdateUserRoleMutation, useDeleteUserMutation } from "../../store/usersApiSlice";
+import { useGetUsersQuery, useUpdateUserRoleMutation, useUpdateUserStatusMutation, useDeleteUserMutation } from "../../store/usersApiSlice";
 import type { RootState } from "../../store";
 import { Loader2, Trash2, UserCog, User as UserIcon, ShieldCheck, ShieldAlert, AlertCircle } from "lucide-react";
 import type { User } from "../../store/authSlice";
 import { Skeleton } from "../../components/ui/skeleton";
+import { useModal } from "../../context/ModalContext";
 
 const ROLES = [
     { value: 0, label: "အသုံးပြုသူ", eng: "Regular User" },
@@ -15,6 +16,7 @@ const ROLES = [
 
 export default function UserManagement() {
     const { user: currentUser } = useSelector((state: RootState) => state.auth);
+    const { showSuccess, showError } = useModal();
 
     // RoleGuard in App.tsx handles access control; this is a safety fallback
     if (!currentUser) return null;
@@ -22,6 +24,7 @@ export default function UserManagement() {
     // RTK Query Hooks
     const { data: users, isLoading, isError, refetch } = useGetUsersQuery();
     const [updateUserRole, { isLoading: isUpdating }] = useUpdateUserRoleMutation();
+    const [updateUserStatus, { isLoading: isStatusUpdating }] = useUpdateUserStatusMutation();
     const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -30,10 +33,28 @@ export default function UserManagement() {
     const handleRoleChange = async (userId: string, newRole: number) => {
         try {
             await updateUserRole({ userId, role: newRole }).unwrap();
-            refetch(); // Ensure UI reflects newest data
+            showSuccess("အောင်မြင်ပါသည်", "ရာထူး ပြောင်းလဲပြီးပါပြီ");
+            refetch();
         } catch (err) {
             console.error("Failed to update role:", err);
-            alert("ရာထူးပြင်ဆင်ခြင်း မအောင်မြင်ပါ။ ခွင့်ပြုချက်မရှိခြင်း ဖြစ်နိုင်ပါသည်။");
+            showError("မအောင်မြင်ပါ", "ရာထူးပြင်ဆင်ခြင်း မအောင်မြင်ပါ။");
+        }
+    };
+
+    const handleStatusToggle = async (userId: string, currentStatus: boolean) => {
+        if (currentUser.role !== 3) return;
+        if (currentUser._id === userId) {
+            showError("ကန့်သတ်ချက်", "မိမိအကောင့်၏ အခြေအနေကို ပြောင်းလဲ၍မရပါ။");
+            return;
+        }
+
+        try {
+            await updateUserStatus({ userId, active: !currentStatus }).unwrap();
+            showSuccess("အောင်မြင်ပါသည်", "အသုံးပြုသူအခြေအနေ ပြောင်းလဲခဲ့ပြီးပါပြီ");
+            refetch();
+        } catch (err) {
+            console.error("Failed to update status:", err);
+            showError("မအောင်မြင်ပါ", "အခြေအနေပြောင်းလဲခြင်း မအောင်မြင်ပါ။");
         }
     };
 
@@ -43,10 +64,11 @@ export default function UserManagement() {
                 await deleteUser(userToDelete).unwrap();
                 setDeleteModalOpen(false);
                 setUserToDelete(null);
+                showSuccess("အောင်မြင်ပါသည်", "အကောင့်ကို အောင်မြင်စွာ ဖျက်သိမ်းပြီးပါပြီ");
                 refetch();
             } catch (err) {
                 console.error("Failed to delete user:", err);
-                alert("အကောင့်ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ။");
+                showError("မအောင်မြင်ပါ", "အကောင့်ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ။");
             }
         }
     };
@@ -55,7 +77,7 @@ export default function UserManagement() {
         <div className="container mx-auto px-4 py-8 animate-in fade-in duration-500">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 border-l-4 border-[#808080] pl-3 padauk-bold">
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 border-l-4 border-primary pl-3 padauk-bold">
                         အသုံးပြုသူများ စီမံခန့်ခွဲခြင်း
                     </h1>
                     <p className="text-slate-500 mt-1 padauk-regular">
@@ -72,6 +94,7 @@ export default function UserManagement() {
                                 <tr>
                                     <th className="px-6 py-4">အသုံးပြုသူ</th>
                                     <th className="px-6 py-4">အခြေအနေ</th>
+                                    <th className="px-6 py-4">နောက်ဆုံးဝင်ရောက်မှု</th>
                                     <th className="px-6 py-4">ရာထူး</th>
                                     <th className="px-6 py-4 text-right">လုပ်ဆောင်ချက်များ</th>
                                 </tr>
@@ -81,6 +104,7 @@ export default function UserManagement() {
                                     <tr key={i}>
                                         <td className="px-6 py-4"><div className="flex gap-3 items-center"><Skeleton className="h-10 w-10 rounded-full" /><div><Skeleton className="h-5 w-32 mb-1" /><Skeleton className="h-4 w-48" /></div></div></td>
                                         <td className="px-6 py-4"><Skeleton className="h-6 w-20 rounded-full" /></td>
+                                        <td className="px-6 py-4"><Skeleton className="h-5 w-24 rounded-lg" /></td>
                                         <td className="px-6 py-4"><Skeleton className="h-10 w-32 rounded-lg" /></td>
                                         <td className="px-6 py-4 text-right"><Skeleton className="h-8 w-8 ml-auto rounded-lg" /></td>
                                     </tr>
@@ -102,6 +126,7 @@ export default function UserManagement() {
                                 <tr>
                                     <th className="px-6 py-4">အသုံးပြုသူ</th>
                                     <th className="px-6 py-4">အခြေအနေ</th>
+                                    <th className="px-6 py-4">နောက်ဆုံးဝင်ရောက်မှု</th>
                                     <th className="px-6 py-4">ရာထူး</th>
                                     <th className="px-6 py-4 text-right">လုပ်ဆောင်ချက်များ</th>
                                 </tr>
@@ -131,16 +156,50 @@ export default function UserManagement() {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${user.active ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-600 border border-red-200'}`}>
-                                                    {user.active ? <ShieldCheck size={12} /> : <ShieldAlert size={12} />}
-                                                    {user.active ? "Active" : "Inactive"}
-                                                </span>
+                                                <div className="flex items-center">
+                                                    {currentUser.role === 3 && !isSelf ? (
+                                                        <button
+                                                            onClick={() => handleStatusToggle(user._id, user.active)}
+                                                            disabled={isStatusUpdating}
+                                                            className={`group relative flex items-center h-8 w-24 rounded-full transition-all duration-300 shadow-sm border ${user.active ? 'bg-green-500 border-green-600' : 'bg-slate-200 border-slate-300'}`}
+                                                        >
+                                                            <div className={`absolute left-1 w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-300 flex items-center justify-center ${user.active ? 'translate-x-[64px]' : 'translate-x-0'}`}>
+                                                                {user.active ? <ShieldCheck size={12} className="text-green-600" /> : <ShieldAlert size={12} className="text-slate-400" />}
+                                                            </div>
+                                                            <span className={`w-full text-[10px] font-black uppercase tracking-tighter transition-all px-2 ${user.active ? 'text-white text-left ml-2' : 'text-slate-500 text-right mr-2'}`}>
+                                                                {user.active ? 'ACTIVE' : 'INACTIVE'}
+                                                            </span>
+                                                        </button>
+                                                    ) : (
+                                                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tight shadow-sm border ${user.active ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-600 border-red-200'}`}>
+                                                            {user.active ? <ShieldCheck size={12} /> : <ShieldAlert size={12} />}
+                                                            {user.active ? "ACTIVE" : "INACTIVE"}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex flex-col">
+                                                    {user.lastLogin ? (
+                                                        <>
+                                                            <span className="text-slate-700 font-bold text-[13px]">
+                                                                {new Date(user.lastLogin).toLocaleDateString("en-GB", { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                            </span>
+                                                            <span className="text-[11px] text-slate-400 font-medium">
+                                                                {new Date(user.lastLogin).toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit', hour12: true })}
+                                                            </span>
+                                                        </>
+                                                    ) : (
+                                                        <span className="text-slate-300 italic text-xs">No records</span>
+                                                    )}
+                                                </div>
                                             </td>
                                             <td className="px-6 py-4">
                                                 {canManageRole ? (
-                                                    <div className="relative max-w-[160px]">
+                                                    <div className="relative max-w-[170px] group">
+                                                        <label className="sr-only">Change User Role</label>
                                                         <select
-                                                            className="appearance-none bg-slate-50 border border-slate-200 text-slate-800 font-semibold text-xs rounded-xl focus:ring-[#808080] focus:border-[#808080] block w-full px-4 py-2.5 pr-10 transition-all cursor-pointer hover:border-slate-300"
+                                                            className="appearance-none bg-white border border-slate-200 text-slate-800 font-bold text-xs rounded-xl focus:ring-primary/20 focus:border-primary block w-full px-4 py-2.5 pr-10 transition-all cursor-pointer hover:border-primary/40 shadow-sm"
                                                             value={user.role}
                                                             onChange={(e) => handleRoleChange(user._id, Number(e.target.value))}
                                                             disabled={isUpdating}
@@ -154,12 +213,13 @@ export default function UserManagement() {
                                                                 );
                                                             })}
                                                         </select>
-                                                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+                                                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 group-hover:text-primary transition-colors">
                                                             <UserCog size={16} />
                                                         </div>
                                                     </div>
                                                 ) : (
-                                                    <span className={`px-4 py-1.5 rounded-lg text-xs font-bold border transition-all ${user.role >= 2 ? 'bg-slate-50 text-[#808080] border-slate-200 shadow-sm shadow-slate-50' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>
+                                                    <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold border transition-all ${user.role >= 2 ? 'bg-blue-50 text-primary border-blue-100 shadow-sm' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>
+                                                        {user.role === 3 ? <ShieldCheck size={14} /> : user.role === 2 ? <UserCog size={14} /> : <UserIcon size={14} />}
                                                         {ROLES.find((r) => r.value === user.role)?.label || "အမည်မသိ"}
                                                     </span>
                                                 )}
@@ -182,7 +242,7 @@ export default function UserManagement() {
                                 })}
                                 {users?.length === 0 && (
                                     <tr>
-                                        <td colSpan={4} className="px-6 py-20 text-center text-slate-400 padauk-bold">
+                                        <td colSpan={5} className="px-6 py-20 text-center text-slate-400 padauk-bold">
                                             <div className="flex flex-col items-center gap-3">
                                                 <AlertCircle size={40} className="text-slate-200" />
                                                 <span>အသုံးပြုသူစာရင်း မရှိသေးပါ။</span>

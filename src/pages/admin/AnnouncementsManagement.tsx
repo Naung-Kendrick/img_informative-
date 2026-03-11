@@ -5,9 +5,11 @@ import { useGetAllAnnouncementsQuery, useDeleteAnnouncementMutation, useUpdateAn
 import type { RootState } from "../../store";
 import { Loader2, Plus, Trash2, Calendar, Eye, AlertCircle, FileText, Check } from "lucide-react";
 import { Skeleton } from "../../components/ui/skeleton";
+import { useModal } from "../../context/ModalContext";
 
 export default function AnnouncementsManagement() {
     const { user } = useSelector((state: RootState) => state.auth);
+    const { showSuccess, showError } = useModal();
     const role = user?.role ?? 0;
 
     const { data: announcements, isLoading, isError, refetch } = useGetAllAnnouncementsQuery(undefined, {
@@ -27,10 +29,11 @@ export default function AnnouncementsManagement() {
                 await deleteAnnouncement(announcementToDelete).unwrap();
                 setDeleteModalOpen(false);
                 setAnnouncementToDelete(null);
+                showSuccess("အောင်မြင်ပါသည်", "ထုတ်ပြန်ချက်ကို အောင်မြင်စွာ ဖျက်သိမ်းပြီးပါပြီ");
                 refetch();
             } catch (err) {
                 console.error("Failed to delete:", err);
-                alert("ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ။");
+                showError("မအောင်မြင်ပါ", "ဖျက်သိမ်းခြင်း မအောင်မြင်ပါ။");
             }
         }
     };
@@ -38,10 +41,11 @@ export default function AnnouncementsManagement() {
     const handleApprove = async (id: string) => {
         try {
             await updateAnnouncement({ id, data: { status: "Published" } }).unwrap();
+            showSuccess("အောင်မြင်ပါသည်", "ထုတ်ပြန်ချက်ကို အတည်ပြုပြီးပါပြီ");
             refetch();
         } catch (err) {
             console.error("Failed to approve:", err);
-            alert("အတည်ပြုခြင်း မအောင်မြင်ပါ။");
+            showError("မအောင်မြင်ပါ", "အတည်ပြုခြင်း မအောင်မြင်ပါ။");
         }
     };
 
