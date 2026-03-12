@@ -84,7 +84,7 @@ function SortableLayoutItem({
 }
 
 export default function LayoutManagement() {
-    const { t } = useTranslation();
+    useTranslation();
     const { showSuccess, showError } = useModal();
     const { data: initialLayout, isLoading, refetch } = useGetLayoutQuery();
     const [updateLayout, { isLoading: isUpdating }] = useUpdateLayoutMutation();

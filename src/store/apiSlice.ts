@@ -6,7 +6,7 @@ export const apiSlice = createApi({
     reducerPath: 'api',
     // Set the base URL matching our Node backend
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://127.0.0.1:3000',
+        baseUrl: import.meta.env.VITE_API_URL || 'http://127.0.0.1:3000',
         prepareHeaders: (headers, { getState }) => {
             // By default, if we have a token in the store, let's use that for authenticated requests
             const token = (getState() as RootState).auth.token;
