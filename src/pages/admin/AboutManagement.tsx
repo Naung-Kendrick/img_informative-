@@ -22,11 +22,22 @@ export default function AboutManagement() {
     const [objective, setObjective] = useState("");
     const [duty, setDuty] = useState("");
     const [mainTasks, setMainTasks] = useState("");
+    const [uniformDescription, setUniformDescription] = useState("");
+    const [uniform1Name, setUniform1Name] = useState("");
+    const [uniform2Name, setUniform2Name] = useState("");
 
     // ── Image State ─────────────────────────────────────────────────────────
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string>("");
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const [uniform1ImageFile, setUniform1ImageFile] = useState<File | null>(null);
+    const [uniform1ImagePreview, setUniform1ImagePreview] = useState<string>("");
+    const fileInput1Ref = useRef<HTMLInputElement>(null);
+
+    const [uniform2ImageFile, setUniform2ImageFile] = useState<File | null>(null);
+    const [uniform2ImagePreview, setUniform2ImagePreview] = useState<string>("");
+    const fileInput2Ref = useRef<HTMLInputElement>(null);
 
     // Initialize state from existing data
     useEffect(() => {
@@ -38,6 +49,11 @@ export default function AboutManagement() {
             setDuty(data.about.duty || "");
             setMainTasks(data.about.mainTasks || "");
             setImagePreview(data.about.imageUrl || "");
+            setUniformDescription(data.about.uniformDescription || "");
+            setUniform1Name(data.about.uniform1Name || "");
+            setUniform2Name(data.about.uniform2Name || "");
+            setUniform1ImagePreview(data.about.uniform1Image || "");
+            setUniform2ImagePreview(data.about.uniform2Image || "");
         }
     }, [data]);
 
@@ -62,10 +78,22 @@ export default function AboutManagement() {
         if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
+    const handleUniformImageSelect = (e: React.ChangeEvent<HTMLInputElement>, setFile: any, setPreview: any, ref: any) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        if (!file.type.startsWith("image/")) {
+            showError("မှားယွင်းသော ဖိုင်အမျိုးအစား", "ပုံဖိုင် မဟုတ်ပါ။");
+            return;
+        }
+        setFile(file);
+        setPreview(URL.createObjectURL(file));
+        if (ref.current) ref.current.value = "";
+    };
+
     const handleRemoveImage = () => {
         if (imageFile) URL.revokeObjectURL(imagePreview);
         setImageFile(null);
-        setImagePreview(""); // Revert to empty or maybe we should keep the old one? Let's just set empty so they can delete it.
+        setImagePreview(""); 
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -77,17 +105,28 @@ export default function AboutManagement() {
         }
 
         try {
-            let finalImageUrl = imagePreview; // Default to existing preview (either S3 URL or empty)
+            let finalImageUrl = imagePreview; 
+            let finalUniform1Image = uniform1ImagePreview;
+            let finalUniform2Image = uniform2ImagePreview;
 
-            // Step 1: Upload image if a new local file was selected
+            // Step 1: Upload images
             if (imageFile) {
                 const uploadFormData = new FormData();
-                uploadFormData.append("images", imageFile); // API expects 'images' field
-
+                uploadFormData.append("images", imageFile); 
                 const uploadResult = await uploadImageToS3(uploadFormData).unwrap();
-                if (uploadResult?.urls?.length > 0) {
-                    finalImageUrl = uploadResult.urls[0];
-                }
+                if (uploadResult?.urls?.length > 0) finalImageUrl = uploadResult.urls[0];
+            }
+            if (uniform1ImageFile) {
+                const fd = new FormData();
+                fd.append("images", uniform1ImageFile); 
+                const res = await uploadImageToS3(fd).unwrap();
+                if (res?.urls?.length > 0) finalUniform1Image = res.urls[0];
+            }
+            if (uniform2ImageFile) {
+                const fd = new FormData();
+                fd.append("images", uniform2ImageFile); 
+                const res = await uploadImageToS3(fd).unwrap();
+                if (res?.urls?.length > 0) finalUniform2Image = res.urls[0];
             }
 
             // Step 2: Save About Content
@@ -99,12 +138,21 @@ export default function AboutManagement() {
                 duty: duty.trim(),
                 mainTasks: mainTasks.trim(),
                 imageUrl: finalImageUrl,
+                uniformDescription: uniformDescription.trim(),
+                uniform1Name: uniform1Name.trim(),
+                uniform2Name: uniform2Name.trim(),
+                uniform1Image: finalUniform1Image,
+                uniform2Image: finalUniform2Image,
             }).unwrap();
 
             showSuccess("အောင်မြင်ပါသည်", "ဌာနအကြောင်း အချက်အလက်များ အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ။");
-            // After save, the imageFile state should ideally be cleared since it's now uploaded and tracked via URL
+            
             setImageFile(null);
+            setUniform1ImageFile(null);
+            setUniform2ImageFile(null);
             setImagePreview(finalImageUrl);
+            setUniform1ImagePreview(finalUniform1Image);
+            setUniform2ImagePreview(finalUniform2Image);
 
         } catch (err: any) {
             console.error("❌ Failed to save about content:", err);
@@ -228,7 +276,7 @@ export default function AboutManagement() {
                     <div className="flex gap-4 items-start mt-2">
                         {imagePreview ? (
                             <div className="relative group w-48 aspect-[4/3] rounded-xl overflow-hidden border border-slate-200 bg-slate-50 shrink-0 shadow-sm">
-                                <img
+                                <img loading="lazy"
                                     src={imagePreview}
                                     alt="Preview"
                                     className="w-full h-full object-cover transition-transform duration-300"
@@ -266,6 +314,90 @@ export default function AboutManagement() {
                         onChange={handleImageSelect}
                         className="hidden"
                     />
+                </div>
+
+                {/* ── UNIFORM SECTIONS ───────────────────────────── */}
+                <div className="space-y-6 pt-6 border-t border-slate-100">
+                    <h2 className="text-lg font-bold text-slate-800 padauk-bold">Department Uniform (ဌာနဝတ်စုံ)</h2>
+                    
+                    <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-700 padauk-bold">
+                            ဝတ်စုံ ဖော်ပြချက် (Uniform Description)
+                        </label>
+                        <textarea
+                            value={uniformDescription}
+                            onChange={(e) => setUniformDescription(e.target.value)}
+                            rows={3}
+                            placeholder="Standard-issue uniforms of the Immigration Department..."
+                            className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular resize-none"
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {/* Uniform 1 */}
+                        <div className="space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <h3 className="text-sm font-bold text-slate-700 padauk-bold">Uniform 1</h3>
+                            <div className="space-y-2">
+                                <label className="text-xs font-semibold text-slate-600">အမည် (Name)</label>
+                                <input
+                                    type="text"
+                                    value={uniform1Name}
+                                    onChange={(e) => setUniform1Name(e.target.value)}
+                                    placeholder="Field Service Uniform — TI - 0010"
+                                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all padauk-regular"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-semibold text-slate-600">ပုံ (Image)</label>
+                                {uniform1ImagePreview ? (
+                                    <div className="relative group w-full aspect-[3/4] rounded-lg overflow-hidden border border-slate-200 bg-white">
+                                        <img src={uniform1ImagePreview} className="w-full h-full object-cover" />
+                                        <button type="button" onClick={() => { setUniform1ImagePreview(""); setUniform1ImageFile(null); }} className="absolute top-2 right-2 p-1.5 bg-white shadow-md rounded-full text-slate-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">
+                                            <X size={14} />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div onClick={() => fileInput1Ref.current?.click()} className="w-full aspect-[3/4] border-2 border-dashed border-slate-200 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-primary bg-white">
+                                        <UploadCloud size={20} className="mb-2 text-slate-300" />
+                                        <p className="text-slate-500 text-[10px] padauk-regular">ပုံရွေးရန်</p>
+                                    </div>
+                                )}
+                                <input ref={fileInput1Ref} type="file" accept="image/*" onChange={(e) => handleUniformImageSelect(e, setUniform1ImageFile, setUniform1ImagePreview, fileInput1Ref)} className="hidden" />
+                            </div>
+                        </div>
+
+                        {/* Uniform 2 */}
+                        <div className="space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <h3 className="text-sm font-bold text-slate-700 padauk-bold">Uniform 2</h3>
+                            <div className="space-y-2">
+                                <label className="text-xs font-semibold text-slate-600">အမည် (Name)</label>
+                                <input
+                                    type="text"
+                                    value={uniform2Name}
+                                    onChange={(e) => setUniform2Name(e.target.value)}
+                                    placeholder="Field Service Uniform — TI-0099"
+                                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all padauk-regular"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-semibold text-slate-600">ပုံ (Image)</label>
+                                {uniform2ImagePreview ? (
+                                    <div className="relative group w-full aspect-[3/4] rounded-lg overflow-hidden border border-slate-200 bg-white">
+                                        <img src={uniform2ImagePreview} className="w-full h-full object-cover" />
+                                        <button type="button" onClick={() => { setUniform2ImagePreview(""); setUniform2ImageFile(null); }} className="absolute top-2 right-2 p-1.5 bg-white shadow-md rounded-full text-slate-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">
+                                            <X size={14} />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div onClick={() => fileInput2Ref.current?.click()} className="w-full aspect-[3/4] border-2 border-dashed border-slate-200 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-primary bg-white">
+                                        <UploadCloud size={20} className="mb-2 text-slate-300" />
+                                        <p className="text-slate-500 text-[10px] padauk-regular">ပုံရွေးရန်</p>
+                                    </div>
+                                )}
+                                <input ref={fileInput2Ref} type="file" accept="image/*" onChange={(e) => handleUniformImageSelect(e, setUniform2ImageFile, setUniform2ImagePreview, fileInput2Ref)} className="hidden" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* ── Action Buttons ─────────────────────────────────── */}

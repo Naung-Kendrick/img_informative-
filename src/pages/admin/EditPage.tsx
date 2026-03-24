@@ -217,7 +217,7 @@ export default function EditPage() {
 
                         {imagePreview ? (
                             <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50 max-w-md">
-                                <img
+                                <img loading="lazy"
                                     src={imagePreview}
                                     alt="Banner preview"
                                     className="w-full max-h-48 object-cover"

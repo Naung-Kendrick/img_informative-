@@ -236,7 +236,7 @@ export default function CreateAnnouncement() {
                                 {imagePreviews.map((preview, index) => (
                                     <div key={index} className="w-full flex flex-col items-center relative group">
                                         <div className="w-full aspect-[1/1.414] rounded-lg shadow-sm border border-slate-200 overflow-hidden relative bg-white flex items-center justify-center">
-                                            <img
+                                            <img loading="lazy"
                                                 src={preview}
                                                 alt={`Document Page ${index + 1}`}
                                                 className="w-full h-full object-cover"

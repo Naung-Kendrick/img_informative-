@@ -30,7 +30,7 @@ import {
     BarChart2,
     Flag,
     Clock,
-    Languages,
+    Globe,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -373,10 +373,10 @@ export default function AdminLayout() {
                                 (link as any).group === "cms" &&
                                 (index === 0 || !(navLinks[index - 1] as any).group || role < navLinks[index - 1].minRole);
 
-                            // Exact match for /admin, broad match for other paths
+                            // Exact match for /admin; for other paths, match exactly or as a prefix followed by '/'
                             const isActive = link.path === "/admin"
                                 ? location.pathname === "/admin"
-                                : location.pathname.startsWith(link.path);
+                                : location.pathname === link.path || location.pathname.startsWith(link.path + "/");
 
                             return (
                                 <div key={link.name}>
@@ -488,7 +488,7 @@ export default function AdminLayout() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-all text-slate-600 group">
-                                    <Languages size={18} className="group-hover:text-primary transition-colors" />
+                                    <Globe size={18} className="group-hover:text-primary transition-colors" />
                                     <span className="text-[11px] font-black uppercase tracking-widest">{i18n.language.startsWith('mm') ? 'မြန်မာ' : 'EN'}</span>
                                 </button>
                             </DropdownMenuTrigger>
@@ -523,7 +523,7 @@ export default function AdminLayout() {
                             <Link to="/admin/profile" className={`h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center border-2 overflow-hidden shrink-0 hover:ring-2 transition-all ${role === 3 ? "border-emerald-300 hover:ring-emerald-200" : role === 2 ? "border-primary hover:ring-primary/20" : "border-blue-300 hover:ring-blue-200"
                                 }`}>
                                 {user.avatar ? (
-                                    <img src={user.avatar} alt="avatar" className="w-full h-full object-cover" />
+                                    <img loading="lazy" src={user.avatar} alt="avatar" className="w-full h-full object-cover" />
                                 ) : (
                                     <span className="font-bold text-sm text-slate-600">{user.name.charAt(0).toUpperCase()}</span>
                                 )}

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useGetAllAnnouncementsQuery } from "../store/announcementApiSlice";
 import { Calendar, Megaphone, FileText } from "lucide-react";
+import NetworkErrorState from "../components/ui/NetworkErrorState";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -29,24 +30,17 @@ export default function Announcements() {
                 <div className="mb-10 text-center max-w-2xl mx-auto flex flex-col items-center">
                     <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4 border border-primary/20">
                         <Megaphone size={14} />
-                        Official Repository
+                        Official Announcement
                     </div>
                     <h1 className="h1 mb-6 relative inline-block pb-4">
                         {t("announcements.title")}
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h1>
-                    <p className="p-lead mt-4">
-                        {t("announcements.subtitle")} အသစ်များ၊ ကြေညာချက်များနှင့် အချက်အလက်များကို ဤနေရာတွင် ဖတ်ရှုနိုင်ပါသည်။
-                    </p>
+
                 </div>
 
                 {isError ? (
-                    <div className="flex flex-col items-center justify-center min-h-[40vh] text-center mt-12">
-                        <div className="bg-destructive/10 text-destructive p-6 rounded-xl max-w-lg">
-                            <h2 className="h4 mb-2">ကွန်ရက်ချို့ယွင်းချက်</h2>
-                            <p className="p-muted text-muted-foreground">ဆာဗာနှင့် ချိတ်ဆက်ရာတွင် အဆင်မပြေမှု ဖြစ်ပေါ်နေပါသည်။</p>
-                        </div>
-                    </div>
+                    <NetworkErrorState />
                 ) : announcements.length === 0 && !isLoading ? (
                     <div className="flex flex-col items-center justify-center min-h-[40vh] text-center mt-12">
                         <div className="bg-muted/50 text-muted-foreground p-8 rounded-xl max-w-lg border border-border">
@@ -72,7 +66,7 @@ export default function Announcements() {
                                 {/* Thumbnail Container (A4 Proportions) */}
                                 <div className="w-full aspect-[1/1.414] bg-secondary/20 relative overflow-hidden border-b border-border">
                                     {announcement.documentImages && announcement.documentImages.length > 0 ? (
-                                        <img
+                                        <img loading="lazy"
                                             src={announcement.documentImages[0]}
                                             alt={announcement.title}
                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"

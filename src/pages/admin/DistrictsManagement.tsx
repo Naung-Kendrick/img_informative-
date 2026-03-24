@@ -71,7 +71,7 @@ function SortableDistrictRow({
             <td className="px-6 py-4 font-medium text-slate-900">
                 <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-lg bg-slate-100 overflow-hidden shrink-0 border border-slate-200 shadow-inner">
-                        <img src={district.coverImage} alt={district.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <img loading="lazy" src={district.coverImage} alt={district.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     </div>
                     <div className="font-bold text-base">{district.name}</div>
                 </div>

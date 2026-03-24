@@ -143,7 +143,7 @@ export default function AuditLogs() {
                                             <div className="flex items-center gap-3">
                                                 <div className="h-9 w-9 rounded-xl bg-slate-100 flex items-center justify-center text-primary font-black text-xs border border-slate-200 overflow-hidden shadow-sm">
                                                     {log.performedBy?.avatar ? (
-                                                        <img src={log.performedBy.avatar} className="h-full w-full object-cover" />
+                                                        <img loading="lazy" src={log.performedBy.avatar} className="h-full w-full object-cover" />
                                                     ) : (
                                                         log.actorName?.charAt(0) || "U"
                                                     )}

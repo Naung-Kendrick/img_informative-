@@ -161,7 +161,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                         {news.images && news.images.length > 0 ? (
                                             <div className="relative shrink-0 overflow-hidden rounded-lg shadow-sm border border-slate-700/50">
                                                 <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors z-10"></div>
-                                                <img
+                                                <img loading="lazy"
                                                     src={news.images[0]}
                                                     alt=""
                                                     className="w-16 h-12 object-cover transform group-hover:scale-105 transition-transform duration-500"

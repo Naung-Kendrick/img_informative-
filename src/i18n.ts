@@ -19,8 +19,8 @@ const resources = {
                 login: "Login",
                 profileSettings: "Profile Settings",
                 logout: "Logout",
-                deptTitle: "Ta'ang Land Federal Unit Government Immigration Department",
-                deptSubtitle: "တအာင်းပြည် ဖက်ဒရယ်ယူနစ် အစိုးရ လူဝင်မှုကြီးကြပ်‌ရေး ဌာန",
+                deptTitle: "Immigration Department of the Ta'ang Land Government",
+                deptSubtitle: "တအာင်းပြည်အစိုးရ လူဝင်မှုကြီးကြပ်‌ရေး ဌာန",
                 searchPlaceholder: "Search documents...",
                 noSearchRes: "No results."
             },
@@ -36,7 +36,7 @@ const resources = {
                 title: "About Immigration Department",
                 subtitle: "We are systematically recording population statistics related to the security and management of Ta'ang Land.",
                 badge: "OFFICIAL REPOSITORY",
-                pslf: "Ta'ang Land Federal Unit Government",
+                pslf: "Ta'ang Land Government",
                 description: "We are systematically working to obtain accurate population statistics and indicators that will support the drawing of projects for the security, management, health, education, economy and other matters of Ta'ang Land.",
                 policyTitle: "Department Policy",
                 policyDesc: "To systematically control and maintain immigration, alien registration and household population activities in accordance with existing laws and procedures.",
@@ -98,7 +98,6 @@ const resources = {
             },
             activities: {
                 title: "Activities",
-                subtitle: "Latest activity news and updates.",
                 noActivities: "No Activities Yet",
                 noActivitiesDesc: "There are no activities published recently.",
                 badge: "Activity",
@@ -109,10 +108,10 @@ const resources = {
                 subtitle: "Learn about the services provided by the Immigration Department.",
                 noServices: "No Services Yet",
                 noServicesDesc: "Service information is not available at the moment.",
-                portalBadge: "e-Government Portal",
+                portalBadge: "Reach out our services",
                 publicServices: "Public Services",
                 assistanceCenter: "Public Assistance Center",
-                publicServicesDesc: "Required Documents for smartcard and household registration.",
+
                 applyBtn: "Apply Now",
                 serviceNode: "Service Node",
                 smartcardTitle: "Apply for Smartcard",
@@ -126,14 +125,14 @@ const resources = {
             },
             districts: {
                 title: "Immigration Offices",
-                subtitle: "Information across various Immigration Offices.",
+
                 noDistricts: "No Immigration Office Information Yet",
                 noDistrictsDesc: "Immigration office information will be added soon.",
                 badge: "REGIONAL IMMIGRATION OFFICE",
                 regionalOffices: "Regional Immigration Offices",
                 adminOffices: "Local Immigration Offices",
                 viewDetails: "VIEW DETAILS",
-                adminOfficesDesc: "Public service information and local office locations.",
+
                 noMap: "No Map Information Yet",
                 viewMap: "View Map",
                 networkError: "Network Error",
@@ -245,7 +244,7 @@ const resources = {
                 },
                 faq: {
                     q1: "How do I apply for a new Smart Identity Card?",
-                    a1: "You can apply through our e-Government Portal under the 'Services' section. You'll need to upload your digital genealogical records and biometric data.",
+                    a1: "You can apply through our online service under the 'Services' section. You'll need to upload your digital genealogical records and biometric data.",
                     q2: "What is the processing time for a visa application?",
                     a2: "Standard processing takes 5-7 working days. Express services are available at the Headquarters for urgent national matters.",
                     q3: "How can I update my household registration?",
@@ -284,8 +283,8 @@ const resources = {
                 login: "ဝင်ရောက်ရန်",
                 profileSettings: "ကိုယ်ရေးအချက်အလက်",
                 logout: "ထွက်မည်",
-                deptTitle: "တအာင်းပြည် ဖက်ဒရယ်ယူနစ် အစိုးရ လူဝင်မှုကြီးကြပ်‌ရေး ဌာန",
-                deptSubtitle: "Immigration Department • Ta'ang Land Federal Unit Government",
+                deptTitle: "တအာင်းပြည်အစိုးရ လူဝင်မှုကြီးကြပ်‌ရေး ဌာန",
+                deptSubtitle: "Immigration Department • Ta'ang Land Government",
                 searchPlaceholder: "စာရွက်စာတမ်းများ ရှာဖွေပါ...",
                 noSearchRes: "ရလဒ်မရှိပါ။"
             },
@@ -301,7 +300,7 @@ const resources = {
                 title: "လူဝင်မှုကြီးကြပ်ရေးဌာန အကြောင်း",
                 subtitle: "တအာင်းပြည်နယ်၏ လုံခြုံရေး၊ စီမံခန့်ခွဲရေးနှင့် သက်ဆိုင်သော လူဦးရေစာရင်းဇယားများကို စနစ်တကျ မှတ်တမ်းတင် ဆောင်ရွက်လျက်ရှိပါသည်။",
                 badge: "OFFICIAL REPOSITORY",
-                pslf: "Ta'ang Land Federal Unit Government",
+                pslf: "Ta'ang Land Government",
                 description: "တအာင်းပြည်နယ်၏ လုံခြုံရေး၊ စီမံခန့်ခွဲရေး၊ ကျန်းမာရေး၊ ပညာရေး၊ စီးပွားရေးနှင့် အခြားကိစ္စရပ်များအတွက် စီမံကိန်းများရေးဆွဲရာတွင် အထောက်အကူပြုစေမည့် ခိုင်မာတိကျသော လူဦးရေစာရင်းဇယားများနှင့် အညွှန်းကိန်းများ ရရှိစေရန် စနစ်တကျ ဆောင်ရွက်လျက်ရှိပါသည်။",
                 policyTitle: "ဌာန၏ မူဝါဒ",
                 policyDesc: "လူဝင်မှုကြီးကြပ်ရေး၊ နိုင်ငံခြားသားထိန်းသိမ်းရေး၊ မှတ်ပုံတင်ရေးနှင့် အိမ်ထောင်စုလူဦးရေစာရင်း လုပ်ငန်းများကို တည်ဆဲဥပဒေ၊ လုပ်ထုံးလုပ်နည်းများနှင့်အညီ စနစ်တကျ ထိန်းသိမ်းကြပ်မတ် ဆောင်ရွက်ရန်။",
@@ -363,7 +362,7 @@ const resources = {
             },
             activities: {
                 title: "လှုပ်ရှားမှုများ",
-                subtitle: "လတ်တလော လှုပ်ရှားမှုဆိုင်ရာ သတင်းများနှင့် အခြေအနေများ။",
+
                 noActivities: "လှုပ်ရှားမှုများ မရှိသေးပါ",
                 noActivitiesDesc: "လတ်တလော လွှင့်တင်ထားသော လှုပ်ရှားမှုများ မရှိသေးပါ။",
                 badge: "လှုပ်ရှားမှု",
@@ -374,10 +373,10 @@ const resources = {
                 subtitle: "လူဝင်မှုကြီးကြပ်ရေးဌာနမှ ဝန်ဆောင်မှုများအကြောင်း လေ့လာပါ။",
                 noServices: "ဝန်ဆောင်မှုများ မရှိသေးပါ",
                 noServicesDesc: "လတ်တလော ဝန်ဆောင်မှု အချက်အလက်များ မရှိသေးပါ။",
-                portalBadge: "e-Government Portal",
+                portalBadge: "Reach out our services",
                 publicServices: "ပြည်သူ့ဝန်ဆောင်မှုများ",
                 assistanceCenter: "ပြည်သူ့အကူအညီပေးရေး ဗဟိုဌာန",
-                publicServicesDesc: "စမက်ကတ် နှင့် အိမ်ထောင်စုစာရင်းများ လျှောက်ထားနိုင်ရန်အတွက် လိုအပ်သော အချက်အလက်များ",
+
                 applyBtn: "လျှောက်ထားရန်",
                 serviceNode: "ဝန်ဆောင်မှု ကဏ္ဍ",
                 smartcardTitle: "Smartcard ပြုလုပ်ရန်",
@@ -398,7 +397,7 @@ const resources = {
                 regionalOffices: "ဒေသဆိုင်ရာ လူဝင်မှုကြီးကြပ်ရေးရုံးများ",
                 adminOffices: "မြို့နယ် လူဝင်မှုကြီးကြပ်ရေးရုံး",
                 viewDetails: "အသေးစိတ်ကြည့်ရန်",
-                adminOfficesDesc: "ပြည်သူ့ဝန်ဆောင်မှု လုပ်ငန်းဆိုင်ရာ အချက်အလက်များနှင့် ရုံးတည်နေရာများ",
+
                 noMap: "မြေပုံအချက်အလက် မရှိသေးပါ",
                 viewMap: "တည်နေရာပြမြေပုံ",
                 networkError: "ကွန်ရက်ချို့ယွင်းချက်",
@@ -406,7 +405,7 @@ const resources = {
             },
             announcements: {
                 title: "ထုတ်ပြန်ချက်များ",
-                subtitle: "တရားဝင်ထုတ်ပြန်ချက်များနှင့် ကြေညာချက်များ။",
+
                 noAnnouncements: "ထုတ်ပြန်ချက်များ မရှိသေးပါ",
                 noAnnouncementsDesc: "လတ်တလော ထုတ်ပြန်ထားသော ကြေညာချက်များ မရှိသေးပါ။",
                 officialAnnouncements: "ဌာန၏ တရားဝင် ထုတ်ပြန်ချက်များ",
@@ -505,7 +504,7 @@ const resources = {
                 },
                 faq: {
                     q1: "စမတ်ကတ် (Smart Identity Card) အသစ်ကို ဘယ်လိုလျှောက်ထားရမလဲ?",
-                    a1: "ကျွန်ုပ်တို့၏ e-Government Portal ရှိ 'ဝန်ဆောင်မှုများ' ကဏ္ဍတွင် လျှောက်ထားနိုင်ပါသည်။ သင်၏ ဇီဝဆိုင်ရာ အချက်အလက်များနှင့် မျိုးရိုးဗီဇဆိုင်ရာ မှတ်တမ်းများကို တင်ပြရန် လိုအပ်ပါသည်။",
+                    a1: "ကျွန်ုပ်တို့၏ အွန်လိုင်းဝန်ဆောင်မှုရှိ 'ဝန်ဆောင်မှုများ' ကဏ္ဍတွင် လျှောက်ထားနိုင်ပါသည်။ သင်၏ ဇီဝဆိုင်ရာ အချက်အလက်များနှင့် မျိုးရိုးဗီဇဆိုင်ရာ မှတ်တမ်းများကို တင်ပြရန် လိုအပ်ပါသည်။",
                     q2: "ဗီဇာလျှောက်ထားမှုအတွက် ကြာမြင့်ချိန် ဘယ်လောက်ရှိသလဲ?",
                     a2: "ပုံမှန်အားဖြင့် ရုံးဖွင့်ရက် ၅ ရက်မှ ၇ ရက်အထိ ကြာမြင့်နိုင်ပါသည်။ အရေးကြီးသော ကိစ္စရပ်များအတွက် ရုံးချုပ်တွင် အမြန်ဝန်ဆောင်မှု ရယူနိုင်ပါသည်။",
                     q3: "အိမ်ထောင်စုစာရင်း ပြင်ဆင်ခြင်းကို ဘယ်လိုလုပ်ဆောင်ရမလဲ?",

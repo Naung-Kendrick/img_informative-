@@ -47,12 +47,12 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
         runtimeCaching: [
           {
-            urlPattern: /.*\/api\/(news|announcements|reports|pages|audit-logs)/i,
-            handler: 'StaleWhileRevalidate',
+            urlPattern: /^http:\/\/127\.0\.0\.1:3000\/.*/i,
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'api-cache',
               expiration: {
-                maxEntries: 100,
+                maxEntries: 200,
                 maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
               },
               cacheableResponse: {

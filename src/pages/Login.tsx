@@ -87,7 +87,7 @@ export default function Login() {
                     {/* Logo Area - Professional & Stylish */}
                     <div className="relative z-10 animate-in zoom-in-95 duration-1000">
                         <div className="h-24 w-24 md:h-44 md:w-44 bg-white rounded-2xl md:rounded-[2.5rem] flex items-center justify-center shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-4 border-white/20 p-4 md:p-6 group transition-all duration-500 hover:scale-105">
-                            <img
+                            <img loading="lazy"
                                 src="/photo_2026-03-09_14-35-44-removebg-preview.png"
                                 alt="Department Seal"
                                 className="w-full h-full object-contain"

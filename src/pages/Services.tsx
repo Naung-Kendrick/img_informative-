@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useGetPagesBySectionQuery } from "../store/pageApiSlice";
 import { Skeleton } from "../components/ui/skeleton";
+import NetworkErrorState from "../components/ui/NetworkErrorState";
 
 export default function Services() {
     const { t } = useTranslation();
@@ -30,9 +31,7 @@ export default function Services() {
                         {t("services.publicServices")}
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h1>
-                    <p className="p-lead mt-4">
-                        {t("services.publicServicesDesc")}
-                    </p>
+
                 </div>
 
                 {/* Content Logic */}
@@ -42,11 +41,7 @@ export default function Services() {
                         <Skeleton className="h-[500px] rounded-2xl" />
                     </div>
                 ) : isError ? (
-                    <div className="text-center py-20 bg-destructive/5 rounded-2xl border border-destructive/10 max-w-2xl mx-auto">
-                        <AlertCircle className="mx-auto h-12 w-12 text-destructive mb-4" />
-                        <h3 className="h4 mb-2">{t("errors.failedToLoad")}</h3>
-                        <p className="p-muted mb-6">ဒေတာရယူနေစဉ် အဆင်မပြေမှု ရှိနေပါသည်။</p>
-                    </div>
+                    <NetworkErrorState />
                 ) : publishedServices.length === 0 ? (
                     <div className="text-center py-20 bg-muted/30 rounded-2xl border border-border max-w-2xl mx-auto">
                         <Briefcase className="mx-auto h-12 w-12 text-slate-300 mb-4" />
@@ -64,7 +59,7 @@ export default function Services() {
                                 {/* Banner Decorative or Featured */}
                                 <div className="aspect-[16/9] bg-secondary/20 relative overflow-hidden border-b border-border">
                                     {service.bannerImage ? (
-                                        <img
+                                        <img loading="lazy"
                                             src={service.bannerImage}
                                             alt={service.title}
                                             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
@@ -77,7 +72,7 @@ export default function Services() {
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent"></div>
                                     <div className="absolute bottom-6 left-8">
                                         <div className="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-[10px] text-white font-bold uppercase tracking-widest leading-none">
-                                            Service Node #{service.order || 1}
+                                            Services #{service.order || 1}
                                         </div>
                                     </div>
                                 </div>

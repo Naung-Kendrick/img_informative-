@@ -177,7 +177,7 @@ export default function ContentReportsManagement() {
                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Reporter</p>
                                     <div className="flex items-center gap-3">
                                         {report.reporter?.avatar ? (
-                                            <img src={report.reporter.avatar} className="w-10 h-10 rounded-full border-2 border-slate-100 object-cover" />
+                                            <img loading="lazy" src={report.reporter.avatar} className="w-10 h-10 rounded-full border-2 border-slate-100 object-cover" />
                                         ) : (
                                             <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 font-black text-sm border-2 border-slate-100">
                                                 {report.reporter?.name?.charAt(0) || '?'}

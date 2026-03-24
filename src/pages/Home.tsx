@@ -22,6 +22,7 @@ import { NewsCardSkeleton, HeroSkeleton } from "../components/feedback/NewsCardS
 import { ImageWithSkeleton } from "../components/feedback/ImageWithSkeleton";
 import StatisticsSection from "../components/StatisticsSection";
 import WeatherWidget from "../components/WeatherWidget";
+import NetworkErrorState from "../components/ui/NetworkErrorState";
 
 const Home = () => {
     const { t } = useTranslation();
@@ -79,7 +80,7 @@ const Home = () => {
     const renderHero = () => {
         if (isLoading || isFetching) return <HeroSkeleton />;
         if (!heroNews) return null;
-        
+
         return (
             <section key="hero" className="relative w-full bg-slate-900 overflow-hidden min-h-[600px] flex items-center">
                 <div className="absolute inset-0 z-0">
@@ -156,9 +157,7 @@ const Home = () => {
                         ပြည်သူ့ဝန်ဆောင်မှုများ
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h2>
-                    <p className="p-lead text-muted-foreground max-w-2xl mx-auto mt-6">
-                        စမက်ကတ် နှင့် အိမ်ထောင်စုစာရင်းများ လျှောက်ထားနိုင်ရန်အတွက် လိုအပ်သော အချက်အလက်များ
-                    </p>
+
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto">
@@ -172,7 +171,7 @@ const Home = () => {
                             >
                                 <div className="aspect-[16/9] bg-secondary/20 relative overflow-hidden border-b border-border">
                                     {service.bannerImage ? (
-                                        <img
+                                        <img loading="lazy"
                                             src={service.bannerImage}
                                             alt={service.title}
                                             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
@@ -185,7 +184,7 @@ const Home = () => {
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent"></div>
                                     <div className="absolute bottom-6 left-8">
                                         <div className="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-[10px] text-white font-bold uppercase tracking-widest leading-none">
-                                            Service Node #{service.order || 1}
+                                            Services #{service.order || 1}
                                         </div>
                                     </div>
                                 </div>
@@ -229,9 +228,7 @@ const Home = () => {
                         {t("districts.title")}
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h2>
-                    <p className="p-lead text-muted-foreground max-w-2xl mx-auto mt-6">
-                        {t("districts.subtitle")}
-                    </p>
+
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -241,7 +238,7 @@ const Home = () => {
                         displayDistricts.map((district: any) => (
                             <Link key={district._id} to="/districts" className="group flex flex-col overflow-hidden bg-card border border-border rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500">
                                 <div className="aspect-[16/10] bg-secondary/20 relative overflow-hidden">
-                                    <img
+                                    <img loading="lazy"
                                         src={district.coverImage}
                                         alt=""
                                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
@@ -281,9 +278,7 @@ const Home = () => {
                             Latest Official News
                             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                         </h2>
-                        <p className="p-lead text-muted-foreground max-w-2xl mx-auto mt-6">
-                            ဌာန၏ လုပ်ဆောင်ချက်များ၊ သတင်းထုတ်ပြန်ချက်များနှင့် အထူးသတင်းများကို ဤနေရာတွင် စုစည်းတင်ပြထားပါသည်။
-                        </p>
+
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
@@ -371,9 +366,7 @@ const Home = () => {
                         နောက်ဆုံးရ ထုတ်ပြန်ချက်များ
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h2>
-                    <p className="p-lead text-muted-foreground max-w-2xl mx-auto mt-6">
-                        ဌာနမှ ထုတ်ပြန်သော အမိန့်ကြော်ငြာစာများ၊ ညွှန်ကြားချက်များနှင့် အများပြည်သူ သိမှတ်ဖွယ်ရာများကို ဤနေရာတွင် ဖတ်ရှုနိုင်ပါသည်။
-                    </p>
+
                 </div>
 
                 {isAnnouncementsLoading ? (
@@ -390,7 +383,7 @@ const Home = () => {
                             >
                                 <div className="w-full aspect-[1/1.414] bg-secondary/10 relative overflow-hidden border border-border/50 rounded-2xl shadow-sm group-hover:shadow-xl group-hover:border-primary/50 transition-all">
                                     {announcement.documentImages && announcement.documentImages.length > 0 ? (
-                                        <img
+                                        <img loading="lazy"
                                             src={announcement.documentImages[0]}
                                             alt=""
                                             className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
@@ -425,15 +418,15 @@ const Home = () => {
 
     const mappedSections = () => {
         if (isLayoutLoading) {
-             return (
-                 <div className="h-screen flex items-center justify-center">
+            return (
+                <div className="h-screen flex items-center justify-center">
                     <HeroSkeleton />
-                 </div>
-             );
+                </div>
+            );
         }
 
         return layout.filter(s => s.isVisible).map(s => {
-            switch(s.sectionId) {
+            switch (s.sectionId) {
                 case 'hero': return <div key="hero-container">{renderHero()}</div>;
                 case 'stats': return <div key="stats-container">{renderStats()}</div>;
                 case 'services': return <div key="services-container">{renderServices()}</div>;
@@ -451,10 +444,7 @@ const Home = () => {
 
             {isError && (
                 <div className="container-custom py-10">
-                    <div className="bg-destructive/5 border border-destructive/20 p-6 rounded-2xl flex items-center gap-4 text-destructive">
-                        <AlertCircle size={24} />
-                        <p className="font-bold">သတင်းအချက်အလက်များ ရယူရာတွင် အဆင်မပြေမှု ရှိနေပါသည်။</p>
-                    </div>
+                    <NetworkErrorState />
                 </div>
             )}
         </div>

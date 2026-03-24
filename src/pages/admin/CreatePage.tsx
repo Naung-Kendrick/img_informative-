@@ -191,7 +191,7 @@ export default function CreatePage() {
 
                         {imagePreview ? (
                             <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
-                                <img
+                                <img loading="lazy"
                                     src={imagePreview}
                                     alt="Banner preview"
                                     className="w-full max-h-64 object-cover"

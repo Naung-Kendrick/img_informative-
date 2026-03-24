@@ -47,7 +47,7 @@ export default function AboutSection() {
                     <div className="relative animate-in fade-in slide-in-from-right duration-1000 delay-200">
                         {/* Overlapping Primary Frame */}
                         <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-[0_30px_100px_-20px_rgba(0,0,0,0.3)] border-[8px] border-white ring-1 ring-slate-100 aspect-[4/3] group">
-                            <img
+                            <img loading="lazy"
                                 src="/images/about-dept.png"
                                 alt="Department Building"
                                 className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"

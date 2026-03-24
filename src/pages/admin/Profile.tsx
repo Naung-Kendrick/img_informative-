@@ -107,7 +107,7 @@ export default function Profile() {
                         <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
                             <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary/20 group-hover:border-primary transition-all duration-500 relative shadow-inner">
                                 {user.avatar ? (
-                                    <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                                    <img loading="lazy" src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
                                 ) : (
                                     <div className="w-full h-full bg-slate-100 flex items-center justify-center text-slate-300">
                                         <User size={64} />

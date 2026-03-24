@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useGetAnnouncementByIdQuery } from "../store/announcementApiSlice";
 import { ArrowLeft, Calendar, FileText } from "lucide-react";
 import { Skeleton } from "../components/ui/skeleton";
+import NetworkErrorState from "../components/ui/NetworkErrorState";
 
 export default function AnnouncementDetail() {
     const { id } = useParams();
@@ -24,7 +25,15 @@ export default function AnnouncementDetail() {
         );
     }
 
-    if (isError || !announcement) {
+    if (isError) {
+        return (
+            <div className="page-container bg-background flex flex-col items-center text-center animate-in fade-in duration-500 section-padding">
+                <NetworkErrorState />
+            </div>
+        );
+    }
+
+    if (!announcement) {
         return (
             <div className="page-container bg-background flex flex-col items-center text-center animate-in fade-in duration-500 section-padding">
                 <div className="bg-card p-12 rounded-xl shadow-sm border border-border max-w-lg">
@@ -93,7 +102,7 @@ export default function AnnouncementDetail() {
                                     {/* Paper Texture Overlay */}
                                     <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]"></div>
 
-                                    <img
+                                    <img loading="lazy"
                                         src={image}
                                         alt={`${announcement.title} - Page ${idx + 1}`}
                                         className="w-full h-auto max-h-[1100px] object-contain rounded-sm"

@@ -32,7 +32,7 @@ export function ImageWithSkeleton({
         <div className={cn("relative overflow-hidden w-full h-full", containerClassName)}>
             {/* 1. Image Component */}
             {src && (
-                <img
+                <img loading="lazy"
                     src={src}
                     alt={alt}
                     onLoad={() => setIsLoaded(true)}

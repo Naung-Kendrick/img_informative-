@@ -144,7 +144,7 @@ export default function UserManagement() {
                                                 <div className="flex items-center gap-3">
                                                     <div className="h-11 w-11 rounded-full bg-slate-100 flex items-center justify-center text-[#808080] overflow-hidden shrink-0 border border-slate-200 shadow-sm transition-transform hover:scale-105">
                                                         {user.avatar ? (
-                                                            <img src={user.avatar} alt="avatar" className="w-full h-full object-cover" />
+                                                            <img loading="lazy" src={user.avatar} alt="avatar" className="w-full h-full object-cover" />
                                                         ) : (
                                                             <UserIcon size={20} />
                                                         )}

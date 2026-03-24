@@ -2,10 +2,11 @@ import { Flag, Landmark, Building2, ClipboardList, ShieldCheck } from "lucide-re
 import { useTranslation } from "react-i18next";
 import { useGetAboutContentQuery } from "../store/aboutApiSlice";
 import { Skeleton } from "../components/ui/skeleton";
+import NetworkErrorState from "../components/ui/NetworkErrorState";
 
 export default function AboutPage() {
     const { t } = useTranslation();
-    const { data, isLoading } = useGetAboutContentQuery({});
+    const { data, isLoading, isError } = useGetAboutContentQuery({});
 
     const about = data?.about || {};
 
@@ -25,6 +26,14 @@ export default function AboutPage() {
                         <Skeleton className="h-24 w-full rounded-xl" />
                     </div>
                 </div>
+            </div>
+        );
+    }
+
+    if (isError) {
+        return (
+            <div className="container-custom pt-24 min-h-[60vh] flex items-center justify-center">
+                <NetworkErrorState />
             </div>
         );
     }
@@ -55,7 +64,7 @@ export default function AboutPage() {
                     {/* Image Section - Premium Redesign */}
                     <div className="relative w-full max-w-3xl animate-in fade-in zoom-in-95 duration-1000">
                         <div className="aspect-[16/9] rounded-[2.5rem] md:rounded-[4rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-[#f8fafc] border-[12px] md:border-[20px] ring-1 ring-slate-200 bg-white">
-                            <img
+                            <img loading="lazy"
                                 src={about.imageUrl || "/images/about-dept.png"}
                                 alt="Department Image"
                                 className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
@@ -80,11 +89,93 @@ export default function AboutPage() {
                             {about.title || t("about.title")}
                         </h2>
 
-                        <div className="w-full max-w-2xl mx-auto pt-4">
-                            <p className="text-xl md:text-2xl text-slate-600 padauk-regular leading-[1.8] whitespace-pre-wrap font-sans">
-                                {about.description || t("about.description")}
-                            </p>
+                        <div className="w-full max-w-5xl mx-auto pt-6 relative">
+                            {/* Premium Editorial Layout Container */}
+                            <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-slate-50/50 blur-3xl rounded-full" />
+                            
+                            <div className="relative bg-white p-8 md:p-12 lg:p-14 rounded-[2.5rem] md:rounded-[3rem] border border-slate-100 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.05)]">
+                                {/* Subtle accent line */}
+                                <div className="absolute top-0 left-12 w-20 h-1.5 bg-gradient-to-r from-primary/30 to-transparent rounded-b-full" />
+                                
+                                {/* 2-Column Split cuts vertical height in HALF */}
+                                <div className="md:columns-2 gap-12 lg:gap-16 text-[15px] md:text-[16px] text-slate-600 padauk-regular leading-[2.3] text-justify font-sans whitespace-pre-wrap">
+                                    {about.description || t("about.description")}
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* ── OFFICIAL UNIFORMS SECTION ────────────────────────────────────── */}
+            <div className="relative bg-gradient-to-b from-white via-slate-50 to-white py-20 md:py-28 border-t border-slate-100 overflow-hidden">
+                {/* Background decorative elements */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/[0.03] rounded-full blur-[100px] pointer-events-none" />
+
+                <div className="container-custom relative z-10">
+                    {/* Section Header */}
+                    <div className="text-center mb-16">
+                        <div className="flex items-center justify-center gap-4 mb-6">
+                            <div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/30" />
+                            <span className="text-[11px] font-bold text-primary uppercase tracking-[0.4em]">
+                                Official Uniforms
+                            </span>
+                            <div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/30" />
+                        </div>
+                        <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-4">
+                            Department Uniform
+                        </h2>
+                        <p className="text-slate-500 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
+                            {about.uniformDescription || "Standard-issue uniforms of the Immigration Department, reinforcing professionalism, identity, and public trust."}
+                        </p>
+                    </div>
+
+                    {/* Uniform Photos Grid */}
+                    <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                        {/* Uniform Card 1 */}
+                        <div className="group relative animate-in fade-in slide-in-from-bottom-4 duration-700">
+                            <div className="relative bg-white rounded-[2rem] border border-slate-200 shadow-[0_8px_32px_rgba(0,0,0,0.06)] overflow-hidden transition-shadow duration-500 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)]">
+                                <div className="aspect-[3/4] overflow-hidden">
+                                    <img loading="lazy"
+                                        src={about.uniform1Image || "/images/uniform-01.jpg"}
+                                        alt={about.uniform1Name || "Immigration Department Official Uniform - Type A"}
+                                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                                    />
+                                </div>
+                                <div className="p-6 text-center border-t border-slate-100">
+                                    <span className="text-[10px] font-bold text-primary uppercase tracking-[0.3em] block mb-1"></span>
+                                    <h4 className="text-sm font-bold text-slate-800">{about.uniform1Name || "Field Service Uniform — TI - 0010"}</h4>
+                                </div>
+                            </div>
+                            {/* Floating accent */}
+                            <div className="absolute -z-10 -bottom-6 -right-6 w-32 h-32 bg-primary/10 rounded-full blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
+                        </div>
+
+                        {/* Uniform Card 2 */}
+                        <div className="group relative animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
+                            <div className="relative bg-white rounded-[2rem] border border-slate-200 shadow-[0_8px_32px_rgba(0,0,0,0.06)] overflow-hidden transition-shadow duration-500 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)]">
+                                <div className="aspect-[3/4] overflow-hidden">
+                                    <img loading="lazy"
+                                        src={about.uniform2Image || "/images/uniform-02.jpg"}
+                                        alt={about.uniform2Name || "Immigration Department Official Uniform - Type B"}
+                                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                                    />
+                                </div>
+                                <div className="p-6 text-center border-t border-slate-100">
+                                    <span className="text-[10px] font-bold text-primary uppercase tracking-[0.3em] block mb-1"></span>
+                                    <h4 className="text-sm font-bold text-slate-800">{about.uniform2Name || "Field Service Uniform — TI-0099"}</h4>
+                                </div>
+                            </div>
+                            {/* Floating accent */}
+                            <div className="absolute -z-10 -bottom-6 -left-6 w-32 h-32 bg-primary/10 rounded-full blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
+                        </div>
+                    </div>
+
+                    {/* Bottom attribution */}
+                    <div className="text-center mt-12">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">
+                            Immigration Department • Ta'ang Land Government • Official Personnel Standards
+                        </p>
                     </div>
                 </div>
             </div>

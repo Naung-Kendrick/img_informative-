@@ -214,7 +214,7 @@ export default function EditDistrict() {
 
                         {imagePreview ? (
                             <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden group border border-slate-200 shadow-sm">
-                                <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                                <img loading="lazy" src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                                 <div className="absolute inset-0 bg-slate-900/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                     <div className="flex gap-2">
                                         <button

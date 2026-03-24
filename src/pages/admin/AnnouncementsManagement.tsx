@@ -121,7 +121,7 @@ export default function AnnouncementsManagement() {
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 rounded-md bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden">
                                                     {item.documentImages && item.documentImages.length > 0 ? (
-                                                        <img src={item.documentImages[0]} alt="" className="w-full h-full object-cover" />
+                                                        <img loading="lazy" src={item.documentImages[0]} alt="" className="w-full h-full object-cover" />
                                                     ) : (
                                                         <FileText size={18} className="text-slate-400" />
                                                     )}

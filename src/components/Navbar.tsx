@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
-import { Menu, Search, Languages, Loader2, User, LogOut, LayoutDashboard, UserCircle } from "lucide-react"
+import { Menu, Search, Globe, Loader2, User, LogOut, LayoutDashboard, UserCircle } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { useSelector, useDispatch } from "react-redux"
 import { logout } from "../store/authSlice"
@@ -204,7 +204,7 @@ export default function Navbar() {
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-all text-slate-600 group">
-                                        <Languages size={18} className="group-hover:text-primary transition-colors" />
+                                        <Globe size={18} className="group-hover:text-primary transition-colors" />
                                         <span className="text-[11px] font-black uppercase tracking-widest">{i18n.language.startsWith('mm') ? 'မြန်မာ' : 'EN'}</span>
                                     </button>
                                 </DropdownMenuTrigger>
@@ -234,7 +234,7 @@ export default function Navbar() {
                                         <button className="flex items-center gap-3 p-1 pr-3 rounded-full hover:bg-slate-100 transition-all border border-slate-100 group">
                                             <div className="w-9 h-9 rounded-full overflow-hidden bg-primary/10 flex items-center justify-center border-2 border-white group-hover:border-primary/20 transition-all">
                                                 {user?.avatar ? (
-                                                    <img src={user.avatar} alt="Profile" className="w-full h-full object-cover" />
+                                                    <img loading="lazy" src={user.avatar} alt="Profile" className="w-full h-full object-cover" />
                                                 ) : (
                                                     <User size={20} className="text-primary" />
                                                 )}
@@ -283,7 +283,7 @@ export default function Navbar() {
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="outline" size="icon" className="rounded-lg border-slate-200">
-                                        <Languages size={20} className="text-slate-600" />
+                                        <Globe size={20} className="text-slate-600" />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="w-32 rounded-xl border-slate-200 shadow-xl">

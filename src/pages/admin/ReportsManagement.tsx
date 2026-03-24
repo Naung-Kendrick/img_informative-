@@ -151,7 +151,7 @@ export default function ReportsManagement() {
                                         </div>
                                         <div className="flex flex-col items-center gap-2">
                                             {item.images && item.images[0] && (
-                                                <img
+                                                <img loading="lazy"
                                                     src={item.images[0]}
                                                     alt=""
                                                     className="shrink-0 w-16 h-16 rounded-xl object-cover shadow-sm group-hover:shadow border border-slate-200"

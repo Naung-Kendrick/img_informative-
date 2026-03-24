@@ -3,6 +3,7 @@ import type { District } from "../store/districtApiSlice";
 import { MapPin, Phone, Building, ArrowRight, UserCircle } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Skeleton } from "../components/ui/skeleton";
+import NetworkErrorState from "../components/ui/NetworkErrorState";
 import { useTranslation } from "react-i18next";
 
 export default function Districts() {
@@ -54,9 +55,7 @@ export default function Districts() {
                         {t("districts.adminOffices")}
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h1>
-                    <p className="p-lead mt-4">
-                        {t("districts.adminOfficesDesc")}
-                    </p>
+
                 </div>
 
                 {/* Loading State */}
@@ -73,13 +72,7 @@ export default function Districts() {
                         ))}
                     </div>
                 ) : isError ? (
-                    <div className="flex flex-col items-center justify-center py-20 bg-card rounded-2xl shadow-sm border border-destructive/20 max-w-3xl mx-auto text-center">
-                        <div className="w-16 h-16 bg-destructive/10 text-destructive rounded-full flex items-center justify-center mb-4 mx-auto">
-                            <Building size={32} />
-                        </div>
-                        <h2 className="h4 mb-2">{t("districts.networkError")}</h2>
-                        <p className="p-muted">{t("districts.networkErrorDesc")}</p>
-                    </div>
+                    <NetworkErrorState />
                 ) : (
                     /* Display Grid */
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -90,7 +83,7 @@ export default function Districts() {
                             >
                                 {/* Image */}
                                 <div className="aspect-video w-full bg-secondary/20 overflow-hidden relative border-b border-border">
-                                    <img
+                                    <img loading="lazy"
                                         src={district.coverImage}
                                         alt={district.name}
                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"

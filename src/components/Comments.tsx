@@ -102,7 +102,7 @@ export default function Comments({ newsId }: { newsId: string }) {
                 <div className="mb-14 flex gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
                     <div className="w-11 h-11 rounded-full bg-[#1e3a8a] flex items-center justify-center text-white text-lg font-bold shrink-0 shadow-md">
                         {user?.avatar ? (
-                            <img src={user.avatar} alt="" className="w-full h-full object-cover rounded-full" />
+                            <img loading="lazy" src={user.avatar} alt="" className="w-full h-full object-cover rounded-full" />
                         ) : (
                             <span>{user?.name?.[0]?.toUpperCase() || "U"}</span>
                         )}
@@ -153,7 +153,7 @@ export default function Comments({ newsId }: { newsId: string }) {
                         <div key={comment._id} className="flex gap-4 group animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <div className="w-11 h-11 rounded-full bg-[#1e3a8a] flex items-center justify-center text-white text-lg font-bold shrink-0 shadow-md">
                                 {comment.author?.avatar ? (
-                                    <img src={comment.author.avatar} alt="" className="w-full h-full object-cover rounded-full" />
+                                    <img loading="lazy" src={comment.author.avatar} alt="" className="w-full h-full object-cover rounded-full" />
                                 ) : (
                                     <span>{comment.author?.name?.[0]?.toUpperCase() || "A"}</span>
                                 )}

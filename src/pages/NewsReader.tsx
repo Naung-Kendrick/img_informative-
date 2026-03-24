@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../store";
 import Comments from "../components/Comments";
 import ReportModal from "../components/ReportModal";
+import NetworkErrorState from "../components/ui/NetworkErrorState";
 import {
     Loader2,
     ArrowLeft,
@@ -74,7 +75,15 @@ export default function NewsReader() {
         );
     }
 
-    if (isError || !article) {
+    if (isError) {
+        return (
+            <div className="page-container bg-background flex flex-col items-center justify-center min-h-[70vh] px-4">
+                <NetworkErrorState />
+            </div>
+        );
+    }
+
+    if (!article) {
         return (
             <div className="page-container bg-background flex flex-col items-center justify-center min-h-[70vh] px-4">
                 <div className="bg-card p-12 rounded-xl border border-border shadow-xl max-w-md text-center">
@@ -94,7 +103,7 @@ export default function NewsReader() {
             {lightboxImage && (
                 <div className="fixed inset-0 z-[100] bg-foreground/95 flex items-center justify-center p-8 animate-in fade-in duration-300" onClick={() => setLightboxImage(null)}>
                     <button className="absolute top-10 right-10 text-background/50 hover:text-background transition-colors"><X size={32} /></button>
-                    <img src={lightboxImage} alt="Full view" className="max-h-[85vh] max-w-full rounded-sm shadow-2xl animate-in zoom-in-95 duration-500 border border-background/10" />
+                    <img loading="lazy" src={lightboxImage} alt="Full view" className="max-h-[85vh] max-w-full rounded-sm shadow-2xl animate-in zoom-in-95 duration-500 border border-background/10" />
                 </div>
             )}
 
@@ -146,7 +155,7 @@ export default function NewsReader() {
                                     className="relative group overflow-hidden rounded-sm shadow-2xl border border-slate-100 cursor-zoom-in"
                                     onClick={() => setLightboxImage(article.images[0])}
                                 >
-                                    <img src={article.images[0]} alt="" className="w-full aspect-[16/9] object-cover group-hover:scale-[1.03] transition-transform duration-1000" />
+                                    <img loading="lazy" src={article.images[0]} alt="" className="w-full aspect-[16/9] object-cover group-hover:scale-[1.03] transition-transform duration-1000" />
                                     <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                         <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-full text-white">
                                             <Eye size={24} />
@@ -163,7 +172,7 @@ export default function NewsReader() {
                                                 className="aspect-square rounded-sm overflow-hidden border border-slate-200 cursor-zoom-in group relative"
                                                 onClick={() => setLightboxImage(img)}
                                             >
-                                                <img src={img} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                                <img loading="lazy" src={img} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                                                 <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                                             </div>
                                         ))}
@@ -299,7 +308,7 @@ export default function NewsReader() {
                                             <Link key={news._id} to={`/news/${news._id}`} className="group flex gap-4">
                                                 <div className="w-20 h-20 bg-secondary rounded-lg overflow-hidden shrink-0 border border-border">
                                                     {news.images && news.images.length > 0 ? (
-                                                        <img src={news.images[0]} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                                        <img loading="lazy" src={news.images[0]} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                                                     ) : (
                                                         <div className="w-full h-full flex items-center justify-center"><Tag size={20} className="text-muted-foreground/30" /></div>
                                                     )}

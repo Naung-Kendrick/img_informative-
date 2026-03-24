@@ -75,7 +75,7 @@ const LegalPage = () => {
                             <section className="bg-foreground/[0.02] p-6 rounded-2xl border border-border">
                                 <h4 className="font-bold text-foreground mb-3 uppercase tracking-widest text-xs">Article 4: Right of Refusal</h4>
                                 <p className="text-sm text-muted-foreground italic">
-                                    The Ta'ang Land Federal Unit Government Of Immigration Department reserves the right to terminate access to digital services for any user suspected of affiliation with non-recognized entities or those found in violation of Section 66 (Anti-state propaganda) of the Civil Code.
+                                    The Ta'ang Land Government Of Immigration Department reserves the right to terminate access to digital services for any user suspected of affiliation with non-recognized entities or those found in violation of Section 66 (Anti-state propaganda) of the Civil Code.
                                 </p>
                             </section>
 
@@ -173,7 +173,7 @@ const LegalPage = () => {
                     <div className="lg:col-span-8 bg-card border border-border rounded-[2.5rem] p-8 md:p-12 shadow-sm relative overflow-hidden">
                         {/* Legal Watermark Background */}
                         <div className="absolute top-20 right-[-10%] opacity-[0.03] pointer-events-none select-none -rotate-12">
-                            <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="" className="w-96 h-auto" />
+                            <img loading="lazy" src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="" className="w-96 h-auto" />
                         </div>
 
                         <div className="relative z-10">

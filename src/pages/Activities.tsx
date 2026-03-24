@@ -5,6 +5,7 @@ import { useGetAllNewsQuery } from "../store/newsApiSlice";
 import { useGetAllDistrictsQuery } from "../store/districtApiSlice";
 import { ArrowRight, Calendar, User, Zap, Search, Filter, X, MapPin } from "lucide-react";
 import { Skeleton } from "../components/ui/skeleton";
+import NetworkErrorState from "../components/ui/NetworkErrorState";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -26,15 +27,15 @@ export default function Activities() {
         if (!isActivity) return false;
 
         const matchesSearch = searchQuery
-            ? (item.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-               item.author?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-               item.district?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-               item.township?.toLowerCase().includes(searchQuery.toLowerCase()))
+            ? (item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                item.author?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                item.district?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                item.township?.toLowerCase().includes(searchQuery.toLowerCase()))
             : true;
 
-        const matchesDistrict = filterDistrict 
+        const matchesDistrict = filterDistrict
             ? (
-                (item.district?.toLowerCase().includes(filterDistrict.toLowerCase().trim())) || 
+                (item.district?.toLowerCase().includes(filterDistrict.toLowerCase().trim())) ||
                 (item.township?.toLowerCase().includes(filterDistrict.toLowerCase().trim())) ||
                 (filterDistrict.toLowerCase().trim().includes(item.district?.toLowerCase().trim() || "___")) ||
                 (filterDistrict.toLowerCase().trim().includes(item.township?.toLowerCase().trim() || "___"))
@@ -70,9 +71,7 @@ export default function Activities() {
                         {t("activities.title")}
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h1>
-                    <p className="p-lead mt-4">
-                        {t("activities.subtitle")}
-                    </p>
+
                 </div>
 
                 {/* Filters */}
@@ -99,7 +98,7 @@ export default function Activities() {
                         className="pl-3 pr-8 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all p-small cursor-pointer"
                     >
                         <option value="">{t("common.allDistricts", "ရုံးခွဲအားလုံး")}</option>
-                        {[...districtsList].sort((a,b) => a.name.localeCompare(b.name)).map(d => (
+                        {[...districtsList].sort((a, b) => a.name.localeCompare(b.name)).map(d => (
                             <option key={d._id} value={d.name}>{d.name.trim()}</option>
                         ))}
                     </select>
@@ -140,12 +139,7 @@ export default function Activities() {
                         ))}
                     </div>
                 ) : isError ? (
-                    <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
-                        <div className="bg-destructive/10 text-destructive p-8 rounded-xl border border-destructive/20 max-w-lg">
-                            <h2 className="h4 mb-3">Access Error</h2>
-                            <p className="p-muted text-destructive/80">Unable to retrieve activity logs from the secure server. Please try again later.</p>
-                        </div>
-                    </div>
+                    <NetworkErrorState />
                 ) : activities.length === 0 ? (
                     <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
                         <div className="bg-muted/50 text-muted-foreground p-12 rounded-xl max-w-lg border border-border">
@@ -165,7 +159,7 @@ export default function Activities() {
                                 >
                                     <div className="aspect-[16/10] bg-secondary/20 relative overflow-hidden shrink-0">
                                         {news.images && news.images.length > 0 ? (
-                                            <img src={news.images[0]} alt={news.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
+                                            <img loading="lazy" src={news.images[0]} alt={news.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center text-muted-foreground/30 font-bold uppercase tracking-widest text-[10px]">
                                                 Archive Image

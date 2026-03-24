@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useGetPageByIdQuery } from "../store/pageApiSlice";
 import Breadcrumbs from "../components/Breadcrumbs";
 import ShareButtons from "../components/ShareButtons";
+import NetworkErrorState from "../components/ui/NetworkErrorState";
 import { Loader2, ArrowLeft, MapPin, Briefcase, X, ZoomIn, Download } from "lucide-react";
 
 export default function PageReader() {
@@ -33,7 +34,15 @@ export default function PageReader() {
         );
     }
 
-    if (isError || !page) {
+    if (isError) {
+        return (
+            <div className="page-container bg-background flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
+                <NetworkErrorState />
+            </div>
+        );
+    }
+
+    if (!page) {
         return (
             <div className="page-container bg-background flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
                 <h2 className="h2 mb-4">{t("pageReader.notFound")}</h2>
@@ -64,7 +73,7 @@ export default function PageReader() {
                         <X size={32} />
                     </button>
                     <div className="relative group max-w-6xl w-full flex flex-col items-center">
-                        <img
+                        <img loading="lazy"
                             src={lightboxImage}
                             alt="Full view"
                             className="max-h-[80vh] max-w-full rounded-sm shadow-2xl animate-in zoom-in-95 duration-300 pointer-events-none border border-background/10"
@@ -106,7 +115,7 @@ export default function PageReader() {
                             className="relative group mb-12 overflow-hidden rounded-2xl shadow-xl cursor-zoom-in border border-border"
                             onClick={() => setLightboxImage(page.bannerImage)}
                         >
-                            <img
+                            <img loading="lazy"
                                 src={page.bannerImage}
                                 alt={page.title}
                                 className="w-full aspect-[16/9] object-cover group-hover:scale-[1.02] transition-transform duration-700"
@@ -143,7 +152,7 @@ export default function PageReader() {
                         </Link>
 
                         <div className="flex items-center gap-4">
-                            <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest hidden sm:block">Public Archive</span>
+                            {/* <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest hidden sm:block"></span> */}
                             <ShareButtons
                                 url={window.location.href}
                                 title={page.title}

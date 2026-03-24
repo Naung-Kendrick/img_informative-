@@ -122,7 +122,7 @@ export default function NewsInteractionsManagement() {
                                     <tr key={likeUser._id || idx} className="hover:bg-slate-50 transition-colors">
                                         <td className="py-3 px-4 flex items-center gap-3">
                                             {likeUser.avatar ? (
-                                                <img src={likeUser.avatar} alt="Avatar" className="w-8 h-8 rounded-full border border-slate-200 object-cover" />
+                                                <img loading="lazy" src={likeUser.avatar} alt="Avatar" className="w-8 h-8 rounded-full border border-slate-200 object-cover" />
                                             ) : (
                                                 <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs text-slate-500 border border-slate-200">
                                                     {likeUser.name?.charAt(0).toUpperCase() || 'U'}
@@ -170,7 +170,7 @@ export default function NewsInteractionsManagement() {
                                         <td className="py-4 px-4">
                                             <div className="flex items-start gap-3">
                                                 {comment.author?.avatar ? (
-                                                    <img src={comment.author.avatar} alt="Avatar" className="shrink-0 w-8 h-8 rounded-full border border-slate-200 object-cover mt-1" />
+                                                    <img loading="lazy" src={comment.author.avatar} alt="Avatar" className="shrink-0 w-8 h-8 rounded-full border border-slate-200 object-cover mt-1" />
                                                 ) : (
                                                     <div className="shrink-0 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs text-slate-500 border border-slate-200 mt-1">
                                                         {comment.author?.name?.charAt(0).toUpperCase() || 'U'}

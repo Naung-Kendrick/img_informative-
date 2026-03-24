@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import PageLoader from "./components/PageLoader"
 import PwaUpdater from "./components/PwaUpdater"
 import OfflineBanner from "./components/OfflineBanner"
-
+import ErrorBoundary from "./components/ErrorBoundary"
 // Core Layout & Guard Components (Kept synchronous to prevent initial flash)
 import Layout from "./components/Layout"
 import AdminLayout from "./components/admin/AdminLayout"
@@ -65,8 +65,9 @@ function App() {
       <PwaUpdater />
       <OfflineBanner />
       <BrowserRouter>
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
+        <ErrorBoundary>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
             {/* Public / Client Site Routes */}
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
@@ -163,7 +164,8 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
-        </Suspense>
+          </Suspense>
+        </ErrorBoundary>
       </BrowserRouter>
     </>
   )

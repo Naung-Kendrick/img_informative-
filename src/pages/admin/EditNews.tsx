@@ -249,7 +249,7 @@ export default function EditNews() {
                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                             {imagePreviews.map((src, index) => (
                                 <div key={index} className="relative group aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-50 shadow-sm">
-                                    <img src={src} alt="" className="w-full h-full object-cover" />
+                                    <img loading="lazy" src={src} alt="" className="w-full h-full object-cover" />
                                     <button type="button" onClick={() => handleRemoveImage(index)} className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"><X size={14} /></button>
                                     {src.startsWith("blob:") && <div className="absolute bottom-0 inset-x-0 bg-blue-600/80 text-[8px] text-white py-0.5 text-center font-bold uppercase">New</div>}
                                 </div>

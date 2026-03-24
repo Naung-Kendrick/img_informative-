@@ -79,7 +79,7 @@ export default function Contact() {
 
                             <div className="space-y-10 relative z-10">
                                 <div>
-                                    <div className="text-[10px] text-white/50 font-bold uppercase tracking-widest mb-3">Primary Physical Address</div>
+                                    <div className="text-[10px] text-white/50 font-bold uppercase tracking-widest mb-3">Office Address</div>
                                     <p className="text-base font-bold leading-relaxed text-white padauk-bold">
                                         {info ? (currentLang === 'en' ? info.address_en : info.address_mm) : t("contact.address")}
                                     </p>
@@ -91,7 +91,7 @@ export default function Contact() {
                                             <Phone size={20} className="text-white" />
                                         </div>
                                         <div>
-                                            <div className="text-[10px] text-white/50 font-bold uppercase tracking-widest mb-1">Official Hotline</div>
+                                            <div className="text-[10px] text-white/50 font-bold uppercase tracking-widest mb-1">Official Phone Number</div>
                                             <div className="font-bold text-white text-lg tracking-wide">
                                                 {info?.phone || "+95 9 444 333 555"}
                                             </div>
@@ -103,8 +103,8 @@ export default function Contact() {
                                             <Mail size={20} className="text-white" />
                                         </div>
                                         <div>
-                                            <div className="text-[10px] text-white/50 font-bold uppercase tracking-widest mb-1">Electronic Mail</div>
-                                            <p className="font-bold text-white text-lg tracking-wide uppercase break-all">
+                                            <div className="text-[10px] text-white/50 font-bold uppercase tracking-widest mb-1">Mail</div>
+                                            <p className="font-bold text-white text-[13px] tracking-wide break-all opacity-90">
                                                 {info?.email || "info@immigration.tlfug.gov"}
                                             </p>
                                         </div>
@@ -112,7 +112,7 @@ export default function Contact() {
                                 </div>
                             </div>
 
-                            <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="" className="absolute -bottom-10 -right-10 w-48 opacity-[0.05] grayscale invert rotate-12 pointer-events-none" />
+                            <img loading="lazy" src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="" className="absolute -bottom-10 -right-10 w-48 opacity-[0.05] grayscale invert rotate-12 pointer-events-none" />
                         </div>
 
                         {/* Administrative Hours */}
@@ -157,7 +157,7 @@ export default function Contact() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="space-y-3">
                                         <label className="p-small text-muted-foreground">
-                                            Full Representative Name <span className="text-primary">*</span>
+                                            Name <span className="text-primary">*</span>
                                         </label>
                                         <input
                                             type="text"
