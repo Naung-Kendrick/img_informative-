@@ -12,7 +12,6 @@ import {
     User,
     FileText,
     IdCard,
-    AlertCircle,
     ChevronLeft,
     ChevronRight
 } from "lucide-react";

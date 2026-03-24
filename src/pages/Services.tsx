@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { IdCard, BookOpen, ArrowRight, AlertCircle, Briefcase } from "lucide-react";
+import { IdCard, BookOpen, ArrowRight, Briefcase } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useGetPagesBySectionQuery } from "../store/pageApiSlice";

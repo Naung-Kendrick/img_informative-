@@ -1,0 +1,2 @@
+﻿src/components/ErrorBoundary.tsx(1,21): error TS1484: 'ErrorInfo' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/ErrorBoundary.tsx(1,32): error TS1484: 'ReactNode' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
