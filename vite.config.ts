@@ -47,7 +47,7 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
         runtimeCaching: [
           {
-            urlPattern: /^http:\/\/127\.0\.0\.1:3000\/.*/i,
+            urlPattern: /^(http:\/\/127\.0\.0\.1:3000|https:\/\/img-informative-backend-2sbj\.onrender\.com)\/.*/i,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'api-cache',
