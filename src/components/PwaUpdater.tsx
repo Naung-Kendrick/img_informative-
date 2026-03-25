@@ -1,7 +1,7 @@
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { RefreshCw, Download, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useModal } from '../context/ModalContext';
+// import { useModal } from '../context/ModalContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /**
@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function PwaUpdater() {
     const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
     const [showInstallBtn, setShowInstallBtn] = useState(false);
-    const { showSuccess } = useModal();
+    // const { showSuccess } = useModal();
 
     const {
         offlineReady: [offlineReady, setOfflineReady],
