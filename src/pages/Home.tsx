@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useGetAllNewsQuery } from "../store/newsApiSlice";
@@ -43,33 +43,45 @@ const Home = () => {
     const { data: services = [], isLoading: isServicesLoading } = useGetPagesBySectionQuery("services");
 
     // Filter for Published services
-    const publishedServices = services.filter(s => s.status === "Published").slice(0, 2);
+    const publishedServices = useMemo(() => 
+        services.filter(s => s.status === "Published").slice(0, 2),
+    [services]);
 
     // Filter for Published news
-    const publishedNews = allNews.filter(n => n.status === "Published");
+    const publishedNews = useMemo(() => 
+        allNews.filter(n => n.status === "Published"),
+    [allNews]);
 
     // Latest news for Hero and Feed
-    const sortedNews = [...publishedNews].sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+    const sortedNews = useMemo(() => 
+        [...publishedNews].sort(
+            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        ),
+    [publishedNews]);
 
     const heroNews = sortedNews[0];
     const allFeedNews = sortedNews.slice(1);
 
     // Latest 5 Announcements
-    const latestAnnouncements = [...announcements]
-        .sort((a, b) => new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime())
-        .slice(0, 5);
+    const latestAnnouncements = useMemo(() => 
+        [...announcements]
+            .sort((a, b) => new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime())
+            .slice(0, 5),
+    [announcements]);
 
     // Districts (Top 3 for home)
-    const displayDistricts = districts.slice(0, 3);
+    const displayDistricts = useMemo(() => 
+        districts.slice(0, 3), 
+    [districts]);
 
     // Pagination for News Feed
     const totalPages = Math.ceil(allFeedNews.length / newsPerPage);
-    const paginatedFeed = allFeedNews.slice(
-        (currentPage - 1) * newsPerPage,
-        currentPage * newsPerPage
-    );
+    const paginatedFeed = useMemo(() => 
+        allFeedNews.slice(
+            (currentPage - 1) * newsPerPage,
+            currentPage * newsPerPage
+        ),
+    [allFeedNews, currentPage, newsPerPage]);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -234,7 +246,7 @@ const Home = () => {
                     {isDistrictsLoading ? (
                         [1, 2, 3].map(i => <Skeleton key={i} className="aspect-[16/10] rounded-3xl" />)
                     ) : (
-                        displayDistricts.map((district: any) => (
+                        displayDistricts.map((district) => (
                             <Link key={district._id} to="/districts" className="group flex flex-col overflow-hidden bg-card border border-border rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500">
                                 <div className="aspect-[16/10] bg-secondary/20 relative overflow-hidden">
                                     <img loading="lazy"

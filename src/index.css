@@ -10,8 +10,8 @@
   --color-brand-gold: #D4AF37;
   --color-brand-silver: #E2E8F0;
 
-  --font-sans: "Times New Roman", "Pyidaungsu", "Myanmar Text", serif;
-  --font-heading: "Times New Roman", "Pyidaungsu", "Myanmar Text", serif;
+  --font-sans: "Noto Sans Myanmar", "Padauk", "Pyidaungsu", "Myanmar Text", sans-serif;
+  --font-heading: "Noto Sans Myanmar", "Padauk", "Pyidaungsu", "Myanmar Text", sans-serif;
 
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
@@ -208,12 +208,12 @@
 
 @layer utilities {
   .padauk-regular {
-    font-family: "Times New Roman", "Pyidaungsu", "Myanmar Text", serif;
+    font-family: "Padauk", "Noto Sans Myanmar", sans-serif;
     font-weight: 400;
   }
 
   .padauk-bold {
-    font-family: "Times New Roman", "Pyidaungsu", "Myanmar Text", serif;
+    font-family: "Padauk", "Noto Sans Myanmar", sans-serif;
     font-weight: 700;
   }
 }

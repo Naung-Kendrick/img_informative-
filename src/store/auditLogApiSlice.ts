@@ -17,8 +17,8 @@ export interface AuditLog {
     };
     actorName: string;
     details: {
-        before?: any;
-        after?: any;
+        before?: Record<string, unknown>;
+        after?: Record<string, unknown>;
         description: string;
     };
     ipAddress?: string;

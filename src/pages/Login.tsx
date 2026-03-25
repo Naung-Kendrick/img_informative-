@@ -5,7 +5,13 @@ import { Loader2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { useLoginMutation, useGoogleLoginMutation, useRegisterMutation } from "../store/authApiSlice";
 import { setCredentials } from "../store/authSlice";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
+
+interface AuthError {
+    data?: {
+        message?: string;
+    };
+}
 
 export default function Login() {
     const { t } = useTranslation();
@@ -43,14 +49,15 @@ export default function Login() {
             } else {
                 navigate("/");
             }
-        } catch (err: any) {
+        } catch (err) {
             console.error("Authentication Error:", err);
         }
     };
 
-    const handleGoogleSuccess = async (credentialResponse: any) => {
+    const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
         try {
-            // Send the credential back using the mutation
+            if (!credentialResponse.credential) return;
+            
             const loginData = await googleLogin({ token: credentialResponse.credential }).unwrap();
 
             dispatch(
@@ -65,7 +72,7 @@ export default function Login() {
             } else {
                 navigate("/");
             }
-        } catch (err: any) {
+        } catch (err) {
             console.error("Google Login Error:", err);
         }
     };
@@ -111,7 +118,7 @@ export default function Login() {
 
                     {(isError || isRegisterError) && (
                         <div className="bg-destructive/10 text-destructive text-sm p-4 text-center rounded-lg mb-6 border border-destructive/20 animate-in shake">
-                            {((error || registerError) as any)?.data?.message || (isRegistering ? "Registration failed. Please try again." : t("login.failed"))}
+                            {((error || registerError) as AuthError)?.data?.message || (isRegistering ? "Registration failed. Please try again." : t("login.failed"))}
                         </div>
                     )}
 

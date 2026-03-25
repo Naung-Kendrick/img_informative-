@@ -20,7 +20,7 @@ import {
     DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
 
-const getLinks = (t: any) => [
+const getLinks = (t: (key: string) => string) => [
     { name: t("nav.home"), path: "/" },
     { name: t("nav.activities"), path: "/activities" },
     { name: t("nav.services"), path: "/services" },
@@ -103,7 +103,6 @@ export default function Navbar() {
         }
     }, [searchQuery]);
 
-    // Live results calculation
     const liveResults = useMemo(() => {
         if (debouncedQuery.trim().length < 2) return [];
 
@@ -311,7 +310,7 @@ export default function Navbar() {
                                                     onKeyDown={(e) => {
                                                         if (e.key === "Enter" && searchQuery.trim().length >= 2) {
                                                             const results = allNews.filter(
-                                                                (n: any) => n.status === "Published" &&
+                                                                (n) => n.status === "Published" &&
                                                                     (n.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                                                                         n.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
                                                                         (n.author?.name || "").toLowerCase().includes(searchQuery.toLowerCase()))

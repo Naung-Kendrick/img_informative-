@@ -10,14 +10,16 @@ export default function Districts() {
     const { t } = useTranslation();
     const { data: districts, isLoading, isError } = useGetAllDistrictsQuery();
 
-    const fallbackDistricts = [
+    const fallbackDistricts: District[] = [
         {
             _id: "1",
             name: "နမ့်ဆန်မြို့နယ်ရုံး",
             address: "ခရိုင်အထွေထွေအုပ်ချုပ်ရေးဦးစီးဌာနရုံး၊ နမ့်ဆန်မြို့",
             phone: "09-xxxxxxxxx",
             coverImage: "https://images.unsplash.com/photo-1596401057633-54a8fe8ef647?q=80&w=800&auto=format&fit=crop",
-            mapUrl: "#"
+            mapUrl: "#",
+            order: 0,
+            createdAt: new Date().toISOString()
         },
         {
             _id: "2",
@@ -25,7 +27,9 @@ export default function Districts() {
             address: "ခရိုင်အထွေထွေအုပ်ချုပ်ရေးဦးစီးဌာနရုံး၊ မန်တုံမြို့",
             phone: "09-xxxxxxxxx",
             coverImage: "https://images.unsplash.com/photo-1582298538104-efa9acff89ed?q=80&w=800&auto=format&fit=crop",
-            mapUrl: "#"
+            mapUrl: "#",
+            order: 1,
+            createdAt: new Date().toISOString()
         },
         {
             _id: "3",
@@ -33,7 +37,9 @@ export default function Districts() {
             address: "ခရိုင်အထွေထွေအုပ်ချုပ်ရေးဦးစီးဌာနရုံး၊ နမ့်ခမ်းမြို့",
             phone: "09-xxxxxxxxx",
             coverImage: "https://images.unsplash.com/photo-1542361345-89e58247f2d5?q=80&w=800&auto=format&fit=crop",
-            mapUrl: "#"
+            mapUrl: "#",
+            order: 2,
+            createdAt: new Date().toISOString()
         }
     ];
 
@@ -76,7 +82,7 @@ export default function Districts() {
                 ) : (
                     /* Display Grid */
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                        {displayDistricts.map((district: District | any) => (
+                        {displayDistricts.map((district: District) => (
                             <div
                                 key={district._id}
                                 className="group bg-card rounded-2xl shadow-sm border border-border overflow-hidden hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col pt-0"
