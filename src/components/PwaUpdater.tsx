@@ -37,11 +37,13 @@ export default function PwaUpdater() {
 
         window.addEventListener('beforeinstallprompt', handler);
 
-        // 2. Handle Feedback
+        // 2. Handle Feedback (Disabled as per user request to remove notice box)
+        /*
         if (offlineReady) {
             showSuccess('ဗားရှင်းအသစ်', 'အော့ဖ်လိုင်း အသုံးပြုရန် အဆင်သင့်ဖြစ်ပါပြီ။');
             setOfflineReady(false);
         }
+        */
 
         return () => window.removeEventListener('beforeinstallprompt', handler);
     }, [offlineReady, setOfflineReady]);
