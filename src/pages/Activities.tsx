@@ -75,13 +75,13 @@ export default function Activities() {
                 </div>
 
                 {/* Filters */}
-                <div className="mb-12 bg-card border border-border rounded-xl p-4 shadow-sm flex flex-wrap items-center gap-4">
-                    <div className="flex items-center gap-2 text-primary font-bold px-2 border-r border-border mr-2">
+                <div className="mb-8 sm:mb-12 bg-card border border-border rounded-xl p-3 sm:p-4 shadow-sm flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+                    <div className="hidden sm:flex items-center gap-2 text-primary font-bold px-2 border-r border-border mr-2">
                         <Filter size={18} />
                         <span className="p-small font-bold hidden md:inline">{t("common.filter", "စစ်ထုတ်ရန်")}</span>
                     </div>
 
-                    <div className="relative flex-1 min-w-[200px]">
+                    <div className="relative flex-1 min-w-0 sm:min-w-[200px]">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
                         <input
                             type="text"
@@ -150,7 +150,7 @@ export default function Activities() {
                     </div>
                 ) : (
                     <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 sm:gap-x-8 gap-y-8 sm:gap-y-12">
                             {paginatedItems.map((news) => (
                                 <Link
                                     key={news._id}
@@ -172,8 +172,8 @@ export default function Activities() {
                                         </div>
                                     </div>
 
-                                    <div className="p-8 flex flex-col flex-grow">
-                                        <div className="flex flex-wrap items-center gap-4 mb-6">
+                                    <div className="p-5 sm:p-8 flex flex-col flex-grow">
+                                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
                                             <div className="flex items-center gap-2 p-small text-muted-foreground">
                                                 <Calendar size={12} className="text-primary/70" />
                                                 {new Date(news.createdAt).toLocaleDateString('en-GB')}
@@ -213,7 +213,7 @@ export default function Activities() {
                                     <button
                                         key={idx}
                                         onClick={() => handlePageChange(idx + 1)}
-                                        className={`w-12 h-12 rounded-xl p-small transition-all ${currentPage === idx + 1
+                                        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl p-small transition-all ${currentPage === idx + 1
                                             ? "bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-110 z-10"
                                             : "bg-card border border-border text-muted-foreground hover:bg-muted/50 hover:text-primary"
                                             }`}

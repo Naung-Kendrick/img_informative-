@@ -49,7 +49,7 @@ const LegalPage = () => {
                                 </p>
                             </section>
 
-                            <div className="p-6 bg-primary/5 border border-primary/20 rounded-2xl italic text-primary/80 text-sm">
+                            <div className="p-6 bg-primary/5 border border-primary/20 rounded-2xl text-primary/80 text-sm">
                                 "The security of the individual's data is secondary only to the security of the Federal Unit." — Preamble, 2025 Departmental Manual.
                             </div>
                         </div>
@@ -74,7 +74,7 @@ const LegalPage = () => {
 
                             <section className="bg-foreground/[0.02] p-6 rounded-2xl border border-border">
                                 <h4 className="font-bold text-foreground mb-3 uppercase tracking-widest text-xs">Article 4: Right of Refusal</h4>
-                                <p className="text-sm text-muted-foreground italic">
+                                <p className="text-sm text-muted-foreground">
                                     The Ta'ang Land Government Of Immigration Department reserves the right to terminate access to digital services for any user suspected of affiliation with non-recognized entities or those found in violation of Section 66 (Anti-state propaganda) of the Civil Code.
                                 </p>
                             </section>
@@ -162,7 +162,7 @@ const LegalPage = () => {
                         </div>
                         <div>
                             <span className="text-[10px] font-bold text-primary uppercase tracking-[0.3em] mb-2 block">Official State Document</span>
-                            <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter uppercase italic">{legal.title}</h1>
+                            <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter uppercase">{legal.title}</h1>
                             <p className="text-muted-foreground mt-2 text-lg">{legal.subtitle}</p>
                         </div>
                     </div>

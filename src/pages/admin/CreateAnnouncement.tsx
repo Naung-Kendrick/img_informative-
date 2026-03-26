@@ -165,7 +165,7 @@ export default function CreateAnnouncement() {
                         </div>
                     </div>
 
-                    <p className="text-sm text-slate-500 bg-slate-50 p-4 rounded-xl border border-slate-100 italic padauk-regular flex items-start gap-3 leading-relaxed mt-4">
+                    <p className="text-sm text-slate-500 bg-slate-50 p-4 rounded-xl border border-slate-100 padauk-regular flex items-start gap-3 leading-relaxed mt-4">
                         <FileText size={20} className="text-primary shrink-0 mt-0.5" />
                         မှတ်ချက်။ ထုတ်ပြန်ချက်များတွင် စာသားအပြည့်အစုံ ရိုက်ထည့်ရန် မလိုပါ။ လိုအပ်သော ခေါင်းစဉ်နှင့် ရည်ညွှန်းအမှတ်စဉ်များကိုသာ ထည့်သွင်းပြီး မူရင်း A4 စာရွက်ပုံစံကို ဓာတ်ပုံဖြင့်သာ တိုက်ရိုက် လွှင့်တင်ရမည် ဖြစပါသည်။
                     </p>

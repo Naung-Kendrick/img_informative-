@@ -141,19 +141,19 @@ export default function Navbar() {
     return (
         <header className="sticky top-0 z-40 w-full shadow-md transition-all duration-300">
             {/* Top Tier: Official Identity & Critical Actions */}
-            <div className="bg-white border-b border-slate-100 py-2 lg:py-3">
-                <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px]">
+            <div className="bg-white border-b border-slate-100 py-1.5 sm:py-2 lg:py-3">
+                <div className="w-full px-3 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px]">
                     <div className="flex items-center justify-between gap-3 lg:gap-8">
                         {/* Identity Module */}
-                        <Link to="/" className="flex items-center gap-3 sm:gap-4 lg:gap-5 group min-w-0">
+                        <Link to="/" className="flex items-center gap-2 sm:gap-4 lg:gap-5 group min-w-0">
                             <div className="relative flex-shrink-0">
-                                <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="Dept Seal" className="h-12 sm:h-14 lg:h-16 w-auto object-contain drop-shadow-md" />
+                                <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="Dept Seal" className="h-10 sm:h-14 lg:h-16 w-auto object-contain drop-shadow-md" />
                             </div>
                             <div className="flex flex-col min-w-0 justify-center">
-                                <span className="text-[14px] sm:text-[16px] lg:text-[20px] font-[800] leading-[1.3] lg:leading-tight text-slate-800 group-hover:text-primary transition-colors pr-2">
+                                <span className="text-[12px] sm:text-[16px] lg:text-[20px] font-[800] leading-[1.25] lg:leading-tight text-slate-800 group-hover:text-primary transition-colors pr-1 sm:pr-2 line-clamp-2">
                                     {t("nav.deptTitle")}
                                 </span>
-                                <span className="text-[8px] sm:text-[10px] lg:text-[12px] text-slate-500 font-bold tracking-[0.1em] lg:tracking-[0.15em] uppercase mt-0.5 opacity-90">
+                                <span className="text-[7px] sm:text-[10px] lg:text-[12px] text-slate-500 font-bold tracking-[0.08em] sm:tracking-[0.1em] lg:tracking-[0.15em] uppercase mt-0.5 opacity-90 line-clamp-1">
                                     {t("nav.deptSubtitle")}
                                 </span>
                             </div>
@@ -182,7 +182,7 @@ export default function Navbar() {
                                 {searchOpen && searchQuery.trim().length >= 2 && (
                                     <div className="absolute right-0 top-full mt-2 w-full bg-white shadow-2xl rounded-xl border border-slate-200 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2">
                                         {liveResults.length === 0 && !isSearching ? (
-                                            <div className="p-4 text-center text-sm text-slate-500 italic">{t("nav.noSearchRes")}</div>
+                                            <div className="p-4 text-center text-sm text-slate-500">{t("nav.noSearchRes")}</div>
                                         ) : (
                                             <div className="flex flex-col">
                                                 {liveResults.map((news) => (
@@ -278,11 +278,11 @@ export default function Navbar() {
                         </div>
 
                         {/* Mobile Controls */}
-                        <div className="lg:hidden flex items-center gap-2">
+                        <div className="lg:hidden flex items-center gap-1.5 sm:gap-2">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" size="icon" className="rounded-lg border-slate-200">
-                                        <Globe size={20} className="text-slate-600" />
+                                    <Button variant="outline" size="icon" className="rounded-lg border-slate-200 h-9 w-9 sm:h-10 sm:w-10">
+                                        <Globe size={18} className="text-slate-600" />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="w-32 rounded-xl border-slate-200 shadow-xl">
@@ -293,11 +293,11 @@ export default function Navbar() {
 
                             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                                 <SheetTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="text-slate-600">
-                                        <Menu className="h-6 w-6" />
+                                    <Button variant="ghost" size="icon" className="text-slate-600 h-9 w-9 sm:h-10 sm:w-10">
+                                        <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
                                     </Button>
                                 </SheetTrigger>
-                                <SheetContent side="right" className="w-[300px] p-0 border-l border-slate-200">
+                                <SheetContent side="right" className="w-[280px] sm:w-[300px] p-0 border-l border-slate-200">
                                     <div className="p-4 border-b border-slate-100">
                                         <div className="relative">
                                             <div className="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
@@ -331,7 +331,7 @@ export default function Navbar() {
                                             {searchQuery.trim().length >= 2 && (
                                                 <div className="absolute left-0 right-0 top-full mt-2 bg-white shadow-xl rounded-xl border border-slate-200 z-50 overflow-hidden">
                                                     {liveResults.length === 0 && !isSearching ? (
-                                                        <div className="p-4 text-center text-sm text-slate-500 italic">{t("nav.noSearchRes")}</div>
+                                                        <div className="p-4 text-center text-sm text-slate-500">{t("nav.noSearchRes")}</div>
                                                     ) : (
                                                         <div className="flex flex-col max-h-64 overflow-y-auto">
                                                             {liveResults.map((news) => (
@@ -348,12 +348,12 @@ export default function Navbar() {
                                             )}
                                         </div>
                                     </div>
-                                    <div className="p-4 space-y-1">
+                                    <div className="p-3 sm:p-4 space-y-0.5 overflow-y-auto max-h-[calc(100dvh-200px)]">
                                         {links.map((link) => (
                                             <SheetClose asChild key={link.name}>
                                                 <Link
                                                     to={link.path}
-                                                    className={`flex items-center p-4 rounded-xl text-md font-bold transition-all ${isActive(link.path)
+                                                    className={`flex items-center p-3 sm:p-4 rounded-xl text-[14px] sm:text-md font-bold transition-all ${isActive(link.path)
                                                         ? "bg-primary/10 text-primary"
                                                         : "text-slate-600 hover:bg-slate-50"
                                                         }`}
@@ -363,23 +363,23 @@ export default function Navbar() {
                                             </SheetClose>
                                         ))}
                                     </div>
-                                    <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-slate-100 bg-white">
+                                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 border-t border-slate-100 bg-white pb-[calc(1rem+env(safe-area-inset-bottom))]">
                                         {isAuthenticated ? (
-                                            <div className="space-y-3">
-                                                <Button asChild variant="outline" className="w-full py-6 rounded-xl font-bold flex items-center justify-center gap-2 border-slate-200">
+                                            <div className="space-y-2 sm:space-y-3">
+                                                <Button asChild variant="outline" className="w-full py-5 sm:py-6 rounded-xl font-bold flex items-center justify-center gap-2 border-slate-200">
                                                     <Link to="/admin">
                                                         <LayoutDashboard size={18} />
                                                         {t("nav.admin")}
                                                     </Link>
                                                 </Button>
-                                                <Button onClick={handleLogout} variant="destructive" className="w-full py-6 rounded-xl font-bold flex items-center justify-center gap-2">
+                                                <Button onClick={handleLogout} variant="destructive" className="w-full py-5 sm:py-6 rounded-xl font-bold flex items-center justify-center gap-2">
                                                     <LogOut size={18} />
                                                     {t("nav.logout")}
                                                 </Button>
                                             </div>
                                         ) : (
                                             <SheetClose asChild>
-                                                <Button asChild className="w-full py-6 rounded-xl font-bold text-[16px]">
+                                                <Button asChild className="w-full py-5 sm:py-6 rounded-xl font-bold text-[15px] sm:text-[16px]">
                                                     <Link to="/login">{t("nav.login")}</Link>
                                                 </Button>
                                             </SheetClose>

@@ -33,7 +33,6 @@ const CreateNews = lazy(() => import("./pages/admin/CreateNews"))
 const EditNews = lazy(() => import("./pages/admin/EditNews"))
 const ReportsManagement = lazy(() => import("./pages/admin/ReportsManagement"))
 const NewsInteractionsManagement = lazy(() => import("./pages/admin/NewsInteractionsManagement"))
-const ContentReportsManagement = lazy(() => import("./pages/admin/ContentReportsManagement"))
 const ActivitiesManagement = lazy(() => import("./pages/admin/ActivitiesManagement"))
 const AnnouncementsManagement = lazy(() => import("./pages/admin/AnnouncementsManagement"))
 const CreateAnnouncement = lazy(() => import("./pages/admin/CreateAnnouncement"))
@@ -96,7 +95,6 @@ function App() {
               {/* All roles: Dashboard, News, Profile */}
               <Route index element={<DashboardOverview />} />
               <Route path="reports" element={<ReportsManagement />} />
-              <Route path="content-reports" element={<ContentReportsManagement />} />
               <Route path="news/interactions/:id" element={<NewsInteractionsManagement />} />
               <Route path="categories" element={<CategoryManagement />} />
               <Route path="news" element={<NewsManagement />} />

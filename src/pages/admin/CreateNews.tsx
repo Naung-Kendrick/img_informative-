@@ -20,8 +20,6 @@ export default function CreateNews() {
     const [customDistrict, setCustomDistrict] = useState("");
     const [isCustomDistrict, setIsCustomDistrict] = useState(false);
 
-    // Township State - free text input
-    const [township, setTownship] = useState("");
 
     const [content, setContent] = useState("<p>သတင်းအကြောင်းအရာများကို ဤနေရာတွင် စတင်ရေးသားပါ...</p>");
 
@@ -97,7 +95,6 @@ export default function CreateNews() {
 
             // Determine final values
             const finalDistrict = isCustomDistrict ? customDistrict : district;
-            const finalTownship = township;
 
             await createNews({
                 title: title.trim(),
@@ -106,7 +103,6 @@ export default function CreateNews() {
                 status,
                 images: bannerImageUrls,
                 district: finalDistrict || undefined,
-                township: finalTownship || undefined,
             }).unwrap();
 
             showSuccess(
@@ -178,8 +174,8 @@ export default function CreateNews() {
                         </div>
                     </div>
 
-                    {/* ── District & Township Row ────────────────────────── */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* ── District Row ────────────────────────── */}
+                    <div className="grid grid-cols-1 gap-6">
                         {/* District */}
                         <div className="space-y-2">
                             <div className="flex items-center justify-between">
@@ -213,7 +209,6 @@ export default function CreateNews() {
                                         value={district}
                                         onChange={(e) => {
                                             setDistrict(e.target.value);
-                                            setTownship("");
                                         }}
                                         disabled={isDistrictsLoading}
                                         className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular cursor-pointer disabled:opacity-50 appearance-none"
@@ -232,23 +227,7 @@ export default function CreateNews() {
                             </div>
                         </div>
 
-                        {/* Township - plain text input since districts are flat in DB */}
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2">
-                                    <MapPin size={16} className="text-[#808080]" />
-                                    မြို့နယ် (Township)
-                                </label>
-                            </div>
-                            <input
-                                type="text"
-                                value={township}
-                                onChange={(e) => setTownship(e.target.value)}
-                                placeholder="မြို့နယ်အမည် ရိုက်ထည့်ပါ... (optional)"
-                                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular"
-                            />
                         </div>
-                    </div>
 
                     <div className="space-y-2">
                         <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2">

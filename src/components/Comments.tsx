@@ -88,19 +88,20 @@ export default function Comments({ newsId }: { newsId: string }) {
     };
 
     return (
-        <div className="mt-16 pt-10 border-t border-slate-100">
-            <div className="flex items-center gap-3 mb-10">
-                <div className="p-2.5 bg-[#1e3a8a]/10 rounded-full text-[#1e3a8a]">
-                    <MessageCircle size={26} strokeWidth={2.5} />
+        <div>
+            <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-10">
+                <div className="p-2 sm:p-2.5 bg-[#1e3a8a]/10 rounded-full text-[#1e3a8a]">
+                    <MessageCircle size={22} strokeWidth={2.5} className="sm:hidden" />
+                    <MessageCircle size={26} strokeWidth={2.5} className="hidden sm:block" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 padauk-bold">
+                <h3 className="text-lg sm:text-xl font-bold text-slate-800 padauk-bold">
                     {t("comments.title")} {comments && !isLoading && `(${comments.length})`}
                 </h3>
             </div>
 
             {isAuthenticated ? (
-                <div className="mb-14 flex gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
-                    <div className="w-11 h-11 rounded-full bg-[#1e3a8a] flex items-center justify-center text-white text-lg font-bold shrink-0 shadow-md">
+                <div className="mb-8 sm:mb-14 flex gap-3 sm:gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#1e3a8a] flex items-center justify-center text-white text-base sm:text-lg font-bold shrink-0 shadow-md">
                         {user?.avatar ? (
                             <img loading="lazy" src={user.avatar} alt="" className="w-full h-full object-cover rounded-full" />
                         ) : (
@@ -113,7 +114,7 @@ export default function Comments({ newsId }: { newsId: string }) {
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             placeholder="Share your thoughts..."
-                            className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/30 transition-all padauk-regular min-h-[140px] resize-y shadow-sm text-slate-600 leading-relaxed"
+                            className="w-full bg-white border border-slate-200 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/30 transition-all padauk-regular min-h-[100px] sm:min-h-[140px] resize-y shadow-sm text-slate-600 leading-relaxed text-sm sm:text-base"
                         />
                         <div className="flex justify-end">
                             <button
@@ -150,8 +151,8 @@ export default function Comments({ newsId }: { newsId: string }) {
             ) : comments && comments.length > 0 ? (
                 <div className="space-y-8">
                     {comments.map((comment: Comment) => (
-                        <div key={comment._id} className="flex gap-4 group animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <div className="w-11 h-11 rounded-full bg-[#1e3a8a] flex items-center justify-center text-white text-lg font-bold shrink-0 shadow-md">
+                        <div key={comment._id} className="flex gap-3 sm:gap-4 group animate-in fade-in slide-in-from-bottom-4 duration-500">
+                            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#1e3a8a] flex items-center justify-center text-white text-base sm:text-lg font-bold shrink-0 shadow-md">
                                 {comment.author?.avatar ? (
                                     <img loading="lazy" src={comment.author.avatar} alt="" className="w-full h-full object-cover rounded-full" />
                                 ) : (
@@ -160,10 +161,10 @@ export default function Comments({ newsId }: { newsId: string }) {
                             </div>
 
                             <div className="flex-1 min-w-0">
-                                <div className="bg-[#f0f4f9] rounded-2xl p-5 shadow-sm border border-slate-100/50">
-                                    <div className="flex justify-between items-center mb-3">
-                                        <span className="font-bold text-slate-800 text-[15px] truncate">{comment.author?.name}</span>
-                                        <span className="text-[11px] font-medium text-slate-400">
+                                <div className="bg-[#f0f4f9] rounded-xl sm:rounded-2xl p-3.5 sm:p-5 shadow-sm border border-slate-100/50">
+                                    <div className="flex justify-between items-center mb-2 sm:mb-3">
+                                        <span className="font-bold text-slate-800 text-[13px] sm:text-[15px] truncate">{comment.author?.name}</span>
+                                        <span className="text-[10px] sm:text-[11px] font-medium text-slate-400 ml-2 shrink-0">
                                             {new Date(comment.createdAt).toLocaleDateString("en-GB", { day: 'numeric', month: 'short' })} • {new Date(comment.createdAt).toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit', hour12: true })}
                                         </span>
                                     </div>
@@ -191,7 +192,7 @@ export default function Comments({ newsId }: { newsId: string }) {
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="text-slate-600 text-[14px] leading-relaxed padauk-regular whitespace-pre-wrap">
+                                        <div className="text-slate-600 text-[13px] sm:text-[14px] leading-relaxed padauk-regular whitespace-pre-wrap">
                                             {comment.content}
                                         </div>
                                     )}

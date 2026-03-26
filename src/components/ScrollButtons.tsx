@@ -32,14 +32,15 @@ export default function ScrollButtons() {
     // This prevents any CSS transforms or animations on parent containers 
     // from breaking the "fixed" positioning context.
     const buttonElement = (
-        <div className="fixed bottom-10 right-10 z-[9999] animate-in fade-in slide-in-from-bottom-8 duration-500">
+        <div className="fixed bottom-6 right-4 sm:bottom-10 sm:right-10 z-[9999] animate-in fade-in slide-in-from-bottom-8 duration-500">
             <button
                 onClick={scrollToTop}
-                className="h-14 w-14 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(0,0,0,0.25)] transition-all duration-300 border border-white/20 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                className="h-12 w-12 sm:h-14 sm:w-14 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(0,0,0,0.25)] transition-all duration-300 border border-white/20 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 aria-label="Scroll to top"
                 title="Scroll to Top"
             >
-                <ArrowUp size={24} strokeWidth={2.5} />
+                <ArrowUp size={20} strokeWidth={2.5} className="sm:hidden" />
+                <ArrowUp size={24} strokeWidth={2.5} className="hidden sm:block" />
             </button>
         </div>
     );

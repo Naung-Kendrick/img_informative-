@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import type { RootState } from "../../store";
 import { logout } from "../../store/authSlice";
 import { useGetAllContactsQuery } from "../../store/contactApiSlice";
-import { useGetAllReportsQuery } from "../../store/reportApiSlice";
 import { useGetAllNewsQuery } from "../../store/newsApiSlice";
 import { useGetAllAnnouncementsQuery } from "../../store/announcementApiSlice";
 import { useGetPagesBySectionQuery } from "../../store/pageApiSlice";
@@ -28,7 +27,6 @@ import {
     BellRing,
     Phone,
     BarChart2,
-    Flag,
     Clock,
     Globe,
 } from "lucide-react";
@@ -95,7 +93,6 @@ export default function AdminLayout() {
     // Global Notification State
     const [toastMessage, setToastMessage] = useState<{ id: string, name: string, subject: string, type?: 'contact' | 'report' | 'pendingPost' } | null>(null);
     const knownContactIds = useRef<Set<string>>(new Set());
-    const knownReportIds = useRef<Set<string>>(new Set());
     const knownPendingNewsIds = useRef<Set<string>>(new Set());
     const knownPendingAnnouncementIds = useRef<Set<string>>(new Set());
     const knownPendingPageIds = useRef<Set<string>>(new Set());
@@ -106,11 +103,6 @@ export default function AdminLayout() {
         skip: !isAuthenticated || role === 0 // Skip polling if not admin
     });
 
-    // Polling reports every 10 seconds checking for newly arrived content reports
-    const { data: reports } = useGetAllReportsQuery(undefined, {
-        pollingInterval: 10000,
-        skip: !isAuthenticated || role === 0 // Skip polling if not admin
-    });
 
     // Polling news every 10 seconds checking for newly arrived pending posts (only for admin/root admin)
     const { data: allNews } = useGetAllNewsQuery(undefined, {
@@ -164,34 +156,6 @@ export default function AdminLayout() {
         }
     }, [contacts]);
 
-    useEffect(() => {
-        if (reports && reports.length > 0) {
-            let hasNewUnread = false;
-            let newestReport = null;
-
-            reports.forEach(report => {
-                if (!knownReportIds.current.has(report._id)) {
-                    knownReportIds.current.add(report._id);
-                    if (!report.isRead) {
-                        hasNewUnread = true;
-                        newestReport = report;
-                    }
-                }
-            });
-
-            if (hasNewUnread && newestReport && knownReportIds.current.size > reports.length === false) {
-                playNotificationSound();
-                setToastMessage({
-                    id: (newestReport as any)._id,
-                    name: (newestReport as any).reporter?.name || "နှိုင်းမဲ့ အသုံးပြုသူ",
-                    subject: (newestReport as any).reason,
-                    type: 'report'
-                });
-
-                setTimeout(() => setToastMessage(null), 5000);
-            }
-        }
-    }, [reports]);
 
     useEffect(() => {
         if (allNews && allNews.length > 0) {
@@ -325,7 +289,6 @@ export default function AdminLayout() {
         { name: "ကိန်းဂဏန်းများ စီမံရန်", path: "/admin/statistics", icon: Activity, minRole: 1 },
         { name: "အကောင့်များ စီမံရန်", path: "/admin/users", icon: Users, minRole: 2 },
         { name: "History Log (Audit Trail)", path: "/admin/audit-logs", icon: Clock, minRole: 3 },
-        { name: "တိုင်ကြားစာများ (Reports)", path: "/admin/content-reports", icon: Flag, minRole: 1 },
         { name: "Home layout မျက်နှာစာ", path: "/admin/layout", icon: LayoutDashboard, minRole: 2 },
 
         // ── CMS Sections ──
@@ -438,11 +401,9 @@ export default function AdminLayout() {
                 {/* Global Notification Toast */}
                 {toastMessage && (
                     <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-top-4 fade-in duration-500">
-                        <div className={`bg-white border-l-4 ${toastMessage.type === 'report' ? 'border-rose-500' : toastMessage.type === 'pendingPost' ? 'border-indigo-500' : 'border-primary'} rounded-xl shadow-2xl p-4 flex items-start gap-4 pr-12 min-w-[300px]`}>
-                            <div className={`${toastMessage.type === 'report' ? 'bg-rose-100 text-rose-600' : toastMessage.type === 'pendingPost' ? 'bg-indigo-100 text-indigo-600' : 'bg-primary/10 text-primary'} p-2 rounded-full shrink-0`}>
-                                {toastMessage.type === 'report' ? (
-                                    <Flag size={20} className="animate-bounce" />
-                                ) : toastMessage.type === 'pendingPost' ? (
+                        <div className={`bg-white border-l-4 ${toastMessage.type === 'pendingPost' ? 'border-indigo-500' : 'border-primary'} rounded-xl shadow-2xl p-4 flex items-start gap-4 pr-12 min-w-[300px]`}>
+                            <div className={`${toastMessage.type === 'pendingPost' ? 'bg-indigo-100 text-indigo-600' : 'bg-primary/10 text-primary'} p-2 rounded-full shrink-0`}>
+                                {toastMessage.type === 'pendingPost' ? (
                                     <Clock size={20} className="animate-pulse" />
                                 ) : (
                                     <BellRing size={20} className="animate-pulse" />
@@ -450,17 +411,13 @@ export default function AdminLayout() {
                             </div>
                             <div>
                                 <h4 className="text-sm font-bold text-slate-900 padauk-bold">
-                                    {toastMessage.type === 'report' ? 'တိုင်ကြားစာအသစ် ရောက်ရှိပါသည်' :
-                                        toastMessage.type === 'pendingPost' ? 'အတည်ပြုရန် သတင်းအသစ်ရှိပါသည်' :
-                                            'မက်ဆေ့ချ်အသစ်ရောက်ရှိနေပါသည်'}
+                                    {toastMessage.type === 'pendingPost' ? 'အတည်ပြုရန် သတင်းအသစ်ရှိပါသည်' : 'မက်ဆေ့ချ်အသစ်ရောက်ရှိနေပါသည်'}
                                 </h4>
                                 <p className="text-xs text-slate-500 font-medium mt-1">
                                     <span className="text-slate-700">{toastMessage.name}</span>
-                                    {toastMessage.type === 'report' ? ' မှ တိုင်ကြားထားပါသည်။' :
-                                        toastMessage.type === 'pendingPost' ? ' မှ တင်ပြထားပါသည်။' :
-                                            ' မှ ပေးပို့ထားပါသည်။'}
+                                    {toastMessage.type === 'pendingPost' ? ' မှ တင်ပြထားပါသည်။' : ' မှ ပေးပို့ထားပါသည်။'}
                                 </p>
-                                <p className="text-xs text-slate-400 mt-1 truncate max-w-[200px] italic">"{toastMessage.subject}"</p>
+                                <p className="text-xs text-slate-400 mt-1 truncate max-w-[200px]">"{toastMessage.subject}"</p>
                             </div>
                             <button onClick={() => setToastMessage(null)} className="absolute top-2 right-2 p-1 text-slate-400 hover:text-slate-600">
                                 <X size={16} />

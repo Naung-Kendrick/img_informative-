@@ -32,8 +32,7 @@ export default function EditNews() {
     const [customDistrict, setCustomDistrict] = useState("");
     const [isCustomDistrict, setIsCustomDistrict] = useState(false);
 
-    // Township State - plain text
-    const [township, setTownship] = useState("");
+    // Township State - removed
 
     const [content, setContent] = useState("");
     const [status, setStatus] = useState<"Draft" | "Published" | "Pending">("Draft");
@@ -60,8 +59,6 @@ export default function EditNews() {
                 setDistrict(dVal);
             }
 
-            // Township logic - always just set the text value
-            setTownship(article.township || "");
 
             setContent(article.content);
             setStatus(article.status);
@@ -118,7 +115,6 @@ export default function EditNews() {
                     status,
                     images: finalImageUrls,
                     district: finalDistrict || undefined,
-                    township: finalTownship || undefined
                 }
             }).unwrap();
             showSuccess("အောင်မြင်ပါသည်", "သတင်းပြင်ဆင်ခြင်း အောင်မြင်ပြီးပါပြီ", () => navigate("/admin/news"));
@@ -198,7 +194,7 @@ export default function EditNews() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 gap-6">
                         {/* District */}
                         <div className="space-y-2">
                             <div className="flex items-center justify-between">
@@ -216,7 +212,7 @@ export default function EditNews() {
                                 ) : (
                                     <select
                                         value={district}
-                                        onChange={(e) => { setDistrict(e.target.value); setTownship(""); }}
+                                        onChange={(e) => { setDistrict(e.target.value) }}
                                         disabled={isDistrictsLoading}
                                         className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular cursor-pointer disabled:opacity-50 appearance-none"
                                     >
@@ -228,21 +224,7 @@ export default function EditNews() {
                             </div>
                         </div>
 
-                        {/* Township - plain text */}
-                        <div className="space-y-2">
-                            <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2">
-                                <MapPin size={16} className="text-[#808080]" />
-                                မြို့နယ် (Township)
-                            </label>
-                            <input
-                                type="text"
-                                value={township}
-                                onChange={(e) => setTownship(e.target.value)}
-                                placeholder="မြို့နယ်အမည် ရိုက်ထည့်ပါ... (optional)"
-                                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular"
-                            />
                         </div>
-                    </div>
 
                     <div className="space-y-4">
                         <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2"><ImageIcon size={16} className="text-[#808080]" />သတင်းဓာတ်ပုံများ</label>

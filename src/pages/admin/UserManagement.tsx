@@ -190,7 +190,7 @@ export default function UserManagement() {
                                                             </span>
                                                         </>
                                                     ) : (
-                                                        <span className="text-slate-300 italic text-xs">No records</span>
+                                                        <span className="text-slate-300 text-xs">No records</span>
                                                     )}
                                                 </div>
                                             </td>

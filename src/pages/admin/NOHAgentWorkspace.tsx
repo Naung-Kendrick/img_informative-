@@ -208,7 +208,7 @@ export default function NOHAgentWorkspace() {
                                         <h4 className="text-sm font-bold text-slate-800 line-clamp-1 mb-1 padauk-bold">
                                             {report.reason}
                                         </h4>
-                                        <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed italic">
+                                        <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">
                                             {report.details || "No additional details provided."}
                                         </p>
                                         {selectedId === report._id && (

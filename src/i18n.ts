@@ -394,7 +394,7 @@ const resources = {
                 noDistricts: "လူဝင်မှုကြီးကြပ်ရေးရုံး အချက်အလက်များ မရှိသေးပါ",
                 noDistrictsDesc: "လူဝင်မှုကြီးကြပ်ရေးရုံးဆိုင်ရာ အချက်အလက်များ မကြာမီ ထည့်သွင်းပါမည်။",
                 badge: "REGIONAL IMMIGRATION OFFICES",
-                regionalOffices: "ဒေသဆိုင်ရာ လူဝင်မှုကြီးကြပ်ရေးရုံးများ",
+                regionalOffices: "Regional Immigration Offices",
                 adminOffices: "မြို့နယ် လူဝင်မှုကြီးကြပ်ရေးရုံး",
                 viewDetails: "အသေးစိတ်ကြည့်ရန်",
 
@@ -523,7 +523,7 @@ const resources = {
             },
             stats: {
                 asOf: "အခြေအနေ -",
-                reach: "မှတ်ပုံတင်နိုင်မှု အတိုင်းအတာ"
+                reach: "Registration Coverage"
             }
         }
     }

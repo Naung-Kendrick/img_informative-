@@ -212,7 +212,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ variant = "default" }) =>
                         </div>
                         <div className="flex flex-col">
                             <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Wind</span>
-                            <span className="text-sm font-bold text-white">{weather.windspeed} <span className="text-[10px] opacity-70 italic font-medium tracking-normal">km/h</span></span>
+                            <span className="text-sm font-bold text-white">{weather.windspeed} <span className="text-[10px] opacity-70 font-medium tracking-normal">km/h</span></span>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">

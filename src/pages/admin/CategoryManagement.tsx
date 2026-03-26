@@ -103,7 +103,7 @@ function SortableCategoryItem({
                 </div>
             </div>
             <div className="text-sm text-slate-600 padauk-regular line-clamp-1">
-                {cat.description || <span className="text-slate-300 italic">No description</span>}
+                {cat.description || <span className="text-slate-300">No description</span>}
             </div>
             <div className="flex justify-end gap-2 pr-2">
                 {canEdit && (

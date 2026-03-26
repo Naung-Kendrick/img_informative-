@@ -95,7 +95,7 @@ function SortableDistrictRow({
                         {district.officerInCharge}
                     </div>
                 ) : (
-                    <span className="text-slate-300 italic text-xs">—</span>
+                    <span className="text-slate-300 text-xs">—</span>
                 )}
             </td>
             <td className="px-6 py-4 text-right">

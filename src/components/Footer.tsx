@@ -11,8 +11,8 @@ const Footer = () => {
     return (
         <footer className="bg-foreground text-background/80 border-t border-background/10">
             {/* Main Footer Content */}
-            <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px] py-16 md:py-24">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
+            <div className="w-full px-3 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px] py-10 sm:py-16 md:py-24">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-16">
 
                     {/* Column 1: Department Identity */}
                     <div className="flex flex-col gap-6 lg:col-span-1">
@@ -78,11 +78,11 @@ const Footer = () => {
                         </h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                             <div className="flex gap-4">
-                                <div className="h-12 w-12 shrink-0 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 text-primary">
-                                    <MapPin size={22} />
+                                <div className="h-11 w-11 shrink-0 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 text-primary">
+                                    <MapPin size={20} />
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <span className="text-sm font-bold text-background uppercase tracking-wider">{t("footer.location")}</span>
+                                <div className="flex flex-col gap-1">
+                                    <span className="p-small text-background/40">{t("footer.location")}</span>
                                     <span className="text-sm leading-relaxed text-background/60">
                                         {info ? (currentLang === 'en' ? info.address_en : info.address_mm) : t("footer.address")}
                                     </span>
@@ -90,21 +90,21 @@ const Footer = () => {
                             </div>
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-center gap-4 group">
-                                    <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 text-primary group-hover:bg-primary group-hover:text-background transition-all">
-                                        <Phone size={18} />
+                                    <div className="h-11 w-11 shrink-0 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 text-primary group-hover:bg-primary group-hover:text-background transition-all">
+                                        <Phone size={20} />
                                     </div>
                                     <div className="flex flex-col">
                                         <span className="p-small text-background/40">{t("footer.phone")}</span>
-                                        <span className="text-sm font-bold text-background/80">{info?.phone || "+95 9 123 456 789"}</span>
+                                        <span className="text-sm font-bold text-background/80 leading-snug">{info?.phone || "+95 9 123 456 789"}</span>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4 group">
-                                    <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 text-primary group-hover:bg-primary group-hover:text-background transition-all">
-                                        <Mail size={18} />
+                                    <div className="h-11 w-11 shrink-0 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 text-primary group-hover:bg-primary group-hover:text-background transition-all">
+                                        <Mail size={20} />
                                     </div>
                                     <div className="flex flex-col">
                                         <span className="p-small text-background/40">{t("footer.email")}</span>
-                                        <span className="text-sm font-bold text-background/80">{info?.email || "contact@immigration.tlfug.gov"}</span>
+                                        <span className="text-sm font-bold text-background/80 leading-snug truncate max-w-[200px] sm:max-w-none">{info?.email || "contact@immigration.tlfug.gov"}</span>
                                     </div>
                                 </div>
                             </div>
@@ -114,12 +114,12 @@ const Footer = () => {
             </div>
 
             {/* Bottom Bar: Ethics & Copyright */}
-            <div className="border-t border-background/10 py-8 bg-black/20">
-                <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px] flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="border-t border-background/10 py-6 sm:py-8 bg-black/20">
+                <div className="w-full px-3 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px] flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6">
                     <div className="p-small text-background/40">
                         &copy; {new Date().getFullYear()} Ta'ang Land Government Of Immigration Department. All Rights Reserved.
                     </div>
-                    <div className="flex gap-8">
+                    <div className="flex flex-wrap justify-center gap-4 sm:gap-8">
                         <Link to="/privacy-policy" className="p-small text-background/40 hover:text-primary transition-colors">Privacy Policy</Link>
                         <Link to="/terms-of-service" className="p-small text-background/40 hover:text-primary transition-colors">Terms of Service</Link>
                         <Link to="/accessibility" className="p-small text-background/40 hover:text-primary transition-colors">Accessibility</Link>

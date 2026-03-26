@@ -43,45 +43,45 @@ const Home = () => {
     const { data: services = [], isLoading: isServicesLoading } = useGetPagesBySectionQuery("services");
 
     // Filter for Published services
-    const publishedServices = useMemo(() => 
+    const publishedServices = useMemo(() =>
         services.filter(s => s.status === "Published").slice(0, 2),
-    [services]);
+        [services]);
 
     // Filter for Published news
-    const publishedNews = useMemo(() => 
+    const publishedNews = useMemo(() =>
         allNews.filter(n => n.status === "Published"),
-    [allNews]);
+        [allNews]);
 
     // Latest news for Hero and Feed
-    const sortedNews = useMemo(() => 
+    const sortedNews = useMemo(() =>
         [...publishedNews].sort(
             (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         ),
-    [publishedNews]);
+        [publishedNews]);
 
     const heroNews = sortedNews[0];
     const allFeedNews = sortedNews.slice(1);
 
     // Latest 5 Announcements
-    const latestAnnouncements = useMemo(() => 
+    const latestAnnouncements = useMemo(() =>
         [...announcements]
             .sort((a, b) => new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime())
             .slice(0, 5),
-    [announcements]);
+        [announcements]);
 
     // Districts (Top 3 for home)
-    const displayDistricts = useMemo(() => 
-        districts.slice(0, 3), 
-    [districts]);
+    const displayDistricts = useMemo(() =>
+        districts.slice(0, 3),
+        [districts]);
 
     // Pagination for News Feed
     const totalPages = Math.ceil(allFeedNews.length / newsPerPage);
-    const paginatedFeed = useMemo(() => 
+    const paginatedFeed = useMemo(() =>
         allFeedNews.slice(
             (currentPage - 1) * newsPerPage,
             currentPage * newsPerPage
         ),
-    [allFeedNews, currentPage, newsPerPage]);
+        [allFeedNews, currentPage, newsPerPage]);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -93,7 +93,7 @@ const Home = () => {
         if (!heroNews) return null;
 
         return (
-            <section key="hero" className="relative w-full bg-slate-900 overflow-hidden min-h-[600px] flex items-center">
+            <section key="hero" className="relative w-full bg-slate-900 overflow-hidden min-h-[400px] sm:min-h-[500px] md:min-h-[600px] flex items-center">
                 <div className="absolute inset-0 z-0">
                     {heroNews.images && heroNews.images.length > 0 ? (
                         <>
@@ -115,9 +115,9 @@ const Home = () => {
                     <WeatherWidget variant="compact" />
                 </div>
 
-                <div className="container-custom relative z-10 py-20">
+                <div className="container-custom relative z-10 py-12 sm:py-16 md:py-20">
                     <div className="max-w-3xl">
-                        <div className="flex items-center gap-3 mb-6 animate-in slide-in-from-left duration-700">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 sm:mb-6 animate-in slide-in-from-left duration-700">
                             <span className="px-3 py-1 bg-primary text-white text-[10px] font-bold tracking-widest uppercase rounded">
                                 {heroNews.category}
                             </span>
@@ -127,19 +127,19 @@ const Home = () => {
                             </span>
                         </div>
 
-                        <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-[1.6] mb-8 animate-in slide-in-from-left duration-1000 delay-100 padauk-bold">
+                        <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.4] sm:leading-[1.5] md:leading-[1.6] mb-4 sm:mb-6 md:mb-8 animate-in slide-in-from-left duration-1000 delay-100 padauk-bold">
                             {heroNews.title}
                         </h1>
 
-                        <p className="text-lg md:text-xl text-slate-300 mb-10 leading-[1.8] line-clamp-3 max-w-2xl animate-in slide-in-from-left duration-1000 delay-200 padauk-regular">
+                        <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-300 mb-6 sm:mb-8 md:mb-10 leading-[1.6] sm:leading-[1.8] line-clamp-2 sm:line-clamp-3 max-w-2xl animate-in slide-in-from-left duration-1000 delay-200 padauk-regular">
                             {t("hero.subtitle") || "Providing transparent, efficient, and secure immigration services for all residents and visitors. Stay updated with our official policy enhancements and legal frameworks."}
                         </p>
 
-                        <div className="flex flex-wrap gap-5 items-center animate-in slide-in-from-bottom duration-1000 delay-300">
-                            <Button asChild className="bg-primary hover:bg-primary/90 text-white px-10 py-7 h-auto text-sm font-bold tracking-widest rounded-xl shadow-xl shadow-primary/20 transition-all transform active:scale-95">
+                        <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-5 items-start sm:items-center animate-in slide-in-from-bottom duration-1000 delay-300">
+                            <Button asChild className="bg-primary hover:bg-primary/90 text-white px-6 sm:px-10 py-5 sm:py-7 h-auto text-xs sm:text-sm font-bold tracking-widest rounded-xl shadow-xl shadow-primary/20 transition-all transform active:scale-95 w-full sm:w-auto">
                                 <Link to={`/news/${heroNews._id}`}>READ FULL STATEMENT</Link>
                             </Button>
-                            <div className="flex items-center gap-4 pl-6 border-l border-white/10">
+                            <div className="hidden sm:flex items-center gap-4 pl-6 border-l border-white/10">
                                 <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
                                     <User size={18} className="text-primary" />
                                 </div>
@@ -160,8 +160,8 @@ const Home = () => {
     const renderServices = () => (
         <section key="services" className="bg-secondary/10 section-padding border-b border-border/50">
             <div className="container-custom">
-                <div className="text-center mb-20 flex flex-col items-center">
-                    <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-6 border border-primary/20">
+                <div className="text-center mb-10 sm:mb-14 md:mb-20 flex flex-col items-center">
+                    <div className="inline-flex items-center justify-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.2em] mb-4">
                         Public Assistance Center
                     </div>
                     <h2 className="h2 mb-8 relative inline-block pb-4">
@@ -171,7 +171,7 @@ const Home = () => {
 
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 max-w-6xl mx-auto">
                     {isServicesLoading ? (
                         [1, 2].map(i => <Skeleton key={i} className="h-96 rounded-[2rem]" />)
                     ) : publishedServices.length > 0 ? (
@@ -200,7 +200,7 @@ const Home = () => {
                                     </div>
                                 </div>
 
-                                <div className="p-8 md:p-10 flex flex-col flex-grow">
+                                <div className="p-5 sm:p-8 md:p-10 flex flex-col flex-grow">
                                     <h2 className="h3 mb-4 padauk-bold text-foreground group-hover:text-primary transition-colors">
                                         {service.title}
                                     </h2>
@@ -209,7 +209,7 @@ const Home = () => {
                                     />
                                     <div className="mt-auto w-full">
                                         <Link to={`/services/${service._id}`} className="w-full block">
-                                            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/80 font-bold py-7 text-base lg:text-lg rounded-2xl transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-primary/20 flex items-center justify-center gap-3 active:scale-[0.98]">
+                                            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/80 font-bold py-5 sm:py-7 text-sm sm:text-base lg:text-lg rounded-2xl transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-primary/20 flex items-center justify-center gap-3 active:scale-[0.98]">
                                                 {t("services.applyBtn") || "လျှောက်ထားရန်"}
                                                 <ArrowRight size={20} className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-500" />
                                             </Button>
@@ -231,7 +231,7 @@ const Home = () => {
     const renderDistricts = () => (
         <section key="districts" className="bg-background section-padding">
             <div className="container-custom">
-                <div className="text-center mb-16 flex flex-col items-center">
+                <div className="text-center mb-10 sm:mb-12 md:mb-16 flex flex-col items-center">
                     <div className="inline-flex items-center justify-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.2em] mb-4">
                         {t("districts.regionalOffices")}
                     </div>
@@ -242,7 +242,7 @@ const Home = () => {
 
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 md:gap-10">
                     {isDistrictsLoading ? (
                         [1, 2, 3].map(i => <Skeleton key={i} className="aspect-[16/10] rounded-3xl" />)
                     ) : (
@@ -267,8 +267,8 @@ const Home = () => {
                     )}
                 </div>
 
-                <div className="mt-16 text-center">
-                    <Button asChild className="bg-primary hover:bg-primary/90 text-white font-bold rounded-xl px-12 py-7 h-auto text-base shadow-xl shadow-primary/10 transition-all">
+                <div className="mt-10 sm:mt-12 md:mt-16 text-center">
+                    <Button asChild className="bg-primary hover:bg-primary/90 text-white font-bold rounded-xl px-8 sm:px-12 py-5 sm:py-7 h-auto text-sm sm:text-base shadow-xl shadow-primary/10 transition-all w-full sm:w-auto">
                         <Link to="/districts">{t("common.viewAllDistricts")}</Link>
                     </Button>
                 </div>
@@ -292,7 +292,7 @@ const Home = () => {
 
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
                         {isLoading || isFetching ? (
                             <NewsCardSkeleton repeat={newsPerPage} />
                         ) : paginatedFeed.map((news) => (
@@ -305,7 +305,7 @@ const Home = () => {
                                             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                         />
                                     ) : (
-                                        <div className="w-full h-full bg-secondary flex items-center justify-center text-muted-foreground italic text-xs">Archive Image</div>
+                                        <div className="w-full h-full bg-secondary flex items-center justify-center text-muted-foreground text-xs">Archive Image</div>
                                     )}
                                     <div className="absolute top-6 left-6 z-10">
                                         <span className="px-3 py-1 bg-background/95 backdrop-blur-sm text-primary font-bold text-[10px] uppercase tracking-widest rounded shadow-sm border border-border/50">
@@ -314,16 +314,16 @@ const Home = () => {
                                     </div>
                                 </div>
 
-                                <div className="p-8 flex flex-col flex-grow">
-                                    <div className="flex items-center gap-4 text-muted-foreground font-bold text-[10px] uppercase tracking-widest mb-6">
+                                <div className="p-5 sm:p-6 md:p-8 flex flex-col flex-grow">
+                                    <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-muted-foreground font-bold text-[10px] uppercase tracking-widest mb-4 sm:mb-6">
                                         <div className="flex items-center gap-1.5"><Calendar size={12} className="text-primary" /> {new Date(news.createdAt).toLocaleDateString('en-GB')}</div>
                                         <div className="w-[1px] h-3 bg-border" />
                                         <div className="flex items-center gap-1.5"><User size={12} className="text-primary" /> {news.author?.name || "Admin"}</div>
                                     </div>
-                                    <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-[1.6] mb-8 padauk-bold">
+                                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-[1.4] sm:leading-[1.6] mb-4 sm:mb-6 md:mb-8 padauk-bold">
                                         {news.title}
                                     </h3>
-                                    <div className="mt-auto pt-6 border-t border-border/50 flex items-center justify-between group-hover:text-primary transition-all font-bold text-xs uppercase tracking-widest text-muted-foreground">
+                                    <div className="mt-auto pt-4 sm:pt-6 border-t border-border/50 flex items-center justify-between group-hover:text-primary transition-all font-bold text-xs uppercase tracking-widest text-muted-foreground">
                                         READ MORE <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
                                     </div>
                                 </div>
@@ -332,11 +332,11 @@ const Home = () => {
                     </div>
 
                     {totalPages > 1 && (
-                        <div className="mt-20 flex items-center justify-center gap-3">
+                        <div className="mt-12 sm:mt-16 md:mt-20 flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
                             <button
                                 onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                                 disabled={currentPage === 1}
-                                className="w-12 h-12 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:border-primary hover:text-primary disabled:opacity-30 transition-all bg-card"
+                                className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:border-primary hover:text-primary disabled:opacity-30 transition-all bg-card"
                             >
                                 <ChevronLeft size={20} />
                             </button>
@@ -344,7 +344,7 @@ const Home = () => {
                                 <button
                                     key={idx}
                                     onClick={() => handlePageChange(idx + 1)}
-                                    className={`w-12 h-12 rounded-xl font-bold transition-all ${currentPage === idx + 1
+                                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl font-bold text-sm sm:text-base transition-all ${currentPage === idx + 1
                                         ? "bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-110"
                                         : "bg-card border border-border text-muted-foreground hover:border-primary hover:text-primary"
                                         }`}
@@ -355,7 +355,7 @@ const Home = () => {
                             <button
                                 onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                                 disabled={currentPage === totalPages}
-                                className="w-12 h-12 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:border-primary hover:text-primary disabled:opacity-30 transition-all bg-card"
+                                className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:border-primary hover:text-primary disabled:opacity-30 transition-all bg-card"
                             >
                                 <ChevronRight size={20} />
                             </button>
@@ -385,7 +385,7 @@ const Home = () => {
                         {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} className="aspect-[1/1.414] rounded-2xl" />)}
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 md:gap-8">
                         {latestAnnouncements.map((announcement) => (
                             <Link
                                 key={announcement._id}
@@ -418,9 +418,9 @@ const Home = () => {
                     </div>
                 )}
 
-                <div className="mt-16 text-center">
-                    <Button asChild className="bg-primary hover:bg-primary/90 text-white font-bold rounded-xl px-12 py-7 h-auto text-base shadow-xl shadow-primary/10 transition-all">
-                        <Link to="/announcements" className="flex items-center gap-2">{t("common.viewAllAnnouncements")} <ArrowRight size={18} /></Link>
+                <div className="mt-10 sm:mt-12 md:mt-16 text-center">
+                    <Button asChild className="bg-primary hover:bg-primary/90 text-white font-bold rounded-xl px-8 sm:px-12 py-5 sm:py-7 h-auto text-sm sm:text-base shadow-xl shadow-primary/10 transition-all w-full sm:w-auto">
+                        <Link to="/announcements" className="flex items-center justify-center gap-2">{t("common.viewAllAnnouncements")} <ArrowRight size={18} /></Link>
                     </Button>
                 </div>
             </div>
