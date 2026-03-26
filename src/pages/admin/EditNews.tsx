@@ -104,7 +104,6 @@ export default function EditNews() {
             }
 
             const finalDistrict = isCustomDistrict ? customDistrict : district;
-            const finalTownship = township;
 
             await updateNews({
                 id: id as string,
