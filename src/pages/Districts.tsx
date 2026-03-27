@@ -55,10 +55,10 @@ export default function Districts() {
                 <div className="mb-10 text-center max-w-2xl mx-auto flex flex-col items-center">
                     <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4 border border-primary/20">
                         <Building size={14} />
-                        {t("districts.badge")}
+                        REGIONAL IMMIGRATION OFFICES
                     </div>
                     <h1 className="h1 mb-6 relative inline-block pb-4">
-                        {t("districts.adminOffices")}
+                        {t("districts.title")}
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h1>
 

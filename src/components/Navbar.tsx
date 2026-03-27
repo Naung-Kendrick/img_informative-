@@ -204,7 +204,9 @@ export default function Navbar() {
                                 <DropdownMenuTrigger asChild>
                                     <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-all text-slate-600 group">
                                         <Globe size={18} className="group-hover:text-primary transition-colors" />
-                                        <span className="text-[11px] font-black uppercase tracking-widest">{i18n.language.startsWith('mm') ? 'မြန်မာ' : 'EN'}</span>
+                                        <span className="text-[11px] font-black uppercase tracking-widest">
+                                            {i18n.language.startsWith('mm') ? 'မြန်မာ' : i18n.language.startsWith('tg') ? 'တအာင်း' : 'EN'}
+                                        </span>
                                     </button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="w-40 rounded-xl border-slate-200 shadow-2xl p-1.5 animate-in fade-in zoom-in-95">
@@ -214,6 +216,13 @@ export default function Navbar() {
                                     >
                                         <span className="font-bold text-xs uppercase tracking-wide">မြန်မာဘာသာ</span>
                                         {i18n.language.startsWith('mm') && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        onClick={() => toggleLanguage('tg')}
+                                        className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${i18n.language.startsWith('tg') ? 'bg-primary/10 text-primary' : 'hover:bg-slate-50 text-slate-700'}`}
+                                    >
+                                        <span className="font-bold text-xs uppercase tracking-wide">တအာင်းဘာသာ</span>
+                                        {i18n.language.startsWith('tg') && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                         onClick={() => toggleLanguage('en')}
@@ -287,6 +296,7 @@ export default function Navbar() {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="w-32 rounded-xl border-slate-200 shadow-xl">
                                     <DropdownMenuItem onClick={() => toggleLanguage('mm')} className="font-bold text-sm">မြန်မာ</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => toggleLanguage('tg')} className="font-bold text-sm">တအာင်း</DropdownMenuItem>
                                     <DropdownMenuItem onClick={() => toggleLanguage('en')} className="font-bold text-sm">ENGLISH</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>

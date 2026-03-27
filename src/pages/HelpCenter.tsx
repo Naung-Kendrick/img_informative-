@@ -63,7 +63,7 @@ const HelpCenter = () => {
                         transition={{ duration: 0.6 }}
                     >
                         <span className="inline-block px-4 py-1.5 mb-6 text-xs font-bold tracking-widest text-primary-foreground bg-primary/20 backdrop-blur-md border border-white/10 rounded-full uppercase">
-                            {t("nav.helpCenter")}
+                            USER SUPPORT CENTER
                         </span>
                         <h1 className="h1 text-white mb-6 uppercase tracking-tighter">
                             {t("help.title")}

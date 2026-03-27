@@ -123,9 +123,9 @@ export default function StatisticsSection() {
                                         <CountUp end={stat.value} duration={2500 + (idx * 500)} />
                                     </div>
 
-                                    {(currentLang === 'en' ? stat.date_en : stat.date_mm) && (
+                                    {(stat.date_en || stat.date_mm) && (
                                         <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-4 bg-slate-900/60 px-3 py-1 rounded-full border border-slate-700/50 shadow-inner">
-                                            {t("stats.asOf")} {currentLang === 'en' ? stat.date_en : stat.date_mm}
+                                            {t("stats.asOf")} {stat.date_en || stat.date_mm}
                                         </div>
                                     )}
 

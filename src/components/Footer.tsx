@@ -117,12 +117,11 @@ const Footer = () => {
             <div className="border-t border-background/10 py-6 sm:py-8 bg-black/20">
                 <div className="w-full px-3 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px] flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6">
                     <div className="p-small text-background/40">
-                        &copy; {new Date().getFullYear()} Ta'ang Land Government Of Immigration Department. All Rights Reserved.
+                        {t("footer.copyright")}
                     </div>
-                    <div className="flex flex-wrap justify-center gap-4 sm:gap-8">
-                        <Link to="/privacy-policy" className="p-small text-background/40 hover:text-primary transition-colors">Privacy Policy</Link>
-                        <Link to="/terms-of-service" className="p-small text-background/40 hover:text-primary transition-colors">Terms of Service</Link>
-                        <Link to="/accessibility" className="p-small text-background/40 hover:text-primary transition-colors">Accessibility</Link>
+                    <div className="p-small flex items-center gap-2 border-l border-primary/20 pl-4 py-1">
+                        <span className="text-background/50">{t("footer.developers").split("by")[0]}by</span>
+                        <span className="text-primary font-extrabold tracking-widest uppercase">{t("footer.developers").split("by")[1]}</span>
                     </div>
                 </div>
             </div>

@@ -25,7 +25,7 @@ export default function Services() {
                 <div className="mb-10 text-center max-w-3xl mx-auto flex flex-col items-center">
                     <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4 border border-primary/20">
                         <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                        {t("services.portalBadge")}
+                        REACH OUT OUR SERVICES
                     </div>
                     <h1 className="h1 mb-6 relative inline-block pb-4">
                         {t("services.publicServices")}
@@ -45,8 +45,8 @@ export default function Services() {
                 ) : publishedServices.length === 0 ? (
                     <div className="text-center py-20 bg-muted/30 rounded-2xl border border-border max-w-2xl mx-auto">
                         <Briefcase className="mx-auto h-12 w-12 text-slate-300 mb-4" />
-                        <h3 className="h4 text-slate-400 mb-2">ဝန်ဆောင်မှုများ မရှိသေးပါ</h3>
-                        <p className="p-muted">ဌာနမှ ဆောင်ရွက်ပေးနေသော ဝန်ဆောင်မှုများကို မကြာမီ ဖော်ပြပေးပါမည်။</p>
+                        <h3 className="h4 text-slate-400 mb-2">{t("services.noServices")}</h3>
+                        <p className="p-muted">{t("services.noServicesDesc")}</p>
                     </div>
                 ) : (
                     /* Dynamic Card Layout */

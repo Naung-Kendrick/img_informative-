@@ -45,10 +45,10 @@ export default function AboutPage() {
                 <div className="container-custom text-center">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-6 border border-primary/20 shadow-sm">
                         <Building2 size={14} />
-                        {t("about.badge") || "ADMINISTRATIVE BODY"}
+                        OFFICIAL REPOSITORY
                     </div>
                     <h1 className="h1 text-slate-900 mb-4 font-heading">
-                        {about.title || t("about.title")}
+                        {t("about.title")}
                     </h1>
                     <div className="w-16 h-1 bg-primary mx-auto rounded-full mb-6" />
                     <p className="p-lead max-w-2xl mx-auto text-slate-600 font-sans leading-[1.8]">
@@ -81,22 +81,22 @@ export default function AboutPage() {
                         <div className="flex flex-col items-center gap-6">
                             <div className="w-20 h-1 bg-primary/20 rounded-full" />
                             <span className="text-primary font-bold text-xs md:text-sm uppercase tracking-[0.5em] leading-none">
-                                {t("about.pslf") || "OUR FOUNDATION"}
+                                OUR FOUNDATION
                             </span>
                         </div>
 
                         <h2 className="text-3xl md:text-5xl font-black text-slate-900 leading-[1.1] padauk-bold tracking-tight">
-                            {about.title || t("about.title")}
+                            {t("about.title")}
                         </h2>
 
                         <div className="w-full max-w-5xl mx-auto pt-6 relative">
                             {/* Premium Editorial Layout Container */}
                             <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-slate-50/50 blur-3xl rounded-full" />
-                            
+
                             <div className="relative bg-white p-8 md:p-12 lg:p-14 rounded-[2.5rem] md:rounded-[3rem] border border-slate-100 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.05)]">
                                 {/* Subtle accent line */}
                                 <div className="absolute top-0 left-12 w-20 h-1.5 bg-gradient-to-r from-primary/30 to-transparent rounded-b-full" />
-                                
+
                                 {/* 2-Column Split cuts vertical height in HALF */}
                                 <div className="md:columns-2 gap-12 lg:gap-16 text-[15px] md:text-[16px] text-slate-600 padauk-regular leading-[2.3] text-justify font-sans whitespace-pre-wrap">
                                     {about.description || t("about.description")}
@@ -123,7 +123,7 @@ export default function AboutPage() {
                             <div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/30" />
                         </div>
                         <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-4">
-                            Department Uniform
+                            Immigration Department Uniforms
                         </h2>
                         <p className="text-slate-500 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
                             {about.uniformDescription || "Standard-issue uniforms of the Immigration Department, reinforcing professionalism, identity, and public trust."}
@@ -189,7 +189,7 @@ export default function AboutPage() {
                             <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center text-primary">
                                 <Landmark size={30} strokeWidth={1.5} />
                             </div>
-                            <h3 className="h3 font-heading text-slate-900">{t("about.policyTitle")}</h3>
+                            <h3 className="h3 font-heading text-slate-900 leading-relaxed mb-2 padauk-bold">{t("about.policyTitle")}</h3>
                             <p className="p-default text-slate-600 padauk-regular leading-relaxed whitespace-pre-wrap">
                                 {about.policy || t("about.policyDesc")}
                             </p>
@@ -200,7 +200,7 @@ export default function AboutPage() {
                             <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center text-primary">
                                 <Flag size={30} strokeWidth={1.5} />
                             </div>
-                            <h3 className="h3 font-heading text-slate-900">{t("about.objectiveTitle")}</h3>
+                            <h3 className="h3 font-heading text-slate-900 leading-relaxed mb-2 padauk-bold">{t("about.objectiveTitle")}</h3>
                             <p className="p-default text-slate-600 padauk-regular leading-relaxed whitespace-pre-wrap">
                                 {about.objective || t("about.objectiveDesc")}
                             </p>
@@ -211,7 +211,7 @@ export default function AboutPage() {
                             <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center text-primary">
                                 <ClipboardList size={30} strokeWidth={1.5} />
                             </div>
-                            <h3 className="h3 font-heading text-slate-900">{t("about.responsibilitiesTitle")}</h3>
+                            <h3 className="h3 font-heading text-slate-900 leading-relaxed mb-2 padauk-bold">{t("about.responsibilitiesTitle")}</h3>
                             <p className="p-default text-slate-600 padauk-regular leading-relaxed whitespace-pre-wrap">
                                 {about.duty || t("about.responsibilitiesDesc")}
                             </p>
@@ -222,7 +222,7 @@ export default function AboutPage() {
                             <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center text-primary">
                                 <ShieldCheck size={30} strokeWidth={1.5} />
                             </div>
-                            <h3 className="h3 font-heading text-slate-900">{t("about.mainTasksTitle")}</h3>
+                            <h3 className="h3 font-heading text-slate-900 leading-relaxed mb-2 padauk-bold">{t("about.mainTasksTitle")}</h3>
                             <p className="p-default text-slate-600 padauk-regular leading-relaxed whitespace-pre-wrap text-left w-full">
                                 {about.mainTasks || t("about.mainTasksDesc")}
                             </p>

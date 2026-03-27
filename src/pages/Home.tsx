@@ -137,7 +137,7 @@ const Home = () => {
 
                         <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-5 items-start sm:items-center animate-in slide-in-from-bottom duration-1000 delay-300">
                             <Button asChild className="bg-primary hover:bg-primary/90 text-white px-6 sm:px-10 py-5 sm:py-7 h-auto text-xs sm:text-sm font-bold tracking-widest rounded-xl shadow-xl shadow-primary/20 transition-all transform active:scale-95 w-full sm:w-auto">
-                                <Link to={`/news/${heroNews._id}`}>READ FULL STATEMENT</Link>
+                                <Link to={`/news/${heroNews._id}`}>{t("hero.readFull")}</Link>
                             </Button>
                             <div className="hidden sm:flex items-center gap-4 pl-6 border-l border-white/10">
                                 <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
@@ -145,7 +145,7 @@ const Home = () => {
                                 </div>
                                 <div className="flex flex-col">
                                     <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Released By</span>
-                                    <span className="text-white text-sm font-bold">{heroNews.author?.name || "Official Media Office"}</span>
+                                    <span className="text-white text-sm font-bold">{heroNews.author?.name || t("hero.officialMedia")}</span>
                                 </div>
                             </div>
                         </div>
@@ -165,7 +165,7 @@ const Home = () => {
                         Public Assistance Center
                     </div>
                     <h2 className="h2 mb-8 relative inline-block pb-4">
-                        ပြည်သူ့ဝန်ဆောင်မှုများ
+                        {t("services.publicServices")}
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h2>
 
@@ -210,7 +210,7 @@ const Home = () => {
                                     <div className="mt-auto w-full">
                                         <Link to={`/services/${service._id}`} className="w-full block">
                                             <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/80 font-bold py-5 sm:py-7 text-sm sm:text-base lg:text-lg rounded-2xl transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-primary/20 flex items-center justify-center gap-3 active:scale-[0.98]">
-                                                {t("services.applyBtn") || "လျှောက်ထားရန်"}
+                                                {t("services.applyBtn")}
                                                 <ArrowRight size={20} className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-500" />
                                             </Button>
                                         </Link>
@@ -220,7 +220,7 @@ const Home = () => {
                         ))
                     ) : (
                         <div className="col-span-full py-20 bg-muted/30 rounded-3xl border border-dashed border-border text-center">
-                            <p className="text-muted-foreground padauk-bold">ဝန်ဆောင်မှုများ မရှိသေးပါ</p>
+                            <p className="text-muted-foreground padauk-bold">{t("services.noServices")}</p>
                         </div>
                     )}
                 </div>
@@ -233,7 +233,7 @@ const Home = () => {
             <div className="container-custom">
                 <div className="text-center mb-10 sm:mb-12 md:mb-16 flex flex-col items-center">
                     <div className="inline-flex items-center justify-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.2em] mb-4">
-                        {t("districts.regionalOffices")}
+                        REGIONAL IMMIGRATION OFFICES
                     </div>
                     <h2 className="h2 mb-8 relative inline-block pb-4">
                         {t("districts.title")}
@@ -283,10 +283,10 @@ const Home = () => {
                 <div className="container-custom">
                     <div className="text-center mb-16 flex flex-col items-center">
                         <div className="inline-flex items-center justify-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.2em] mb-4">
-                            Press Center
+                            PRESS CENTER
                         </div>
                         <h2 className="h2 mb-8 relative inline-block pb-4">
-                            Latest Official News
+                            {t("news.latestOfficialNews")}
                             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                         </h2>
 
@@ -324,7 +324,7 @@ const Home = () => {
                                         {news.title}
                                     </h3>
                                     <div className="mt-auto pt-4 sm:pt-6 border-t border-border/50 flex items-center justify-between group-hover:text-primary transition-all font-bold text-xs uppercase tracking-widest text-muted-foreground">
-                                        READ MORE <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
+                                        {t("common.readMore")} <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
                                     </div>
                                 </div>
                             </Link>
@@ -371,10 +371,10 @@ const Home = () => {
             <div className="container-custom">
                 <div className="text-center mb-16 flex flex-col items-center">
                     <div className="inline-flex items-center justify-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.2em] mb-4">
-                        Official Announcements
+                        OFFICIAL ANNOUNCEMENTS
                     </div>
                     <h2 className="h2 mb-8 relative inline-block pb-4">
-                        နောက်ဆုံးရ ထုတ်ပြန်ချက်များ
+                        {t("announcements.title")}
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/30 rounded-full"></div>
                     </h2>
 
