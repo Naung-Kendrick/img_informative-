@@ -119,16 +119,16 @@ const Footer = () => {
                     <div className="p-small text-background/40">
                         {t("footer.copyright")}
                     </div>
-                    <div className="flex flex-col items-center md:flex-row md:items-center gap-3 md:gap-6 mt-6 md:mt-0 pt-6 md:pt-0 border-t md:border-t-0 md:border-l border-white/5 md:border-primary/20 md:pl-8 w-full md:w-auto">
-                        <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.4em] text-white/20 whitespace-nowrap">
+                    <div className="flex flex-col items-center md:flex-row md:items-center gap-2 md:gap-6 mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-white/5 md:border-primary/20 md:pl-8 w-full md:w-auto">
+                        <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/20 whitespace-nowrap">
                             DESIGNED & DEVELOPED BY
                         </span>
-                        <div className="flex items-center gap-2 sm:gap-4">
-                            <span className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-primary px-2.5 py-1 bg-primary/5 rounded-sm border border-primary/10 shadow-sm transition-all hover:bg-primary/10">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-primary px-2 py-0.5 bg-primary/5 rounded-sm border border-primary/10 shadow-sm">
                                 MAI SAN HLU
                             </span>
                             <span className="text-white/10 font-bold text-[10px]">&</span>
-                            <span className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-primary px-2.5 py-1 bg-primary/5 rounded-sm border border-primary/10 shadow-sm transition-all hover:bg-primary/10">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-primary px-2 py-0.5 bg-primary/5 rounded-sm border border-primary/10 shadow-sm">
                                 MAI NAY LIN
                             </span>
                         </div>
