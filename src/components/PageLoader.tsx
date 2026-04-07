@@ -24,7 +24,7 @@ export default function PageLoader() {
                         />
                         <motion.div
                             animate={{ rotate: 360 }}
-                            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+                            transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
                             className="absolute inset-0 w-32 h-32 rounded-full border-t-[3px] border-r-[3px] border-primary shadow-[0_0_15px_rgba(30,58,138,0.3)]"
                         />
                     </div>
