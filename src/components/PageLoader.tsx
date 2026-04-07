@@ -1,47 +1,80 @@
 import { motion } from "framer-motion";
-import { Loader2 } from "lucide-react";
-import { Skeleton } from "./ui/skeleton";
 
 /**
- * A clean, professional Page Loader for Suspense fallbacks.
- * Combines a subtle spinner with skeleton placeholders to prevent layout shift.
+ * A premium centered Page Loader that uses the project logo
+ * and a themed spinning animation.
  */
 export default function PageLoader() {
     return (
-        <div className="min-h-[60vh] w-full flex flex-col items-center justify-center p-8 space-y-6">
-            <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-                className="flex flex-col items-center space-y-4 w-full max-w-4xl"
-            >
-                {/* Animated Spinner with Logo-like feel */}
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white/95 backdrop-blur-md">
+            <div className="relative flex flex-col items-center gap-10">
+                {/* ── Spinning Animation Container ─────────────────────────────────── */}
                 <div className="relative flex items-center justify-center">
-                    <Loader2 className="h-10 w-10 animate-spin text-primary opacity-20" />
+                    {/* Outer Glow Effect */}
+                    <motion.div 
+                        className="absolute inset-0 rounded-full bg-primary/10 blur-3xl"
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    />
+
+                    {/* The Running Circle (Themed Ring) */}
+                    <div className="relative">
+                        <motion.div 
+                            className="w-32 h-32 rounded-full border-[3px] border-slate-100"
+                        />
+                        <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+                            className="absolute inset-0 w-32 h-32 rounded-full border-t-[3px] border-r-[3px] border-primary shadow-[0_0_15px_rgba(30,58,138,0.3)]"
+                        />
+                    </div>
+
+                    {/* Centered Photo (Phone/Image) */}
                     <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="h-2 w-2 bg-primary rounded-full animate-pulse" />
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: [1, 1.05, 1], opacity: 1 }}
+                            transition={{ 
+                                scale: { repeat: Infinity, duration: 2, ease: "easeInOut" },
+                                opacity: { duration: 0.5 }
+                            }}
+                            className="w-20 h-20 flex items-center justify-center"
+                        >
+                            <img 
+                                src="/image.png" 
+                                alt="Loading..." 
+                                className="w-full h-full object-contain filter drop-shadow-sm"
+                                onError={(e) => (e.currentTarget.style.display = 'none')}
+                            />
+                        </motion.div>
                     </div>
                 </div>
 
-                {/* Skeleton content to simulate page structure */}
-                <div className="w-full space-y-4">
-                    <Skeleton className="h-8 w-1/3 mx-auto" />
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8">
-                        <Skeleton className="h-48 rounded-2xl" />
-                        <Skeleton className="h-48 rounded-2xl" />
-                        <Skeleton className="h-48 rounded-2xl" />
-                    </div>
-                    <div className="space-y-2 pt-4">
-                        <Skeleton className="h-4 w-full" />
-                        <Skeleton className="h-4 w-5/6" />
-                        <Skeleton className="h-4 w-4/6" />
+                {/* ── Loading Text with Theme Matching ──────────────────────────────── */}
+                <div className="flex flex-col items-center space-y-3">
+                    <p className="text-xl font-bold tracking-[0.2em] text-primary padauk-bold animate-pulse">
+                        စောင့်ဆိုင်းပေးပါ
+                    </p>
+                    <div className="flex gap-1.5">
+                        {[0, 1, 2].map((i) => (
+                            <motion.div
+                                key={i}
+                                className="w-2.5 h-2.5 bg-primary/40 rounded-full"
+                                animate={{ 
+                                    scale: [1, 1.5, 1],
+                                    backgroundColor: ["#1e3a8a20", "#1e3a8a", "#1e3a8a20"] 
+                                }}
+                                transition={{ 
+                                    repeat: Infinity, 
+                                    duration: 1.2, 
+                                    delay: i * 0.2,
+                                    ease: "easeInOut" 
+                                }}
+                            />
+                        ))}
                     </div>
                 </div>
-
-                <p className="text-sm font-medium text-slate-400 animate-pulse pt-4">
-                    Loading resources...
-                </p>
-            </motion.div>
+            </div>
         </div>
     );
 }
