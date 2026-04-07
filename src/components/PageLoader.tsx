@@ -14,7 +14,7 @@ export default function PageLoader() {
                     <motion.div
                         className="absolute inset-0 rounded-full bg-primary/10 blur-3xl"
                         animate={{ scale: [1, 1.2, 1] }}
-                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
                     />
 
                     {/* The Running Circle (Themed Ring) */}
@@ -24,7 +24,7 @@ export default function PageLoader() {
                         />
                         <motion.div
                             animate={{ rotate: 360 }}
-                            transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
+                            transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
                             className="absolute inset-0 w-32 h-32 rounded-full border-t-[3px] border-r-[3px] border-primary shadow-[0_0_15px_rgba(30,58,138,0.3)]"
                         />
                     </div>
@@ -35,8 +35,8 @@ export default function PageLoader() {
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: [1, 1.05, 1], opacity: 1 }}
                             transition={{
-                                scale: { repeat: Infinity, duration: 4, ease: "easeInOut" },
-                                opacity: { duration: 0.5 }
+                                scale: { repeat: Infinity, duration: 8, ease: "easeInOut" },
+                                opacity: { duration: 1 }
                             }}
                             className="w-20 h-20 flex items-center justify-center"
                         >
@@ -52,9 +52,13 @@ export default function PageLoader() {
 
                 {/* ── Loading Text with Theme Matching ──────────────────────────────── */}
                 <div className="flex flex-col items-center space-y-3">
-                    <p className="text-xl font-bold tracking-[0.2em] text-primary padauk-bold animate-pulse">
+                    <motion.p 
+                        animate={{ opacity: [0.3, 1, 0.3] }}
+                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                        className="text-xl font-bold tracking-[0.2em] text-primary padauk-bold"
+                    >
                         Loading...
-                    </p>
+                    </motion.p>
                     <div className="flex gap-1.5">
                         {[0, 1, 2].map((i) => (
                             <motion.div
@@ -66,8 +70,8 @@ export default function PageLoader() {
                                 }}
                                 transition={{
                                     repeat: Infinity,
-                                    duration: 1.5,
-                                    delay: i * 0.3,
+                                    duration: 3,
+                                    delay: i * 0.5,
                                     ease: "easeInOut"
                                 }}
                             />
