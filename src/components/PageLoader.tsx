@@ -46,9 +46,9 @@ export default function PageLoader() {
                 >
                     <defs>
                         <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%"   stopColor="#D4AF37" stopOpacity="1" />
-                            <stop offset="50%"  stopColor="#228B22" stopOpacity="0.6" />
-                            <stop offset="100%" stopColor="#D4AF37" stopOpacity="0.1" />
+                            <stop offset="0%"   stopColor="#1A5B9C" stopOpacity="1" />
+                            <stop offset="50%"  stopColor="#1e3a8a" stopOpacity="0.6" />
+                            <stop offset="100%" stopColor="#1A5B9C" stopOpacity="0.1" />
                         </linearGradient>
                     </defs>
                     <circle
@@ -70,7 +70,7 @@ export default function PageLoader() {
                     <circle
                         cx="80" cy="80" r="66"
                         fill="none"
-                        stroke="#D4AF37"
+                        stroke="#1A5B9C"
                         strokeWidth="1"
                         strokeLinecap="round"
                         strokeDasharray="60 350"
@@ -87,8 +87,8 @@ export default function PageLoader() {
                         className="absolute rounded-full"
                         style={{
                             width: 8, height: 8,
-                            background: "linear-gradient(135deg, #D4AF37, #c9a02e)",
-                            boxShadow: "0 0 12px rgba(212,175,55,0.6)",
+                            background: "linear-gradient(135deg, #1A5B9C, #1e3a8a)",
+                            boxShadow: "0 0 12px rgba(26, 91, 156, 0.6)",
                             top: 2, left: "50%",
                             transform: "translateX(-50%)",
                         }}
@@ -107,7 +107,7 @@ export default function PageLoader() {
                         style={{
                             width: 100, height: 100,
                             objectFit: "contain",
-                            filter: "drop-shadow(0 2px 12px rgba(212,175,55,0.3))",
+                            filter: "drop-shadow(0 2px 12px rgba(26, 91, 156, 0.3))",
                         }}
                     />
                 </div>
@@ -118,7 +118,7 @@ export default function PageLoader() {
                 <p
                     className="text-sm font-semibold tracking-[0.2em] uppercase padauk-bold"
                     style={{
-                        color: "#6b5c3e",
+                        color: "#1A5B9C",
                         animation: "loader-text-fade 2s ease-in-out infinite",
                     }}
                 >
@@ -131,7 +131,7 @@ export default function PageLoader() {
                             className="rounded-full"
                             style={{
                                 width: 5, height: 5,
-                                backgroundColor: "#D4AF37",
+                                backgroundColor: "#1A5B9C",
                                 animation: `loader-dot-bounce 1.4s ease-in-out ${i * 0.2}s infinite`,
                             }}
                         />
