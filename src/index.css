@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'LocalFont';
-  src: url('/fonts/my-font.ttff') format('truetype');
+  src: url('/fonts/my-font.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -17,8 +17,8 @@
   --color-brand-gold: #D4AF37;
   --color-brand-silver: #E2E8F0;
 
-  --font-sans: "Times New Roman", "LocalFont", "Pyidaungsu", "Tinos", "Padauk", "Noto Serif Myanmar", "Myanmar Text", serif;
-  --font-heading: "Times New Roman", "LocalFont", "Pyidaungsu", "Tinos", "Padauk", "Noto Serif Myanmar", "Myanmar Text", serif;
+  --font-sans: "Padauk", "Noto Serif Myanmar", "LocalFont", "Pyidaungsu", "Tinos", "Myanmar Text", serif;
+  --font-heading: "Padauk", "Noto Serif Myanmar", "LocalFont", "Pyidaungsu", "Tinos", "Myanmar Text", serif;
 
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
@@ -225,12 +225,12 @@
 
 @layer utilities {
   .padauk-regular {
-    font-family: "Times New Roman", "LocalFont", "Pyidaungsu", "Tinos", "Padauk", "Noto Serif Myanmar", "Myanmar Text", serif;
+    font-family: "Padauk", "Noto Serif Myanmar", "LocalFont", "Pyidaungsu", "Tinos", "Myanmar Text", serif;
     font-weight: 400;
   }
 
   .padauk-bold {
-    font-family: "Times New Roman", "LocalFont", "Pyidaungsu", "Tinos", "Padauk", "Noto Serif Myanmar", "Myanmar Text", serif;
+    font-family: "Padauk", "Noto Serif Myanmar", "LocalFont", "Pyidaungsu", "Tinos", "Myanmar Text", serif;
     font-weight: 700;
   }
 }
