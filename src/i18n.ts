@@ -19,8 +19,8 @@ const resources = {
                 login: "Login",
                 profileSettings: "Profile Settings",
                 logout: "Logout",
-                deptTitle: "Immigration Department of the Ta'ang Land Government",
-                deptSubtitle: "တအာင်းပြည်အစိုးရ လူဝင်မှုကြီးကြပ်‌ရေး ဌာန",
+                deptTitle: "IMMIGRATION DEPARTMENT. TA'ANG LAND GOVERNMENT",
+                deptSubtitle: "တီုင်စေတ်မေန်းတိုအီး အဆိုးယကပီုန်တအာင်း",
                 searchPlaceholder: "Search documents...",
                 noSearchRes: "No results."
             },
