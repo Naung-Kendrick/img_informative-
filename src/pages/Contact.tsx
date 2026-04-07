@@ -81,7 +81,7 @@ export default function Contact() {
                                 <div>
                                     <div className="text-[10px] text-white/50 font-bold uppercase tracking-widest mb-3">Office Address</div>
                                     <p className="text-base font-bold leading-relaxed text-white padauk-bold">
-                                        {info ? (currentLang === 'en' ? info.address_en : info.address_mm) : t("contact.address")}
+                                        {info ? (currentLang === 'mm' ? info.address_mm : info.address_en) : t("contact.address")}
                                     </p>
                                 </div>
 
@@ -125,7 +125,7 @@ export default function Contact() {
                                 <div className="flex flex-col gap-2 pb-1 border-b border-border pb-5">
                                     <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">Administrative Hours</span>
                                     <span className="text-sm font-bold text-foreground padauk-bold">
-                                        {info ? (currentLang === 'en' ? info.working_hours_en : info.working_hours_mm) : "Mon - Fri, 09:00 - 16:00"}
+                                        {info ? (currentLang === 'mm' ? info.working_hours_mm : info.working_hours_en) : "Mon - Fri, 09:00 - 16:00"}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center bg-destructive/5 p-4 rounded-xl border border-destructive/10">

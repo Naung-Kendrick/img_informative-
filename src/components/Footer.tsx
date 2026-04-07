@@ -84,7 +84,7 @@ const Footer = () => {
                                 <div className="flex flex-col gap-1">
                                     <span className="p-small text-background/40">{t("footer.location")}</span>
                                     <span className="text-sm leading-relaxed text-background/60">
-                                        {info ? (currentLang === 'en' ? info.address_en : info.address_mm) : t("footer.address")}
+                                        {info ? (currentLang === 'mm' ? info.address_mm : info.address_en) : t("footer.address")}
                                     </span>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@ const Footer = () => {
             {/* Bottom Bar: Ethics & Copyright */}
             <div className="border-t border-background/10 py-6 sm:py-8 bg-black/20">
                 <div className="w-full px-3 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px] flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6">
-                    <div className="p-small text-background/40">
+                    <div className="p-small text-background/40 text-center md:text-left">
                         {t("footer.copyright")}
                     </div>
                     <div className="flex flex-col items-center md:flex-row md:items-center gap-2 md:gap-6 mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-white/5 md:border-primary/20 md:pl-8 w-full md:w-auto">

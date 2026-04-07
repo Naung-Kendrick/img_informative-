@@ -97,7 +97,7 @@ export default function StatisticsSection() {
                         {t("stats.reach")}
                     </h2>
                     <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-white padauk-bold mb-4 sm:mb-6">
-                        {currentLang === 'en' ? 'Ta\'ang Land Population & Registration Statistics' : 'တအာင်းပြည် လူဦးရေ နှင့် မှတ်ပုံတင်ခြင်း စာရင်းများ'}
+                        {currentLang === 'mm' ? 'တအာင်းပြည် လူဦးရေ နှင့် မှတ်ပုံတင်ခြင်း စာရင်းများ' : 'Ta\'ang Land Population & Registration Statistics'}
                     </h1>
                     <div className="w-24 h-1 bg-primary/50 mx-auto rounded-full"></div>
                 </div>
@@ -105,7 +105,7 @@ export default function StatisticsSection() {
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-5xl mx-auto">
                     {statistics.map((stat, idx) => {
                         const IconElement = IconMap[stat.icon] || Activity;
-                        const title = currentLang === 'en' ? stat.title_en : stat.title_mm;
+                        const title = currentLang === 'mm' ? stat.title_mm : stat.title_en;
 
                         return (
                             <div key={stat._id} className="relative group perspective-1000">

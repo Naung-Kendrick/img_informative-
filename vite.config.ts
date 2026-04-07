@@ -10,7 +10,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+      includeAssets: ['images/web_logo.jpg', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
         name: 'NOH Portal',
         short_name: 'NOH',

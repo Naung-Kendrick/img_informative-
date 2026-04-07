@@ -532,263 +532,244 @@ const resources = {
     tg: {
         translation: {
             nav: {
-                home: "Home",
-                news: "News",
-                activities: "Activities",
-                services: "Services",
-                districts: "Immigration Offices",
-                announcements: "Announcements",
-                about: "About Us",
-                contact: "Contact",
-                helpCenter: "Help Center",
-                admin: "Dashboard",
-                login: "Login",
-                profileSettings: "Profile Settings",
-                logout: "Logout",
-                deptTitle: "Immigration Department of the Ta'ang Land Government",
-                deptSubtitle: "Dept Subtitle (Ta'ang)",
-                searchPlaceholder: "Search documents...",
-                noSearchRes: "No results."
+                home: "တံင်ငါည်ပ္လါႇဘေဲႇပြီမ်",
+                news: "ဆဒါင်",
+                activities: "ဘည်ရည်းရေဲန်",
+                services: "ဘည်ရေဲန်ဒဲႈ",
+                districts: "လူမ်စေတ်မေန်းတိုအီး",
+                announcements: "အချာက်ပ်ုန်ရိူရ်ႈလေႈ",
+                about: "ဘည်မိုႈတီုင်ဌာန",
+                contact: "ဒီကဆီုပ်ကဘား",
+                helpCenter: "ပ်ုန်ဆမွံတ် ကာည်း ပ်ုန်ကဇောည်",
+                admin: "ဘည်ကကာႈချှာင်",
+                login: "ဒီလီပ်ရောတ်",
+                profileSettings: "အချာက်ကနာည်တို",
+                logout: "နံင်လေႈ",
+                deptTitle: "တီုင်စေတ်မေန်းတိုအီး အဆိုးယကပီုန်တအာင်း",
+                deptSubtitle: "Immigration Department • Ta'ang Land Government",
+                searchPlaceholder: "ဟြီုက်တခေါရ် ပ္လါႇဘေဲႇ...",
+                noSearchRes: "အာဝ်မိူဝ်ႈပ်ုန်ဘိူန်း။"
             },
             hero: {
-                title: "Stay Informed with Local Updates",
-                subtitle: "Access the latest news, services, and announcement information of Ta'ang Land Immigration Department in one place.",
-                latestNews: "Latest News",
-                readFull: "READ FULL STATEMENT",
-                releasedBy: "Released By",
-                officialMedia: "Official Media Office",
-            },
-            about: {
-                title: "About Immigration Department",
-                subtitle: "We are systematically recording population statistics related to the security and management of Ta'ang Land.",
-                badge: "OFFICIAL REPOSITORY",
-                pslf: "Ta'ang Land Government",
-                description: "We are systematically working to obtain accurate population statistics and indicators that will support the drawing of projects for the security, management, health, education, economy and other matters of Ta'ang Land.",
-                policyTitle: "Department Policy",
-                policyDesc: "To systematically control and maintain immigration, alien registration and household population activities in accordance with existing laws and procedures.",
-                objectiveTitle: "Main Objectives",
-                objectiveDesc: "To prevent illegal immigration, eliminate human trafficking and smuggling, and strictly implement the guidelines set by the government.",
-                responsibilitiesTitle: "Working Responsibilities",
-                responsibilitiesDesc: "Systematically carrying out population registration, census collection, and immigration control tasks for the region.",
-                mainTasksTitle: "Two Main Duties of Department",
-                mainTasksDesc: "1. Census and Population Registration\n2. Immigration and Border Control Regulation"
+                title: "နံပ်ဆဒါင် ခေဲင်အရာပ် က်ြုပ်အခိင်",
+                subtitle: "ယွံတ် အချာက်၊ ဘည်ရေဲန်ဒဲႈ ကာည်း ဆဒါင် အီကဆဲင်တောပ် လံပ်စေတ်မေန်းတိုအီး ကပီုန်တအာင်း အူဒီ",
+                latestNews: "ဆဒါင်ပ်ုန်ဘိူန်းရဘံန်းဆူတ်",
+                readFull: "ဒီရ်ႈ နိုက်နိုက်အချာက်ပ်ုန်ရိူရ်ႈလေႈ",
+                releasedBy: "ကဝ်ရိူရ်ႈလေႈ"
             },
             common: {
-                readMore: "Read More",
-                allNews: "All News",
-                save: "Save",
-                cancel: "Cancel",
-                viewAllDistricts: "View All Immigration Offices",
-                allDistricts: "All Offices",
-                viewAllAnnouncements: "View All Announcements",
-                pressCenter: "Press Center",
-                archiveImage: "Archive Image",
+                readMore: "ဆီုပ်ဒီရ်ႈ",
+                allNews: "ဆဒါင်ပါ်ဒိုႇဒိုည်ႇ",
+                save: "တကျြံတ်ဆီမ်း",
+                cancel: "ပျံတ်ႎီုန်",
+                viewAllDistricts: "တိူရ်ႈဒိုႇဒိုည်ႇ လူမ်စေတ်မေန်းတိုအီး",
+                allDistricts: "လူမ်ကကာႈပါ်ဒိုႇဒိုည်ႇ",
+                viewAllAnnouncements: "တိူရ်ႈဒိုႇဒိုည်ႇ အချာက်ပ်ုန်ရိူရ်ႈလေႈ",
+                pressCenter: "တီုင်ဒါင်း ပ္လေႈဆဒါင်",
+                archiveImage: "အရာင်မောဂူန်း"
             },
             contact: {
-                badge: "Contact",
-                title: "Contact Us",
-                subtitle: "If you need help, you can send complaints or suggestions.",
-                location: "Headquarters Location",
-                address: "Ta'ang Region, Northern Shan State",
-                phone: "Phone Number",
-                email: "Email",
-                officeHours: "Office Hours",
-                days: "Mon - Fri",
-                weekend: "Sat - Sun",
-                closed: "Closed",
-                name: "Name",
-                subject: "Subject",
-                message: "Message",
-                placeholderName: "Your Name",
+                badge: "ဒီကဆီုပ်ကဘား",
+                title: "ကတူည်ႇဒေဲႈတယဲ",
+                subtitle: "ဆာ်အယ်လိုကဇောည်၊ ဘိူန်းအူန်းတိုန်း ဘည်ဟြာင်း(ဆာ်အာဝ်မိုႈ) ဘည်ဒဲႈအကျံမ်ငျာန်။",
+                location: "ဒီလူမ်ဒါင်း",
+                address: "ကဒါႇပိူည်ကပီုန်ဆျှံမ် အရာပ်တအာင်း",
+                phone: "ကနံဝ်းႎှုင်",
+                email: "အီးမေးလ်",
+                officeHours: "အခိင်ႎိူဝ်ႈလူမ်",
+                days: "ဆငည်းရႎါည်း – ဆငည်းပူ",
+                weekend: "ဆငည်းနဂါး – ဆငည်းကာလိုန်",
+                closed: "ဆငည်းဘိ",
+                name: "ဇီုဝ်",
+                subject: "ကိင်ဘေဲႇ",
+                message: "မေတ်ဆေ့",
+                placeholderName: "ဇီုဝ်မည်း",
                 placeholderEmail: "example@email.com",
                 placeholderPhone: "+95 9 xxx xxx xxx",
-                placeholderSubject: "Enter subject",
-                placeholderMessage: "Write your message here...",
-                send: "Send Message",
-                sending: "Sending...",
-                success: "Your message has been sent successfully. We will contact you back.",
-                error: "Failed to send. Please try again.",
-                requiredFields: "Please fill in all required fields.",
+                placeholderSubject: "ကိက်ဟံပ်ကိင်ဘေဲႇ",
+                placeholderMessage: "ကိက်မေတ်ဆေ့မည်း ဒီနီန်...",
+                send: "တိုန်း မေတ်ဆေ့",
+                sending: "တိုန်းဟာဝ်း...",
+                success: "ဟောည်ႇတိုန်းဟောည်ႇ မေတ်ဆေ့ချှ်။ ယဲနံင်ႎီရ်ကဆီုပ်ကဘား။",
+                error: "ဘည်တိုန်း အာဝ်ဘာည်းဒါႈ။ ႎီရ်ရီန်းရဲတ်ဘိုး။",
+                requiredFields: "ရာ့်မည်း ပနိုက်ဒဲႈ အချာက်ပ်ုန်လိုအ်ုန် နိုက်နိုက်။"
             },
             login: {
-                title: "Login",
-                subtitle: "Sign in with your email and password",
-                email: "Email",
-                password: "Password",
-                forgot: "Forgot password?",
-                button: "Login",
-                loggingIn: "Logging in...",
-                noAccount: "Don't have an account?",
-                contactUs: "Contact Us",
-                failed: "Login failed. Please check your credentials.",
+                title: "လီပ်အကောက်",
+                subtitle: "လီပ်ရောတ် တိုဘေဲႇချြံင် ကာည်း အီးမေးလ် မည်း",
+                email: "အီးမေးလ်",
+                password: "တိုဘေဲႇချြံင်",
+                forgot: "မိုႈလာ့် မည်းဘီရ် တိုဘေဲႇချြံင်?",
+                button: "လီပ်ရောတ်",
+                loggingIn: "ဟည်လီပ်ရောတ်...",
+                noAccount: "ဆာ်ညှံမ်မိူဝ်ႈ အကောက်?",
+                contactUs: "ဒီကဆီုပ်ကဘား",
+                failed: "အာဝ်ဘိူန်းလီပ် အကောက်။ ႎီရ်စေတ်မေန်း အချာက်မည်း။"
             },
             activities: {
-                title: "Activities",
-                noActivities: "No Activities Yet",
-                noActivitiesDesc: "There are no activities published recently.",
-                badge: "Activity",
+                title: "ဘည်ရည်းရေဲန်",
+                noActivities: "ညှံမ်မိူဝ်ႈဘည်ရည်းရေဲန်",
+                noActivitiesDesc: "ကဇေန်နီး ညှံမ်မိူဝ်ႈ ဘည်ရည်းရေဲန် အီပ္လိူရ်ႈနှဲ။",
+                badge: "ဘည်ရည်းရေဲန်",
                 admin: "Admin"
             },
             services: {
-                title: "Services",
-                subtitle: "Learn about the services provided by the Immigration Department.",
-                noServices: "No Services Yet",
-                noServicesDesc: "Service information is not available at the moment.",
+                title: "ဘည်ရေဲန်ဒဲႈ",
+                subtitle: "တခေါရ် ဘည်မိုႈ ဘည်ရေဲန်ဒဲႈ တီုင်စေတ်မေန်းတိုအီး",
+                noServices: "ညှံမ်မိူဝ်ႈဘည်ရေဲန်ဒဲႈ",
+                noServicesDesc: "ကဇေန်နီး ညှံမ်မိူဝ်ႈ အချက်ဘည်ရေဲန်ဒဲႈ",
                 portalBadge: "Reach out our services",
-                publicServices: "Public Services",
-                assistanceCenter: "Public Assistance Center",
-
-                applyBtn: "Apply Now",
-                serviceNode: "Service Node",
-                smartcardTitle: "Apply for Smartcard",
-                smartcardDesc: "You can apply for a new Smart Identity Card and renew it.",
-                smartcardFeature1: "Full data security",
-                smartcardFeature2: "Can be connected via Digital system",
-                householdTitle: "Apply for Household Registration",
-                householdDesc: "You can apply online for new household registration, adding/removing members, and making amendments.",
-                householdFeature1: "Can issue new household registration",
-                householdFeature2: "Can register move/birth/death"
+                publicServices: "ဘည်ရေဲန်ဒဲႈ ကူန်ရဝ်မာဂါင်",
+                assistanceCenter: "တီုင်ဒါင်း လံပ်ကဇောည်ကူန်ရဝ်မာဂါင်",
+                applyBtn: "ဟြာင်း",
+                serviceNode: "ကဏ္ဍ ဘည်ရေဲန်ဒဲႈ",
+                smartcardTitle: "ရေဲန် Smartcard",
+                smartcardDesc: "ဘိူန်းရေဲန် ကဘ္လျ ဆမာတ်ကဲတ်က်ြုပ်ကာပ် အီကမာည်း (Smart Identity Card)ကာည်း ကဆီုပ်အဆာက် ကနာည်းကဘ္လျကနံဝ်းတို ကောန်ကုင်။",
+                smartcardFeature1: "မိူဝ်ႈနိုက်နိုက် ဘည်ကတ်ုမ်အချာက်",
+                smartcardFeature2: "ဘိူန်းကဆီုပ်ဒါဆနီတ် ဒီတ်ဇီတ်တယ်",
+                householdTitle: "ရေဲန်စြာင်းတိုအီး",
+                householdDesc: "ဘိူန်းဟြာင် ရေဲန် ဘည်ဘြဲဆား၊ ဘည်ဟံပ်စြာင်း ပယောမ်/ပဘိုး အီလီပ်ရမာ ကာည်း ဘည်ရေဲန်စြာင်းထာန်ဂေါည်တိုအီးကမာည်း တေဲင်အောန်လဲင်",
+                householdFeature1: "ဘိူန်းရိူရ်ႈ စြာင်းတိုအီး အီကမာည်း",
+                householdFeature2: "ဘိူန်းဟံပ် စြာင်း အီယံမ်း/ အီကိူတ်/ အီခ္လါည်း"
             },
             districts: {
-                title: "Immigration Offices",
-
-                noDistricts: "No Immigration Office Information Yet",
-                noDistrictsDesc: "Immigration office information will be added soon.",
-                badge: "REGIONAL IMMIGRATION OFFICE",
+                title: "လူမ်စေတ်မေန်းတိုအီး",
+                subtitle: "အချာက် ကာည်း လူမ်ကကာႈစေတ်မေန်းတိုအီး",
+                noDistricts: "ညှံမ်မိူဝ်ႈအချာက် လူမ်စေတ်မေန်းတိုအီး",
+                noDistrictsDesc: "အာဝ်လှေင် နံင်ဟံပ်အချာက် ကဆီုဝ်လူမ်စေတ်မေန်းတိုအီး",
+                badge: "REGIONAL IMMIGRATION OFFICES",
                 regionalOffices: "Regional Immigration Offices",
-                adminOffices: "Local Immigration Offices",
-                viewDetails: "VIEW DETAILS",
-
-                noMap: "No Map Information Yet",
-                viewMap: "View Map",
-                networkError: "Network Error",
-                networkErrorDesc: "Unable to retrieve data. Please try again."
+                adminOffices: "လူမ်စေတ်မေန်းတိုအီး လှံင်",
+                viewDetails: "ယွံတ် ဒုဒုဒဲႇဒဲႇ",
+                noMap: "ညှံမ်မိူဝ်ႈ အချာက်အရာင်ကတာည်း",
+                viewMap: "အရာင်ကတာည်း ယီုဝ်နှဲဒီ",
+                networkError: "ဘည်ကဆီုပ်ကႎှအာဝ်ကရောတ်",
+                networkErrorDesc: "အာဝ်မိူဝ်ႈ ဘည်ဘိူန်းလာည်း အချာက်။ ႎီရ်ရီန်းရဲတ်တိူရ်ႈဘိုး။"
             },
             announcements: {
-                title: "Announcements",
-                subtitle: "Official statements and announcements.",
-                noAnnouncements: "No Announcements Yet",
-                noAnnouncementsDesc: "There are no official announcements published recently.",
-                badge: "Announcement",
-                officialAnnouncements: "Official Announcements",
-                submittedBy: "Submitted by - ",
+                title: "အချာက်ပ်ုန်ရိူရ်ႈလေႈ",
+                noAnnouncements: "ညှံမ်မိူဝ်ႈ အချာက်ပ်ုန်ရိူရ်ႈလေႈ",
+                noAnnouncementsDesc: "ကဇေန်နီး ညှံမ်မိူဝ်ႈအချာက်ပ္လိူရ်ႈ ပ်ုန်ရိူရ်ႈလေႈအူန်း။",
+                officialAnnouncements: "ပ်ုန်ရိူရ်ႈလီပ်တြား တီုင်ဌာန",
+                submittedBy: "ကဝ်အီပ္လီပ်လီပ် - ",
                 admin: "Admin"
             },
             news: {
-                latestOfficialNews: "Latest Official News",
-                newsDesc: "Stay updated with our official press releases, department activities, and special announcements.",
+                latestOfficialNews: "ဆဒါင်အီလီပ်တြား ရဘံန်းဆူတ်",
+                newsDesc: "ဘိူန်းနံပ် တောပ်အခိင်မှောအခိင်အ်ုန် အချာက်ပ်ုန်ရိူရ်ႈလေႈဇာရ်၊ ဘည်ရည်းရေဲန်တီုင်ဌာန ကာည်း အချာက်ဆဒါင်ပ်ုန်ရိူရ်ႈလေႈ လီပ်တြား "
             },
             newsReader: {
-                preparing: "Preparing to read news...",
-                notFound: "News Not Found",
-                notFoundDesc: "This news article may have been removed or there is a link error.",
-                backHome: "Go back to home page",
-                download: "Download",
-                author: "Author",
+                preparing: "ရဲန်အူန်း ကနာည်ဒီရ်ႈဆဒါင်...",
+                notFound: "အာဝ်ဟြီုက်ယိူဝ်း ဆဒါင်",
+                notFoundDesc: "ဆဒါင်းကဇေန်နီး မိူဝ်ႈ လီန်းကလူည်ႇ ဆာ်အာဝ်မိုႈ ကတူႈခါမ်ပႎဲႈ။",
+                backHome: "နံင်ႎီရ်ဟာဝ်း ပ တံင်ငါည်ပ္လါႇဘေဲႇပြီမ်",
+                download: "ဘိူန်းဒေါင်လောတ်",
+                author: "ကဝ်အီကိက်",
                 admin: "System Admin",
-                loves: "Loves",
-                back: "Go Back",
-                like: "Like",
+                loves: "ကဝ်အီအုင်",
+                back: "ႎီရ် ႎီရ်ရဘံန်း",
+                like: "အုင်",
                 report: "REPORT",
                 publicInteraction: "Public Interaction",
-                relatedNews: "Related News",
-                noRelated: "No related articles found in this category."
+                relatedNews: "ဆဒါင်ကစာပ်",
+                noRelated: "ညှံမ်မိူဝ်ႈဆဒါင်ကစာပ်"
             },
             notFound: {
-                title: "Page Not Found",
-                desc: "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
-                home: "Home Page",
-                back: "Go Back"
+                title: "အာဝ်ဟြီုက်ယိူဝ်း ငါည်ပ္လါႇဘေဲႇ",
+                desc: "ငါည်ပ္လါႇဘေဲႇ ပ်ုန်ဟြီုက်အူန်းမည်းဒီန် ဆမာပဲန် ကတူႈခါမ်ပႎဲႈ၊ ခ္လါည်းအူန်းဇီုဝ် (ဆာ်အာဝ်မိုႈ) အာဝ်ဘိူန်းပွံတ်အူဂ္လိူမ်",
+                home: "တံင်ငါည်ပ္လါႇဘေဲႇပြီမ်",
+                back: "ႎီရ်ႎီရ်ရဘံန်း"
             },
             pageReader: {
-                preparing: "Searching for information...",
-                notFound: "Page Not Found",
-                back: "Go Back",
-                service: "Service",
-                districtInfo: "Immigration Office Information",
-                download: "Download"
+                preparing: "ဟြီုက်တခေါရ် အချာက်...",
+                notFound: "အာဝ်ဟြီုက်ယိူဝ်း ငါည်ပ္လါႇဘေဲႇ",
+                back: "နံင်ႎီရ်ဟာဝ်း",
+                service: "ဘည်ရေဲန်ဒဲႈ",
+                districtInfo: "အချာက်ဘည်မိုႈခေဲင်လူမ်",
+                download: "ဘိူန်းဒေါင်လောတ်"
             },
             footer: {
-                about: "You can read the latest reliable and valid news and events in real time.",
-                quickLinks: "Quick Links",
-                contact: "Contact",
-                copyright: "© 2026 San Hlu & Nay Lin. All rights reserved.",
+                about: "ဘိူန်းဒီရ်ႈ ဘည်မိုႈ၊ ဆဒါင် ကတီးကရီး ပ်ုန်ဘိူန်းရဘံန်းဆူတ် ကာည်း အီဘိူန်းညှူမ် တောပ်ဘည်အခိင်မှောအခိင်အ်ုန်",
+                quickLinks: "လီန်းချာ်န်း",
+                contact: "ဒီကဆီုပ်ကဘား",
+                copyright: "© 2026 Ta'ang Land Government Of Immigration Department. All Rights Reserved.",
                 developers: "Designed & Developed by Mai San Hlu & Mai Nay Lin",
-                location: "Headquarters Location",
-                address: "Ta'ang Region, Northern Shan State",
-                phone: "Phone Number",
-                email: "Email"
+                location: "ဒီလူမ်ဒါင်း",
+                address: "ကဒါႇပိူည်ကပီုန်ဆျှံမ် ၊ အရာပ်တအာင်း",
+                phone: "ကနံဝ်းႎှုင်",
+                email: "အီးမေးလ်"
             },
             searchModal: {
-                placeholder: "Search news, category, author...",
-                hint: "Enter text to search (min 2 characters)",
-                noResults: "No Results",
-                noResultsDesc: "No matching news found for",
-                found: "results found",
-                navigationHint: "↑↓ Navigate • Enter to view"
+                placeholder: "ဟြီုက်တခေါရ် ကဝ်အိကိက်၊ ကဏ္ဍ၊ ဆဒါင်...",
+                hint: "ကိက်ဟံပ်ဘေဲႇ ပ်ုန်လိုဟြီုက် (ဘြေ့အ်ုန် (2) တို)",
+                noResults: "အာဝ်ယိူဝ်း ပ်ုန်ဘိူန်း",
+                noResultsDesc: "အာဝ်မိူဝ်ႈဆဒါင် အီကငျား",
+                found: "ယိူဝ်းကဇေန်နီး",
+                navigationHint: "↑↓ ရံရ်ႈ • လီပ်ယွံတ် Enter "
             },
             comments: {
-                title: "Comments",
-                error: "Comment failed",
-                placeholder: "Write a comment about the news...",
-                submit: "Submit",
-                loginRequiredTitle: "You need to login to write a comment.",
-                login: "Login",
-                anonymous: "Anonymous",
+                title: "ပ်ုန်ကအာ်မ်း",
+                error: "ဘည်ဒဲႈပ်ုန်ကအာ်မ်း အာဝ်ဘာည်းဒါႈ။ (Comment failed)",
+                placeholder: "ကိက်ပ်ုန်ကအာ်မ်း အီကဆဲင်တောပ်ဆဒါင်...",
+                submit: "နံင်တိုန်း",
+                loginRequiredTitle: "ကနာည်ကိက်ပ်ုန်ကအာ်မ်း လိုလီပ်ရောတ်ခေဲင် အကောက်",
+                login: "နံင်လီပ်အကောက်",
+                anonymous: "အာဝ်နံပ်ဇီုဝ်",
                 roleRootAdmin: "Root Admin",
                 roleAdmin: "Admin",
                 roleStaff: "Staff",
-                roleUser: "User",
-                noComments: "No comments yet. Be the first to comment.",
-                edit: "Edit",
-                delete: "Delete",
-                reply: "Reply",
-                confirmDelete: "Are you sure you want to delete this comment?"
+                roleUser: "ကဝ်အီဒါ",
+                noComments: "ညှံမ်မိူဝ်ႈ ပ်ုန်ကအာ်မ်း။ ဒဲႈမိုႈ အီဒဲႈပ်ုန်ကအာ်မ်းရအာည်ႇဆူတ်။",
+                edit: "နံင်ဘြဲဆား",
+                delete: "နံင်ပျံတ်",
+                reply: "ပ္လါန် ပ်ုန်ကအာ်မ်း",
+                confirmDelete: "နှဲန်လာ့် နံင်ပျံတ် ပ်ုန်ကအာ်မ်းနီန်?"
             },
             breadcrumbs: {
-                homeTitle: "Home Page",
-                home: "Home"
+                homeTitle: "တံင်ငါည်ပ္လါဘေဲႇပြီမ်",
+                home: "တံင်ဒါင်း ဒီယိူဝ်ႇအ်ုန်"
             },
             shareButtons: {
-                title: "Share News",
-                shareFacebook: "Share on Facebook",
-                shareTelegram: "Share on Telegram",
+                title: "ကဆာင်းဆဒါင်",
+                shareFacebook: "နံင်ကဆာင်း ခေဲင် Facebook ",
+                shareTelegram: "နံင်ကဆာင်း ခေဲင် Telegram",
                 copyLink: "Copy Link",
-                linkCopied: "Link copied.",
-                errorFetchingData: "Unable to retrieve information from the secure server.",
+                linkCopied: " linkCopied: ",
+                errorFetchingData: "ကဆီုဝ်လာည်း အချာက်ဆဒါင် မိူဝ်ႈဘည်အာဝ်ဘာည်းဒါႈ။",
             },
             help: {
-                title: "FAQ & Help Center",
-                subtitle: "Find answers to frequently asked questions and get support for immigration procedures.",
-                searchPlaceholder: "Search for help, procedures, or keywords...",
+                title: "ပ်ုန်ဆမွံတ်ဂီုန်း ကာည်း ပ်ုန်ကဇောည်",
+                subtitle: "အချာက်အီကဆဲင်တောပ် ဘည်ကျာင်ရေဲန် လံပ်စေတ်မေန်းတိုအီး ဘိူန်းဟြီုက်တခေါရ် ကဆီုဝ်နီန်။",
+                searchPlaceholder: "ဟြီုက်တခေါရ် တိုဘေဲႇအမဒါင်း (ဆာ်အာဝ်မိုႈ) ပ်ုန်ကျာင်ရေဲန် ကာည်း ပ်ုန်ကဇောည်...",
                 categories: {
-                    general: "General Information",
-                    passport: "Passport & Identity",
-                    visa: "Visa & Residency",
-                    security: "Security & Ethics"
+                    general: "အချာက် အီုဝ်အီုဝ်နာန်နာန်",
+                    passport: "ကဘ္လျကနံဝ်းတို ကာည်း ကဘ္လျဟာဝ်းကုင်ဟံရ်",
+                    visa: "အခွါင်းဂေါည် ကာည်း ဘီဆာ",
+                    security: "ပ်ုန်ကံမ်ကျာင် ကာည်း လံပ်ကတ်ုမ်"
                 },
                 faq: {
-                    q1: "How do I apply for a new Smart Identity Card?",
-                    a1: "You can apply through our online service under the 'Services' section. You'll need to upload your digital genealogical records and biometric data.",
-                    q2: "What is the processing time for a visa application?",
-                    a2: "Standard processing takes 5-7 working days. Express services are available at the Headquarters for urgent national matters.",
-                    q3: "How can I update my household registration?",
-                    a3: "Changes in residency or family members must be reported via this portal within 48 hours. Visit the 'Household Registration' service to submit amendments.",
-                    q4: "Is my data secure on this portal?",
-                    a4: "Yes, we utilize military-grade encryption to protect all digital identities. Your data is treated as a national security asset."
+                    q1: "ဘည်မှော နံင်လိုဟြာင်း ဆမဲတ်ကဲတ်(Smart Identity Card)ကမာည်း?",
+                    a1: "ဘိူန်းဟြာင်းအူန်း ကဏ္ဍ “ဘည်ရေဲန်ဒဲႈ” အီမိူဝ်ႈဘည်ရေဲန်ဒဲႈယဲ တေဲင်လဲင်။ လိုဟြာင်း ပ်ုန်ရနော ကဆီုဝ်နှာမ်ခြိူဝ်း ကာည်း အချာက်ကဆီုဝ် ဇီဝ မည်း။",
+                    q2: "ကနာည်ဟြာင်းအူန်း ဘီဇာ ထာန်မှောအခိင်အ်ုန်လှေင်?",
+                    a2: "ဘည်ဆေႏအ်ုန် ဆငည်းႎိူဝ်ႈလူမ် လှေင် (5)ဆငည်း ရောတ် (7)ဆငည်း။ ကနာည်ဇီုင်း အီအရေးဒါင်း ဘိူန်းလာည်းဘည်ရေဲန်ဒဲႈ အီချှာင်လူမ်ချာ်န်းချာ်န်း။",
+                    q3: "ဘည်မှောနံင်ရေဲန် ဘည်ဘြဲဆား စြာင်းထာန်ဂေါည်တိုအီး?",
+                    a3: " ဘည်ပယောမ်/ပဘိုး အီလီပ်ရဟောမ်ရမာ ဆာ်အာဝ်မိုႈ ဘည်ခ္လါည်းဒီ ခေဲင် (48)နြီ ဘ်ုပ်ဟြာင်းက္လာင်း ဒီဇူႈအ်ုန်",
+                    q4: "အချာက်အော အီဂေါည်တေဲင် ဒီဇူႈနီန် မိူဝ်ႈလာ့် ဘည်ကတ်ုမ်?",
+                    a4: "မိူဝ်ႈအူန်း။ ဒါဆနီတ်ကနံဝ်းချြံင်ချှံန် ကဒါႇတံပ်နာန်း  ဒံန်ခြဲအူန်းနိုက်နိုက် ၊ တကျြံတ်ဆီမ်းအူန်း ခေဲင်ချှံန်လံပ်ကတ်ုမ်ကုင်",
                 },
-                contactSupport: "Still need help?",
-                contactDesc: "Our support team is available during office hours to assist with complex cases.",
+                contactSupport: "လိုလာ့်ဘိုး ကဇောည်?",
+                contactDesc: "ကနာည်ဇီုင်း အီကႎှ်ုရ် ဘိူန်းကဆီုပ်ကဘား တ ဖုင်လံပ်ကဇောည် အခိင်ႎိူဝ်ႈလူမ် ။",
                 chatbot: {
                     title: "Federal Support AI",
-                    welcome: "Hello! I am the Federal Support Assistant. How can I help you today?",
-                    placeholder: "Type a message...",
+                    welcome: "ရိုဆေ! ယဲနီန်မိုႈ Federal Support Assistant ။ဆေနံင်လိုကဇောည်ဒဲႈ?",
+                    placeholder: "ကိက်ဟံပ် မေတ်ဆေ့...",
                     online: "Online"
                 }
             },
             stats: {
                 asOf: "As of",
                 reach: "Registration Coverage"
+
             }
         }
     }
@@ -801,8 +782,251 @@ i18n
         resources,
         fallbackLng: "en",
         interpolation: {
-            escapeValue: false
-        }
+            escapeValue: false,
+        },
+        detection: {
+            order: ['localStorage', 'navigator'],
+            caches: ['localStorage'],
+        },
     });
 
 export default i18n;
+
+//     tg: {
+//         translation: {
+//             nav: {
+//                 Home: “တံင်ငါည်ပ္လါႇဘေဲႇပြီမ်”
+//                 News: “ဆဒါင်”
+//                 Activities: “ဘည်ရည်းရေဲန်”
+//                 Services: “ဘည်ရေဲန်ဒဲႈ”
+//                 Districts: “လူမ်စေတ်မေန်းတိုအီး”
+//                 announcements: “အချာက်ပ်ုန်ရိူရ်ႈလေႈ
+// about: “ဘည်မိုႈတီုင်ဌာန
+// contact: “ဒီကဆီုပ်ကဘား”
+//                 helpCenter: "ပ်ုန်ဆမွံတ် ကာည်း ပ်ုန်ကဇောည်",
+//                 admin: "ဘည်ကကာႈချှာင်",
+//                 login: "ဒီလီပ်ရောတ်",
+//                 profileSettings: "အချာက်ကနာည်တို",
+//                 logout: "နံင်လေႈ",
+//                 deptTitle: "တီုင်စေတ်မေန်းတိုအီး အဆိုးယကပီုန်တအာင်း",
+//                 deptSubtitle: "Immigration Department • Ta'ang Land Government",
+//                 searchPlaceholder: "ဟြီုက်တခေါရ် ပ္လါႇဘေဲႇ...",
+//                 noSearchRes: "အာဝ်မိူဝ်ႈပ်ုန်ဘိူန်း။"
+//             hero: {
+//                     title: "နံပ်ဆဒါင် ခေဲင်အရာပ် က်ြုပ်အခိင်",
+//                     subtitle: "ယွံတ် အချာက်၊ ဘည်ရေဲန်ဒဲႈ ကာည်း ဆဒါင် အီကဆဲင်တောပ် လံပ်စေတ်မေန်းတိုအီး ကပီုန်တအာင်း အူဒီ",
+//                     latestNews: "ဆဒါင်ပ်ုန်ဘိူန်းရဘံန်းဆူတ်",
+//                     readFull: "ဒီရ်ႈ နိုက်နိုက်အချာက်ပ်ုန်ရိူရ်ႈလေႈ",
+//                     releasedBy: "ကဝ်ရိူရ်ႈလေႈ",
+//                     Home: “တံင်ငါည်ပ္လါႇဘေဲႇပြီမ်”
+//                     News: “ဆဒါင်”
+//                     Activities: “ဘည်ရည်းရေဲန်”
+//                     Services: “ဘည်ရေဲန်ဒဲႈ”
+//                     Districts: “လူမ်စေတ်မေန်းတိုအီး”
+//                     announcements: “အချာက်ပ်ုန်ရိူရ်ႈလေႈ
+// about: “ဘည်မိုႈတီုင်ဌာန
+// contact: “ဒီကဆီုပ်ကဘား”
+//                     helpCenter: "ပ်ုန်ဆမွံတ် ကာည်း ပ်ုန်ကဇောည်",
+//                     admin: "ဘည်ကကာႈချှာင်",
+//                     login: "ဒီလီပ်ရောတ်",
+//                     profileSettings: "အချာက်ကနာည်တို",
+//                     logout: "နံင်လေႈ",
+//                     deptTitle: "တီုင်စေတ်မေန်းတိုအီး အဆိုးယကပီုန်တအာင်း",
+//                     deptSubtitle: "Immigration Department • Ta'ang Land Government",
+//                     searchPlaceholder: "ဟြီုက်တခေါရ် ပ္လါႇဘေဲႇ...",
+//                     noSearchRes: "အာဝ်မိူဝ်ႈပ်ုန်ဘိူန်း။"
+//             hero: {
+//                         title: "နံပ်ဆဒါင် ခေဲင်အရာပ် က်ြုပ်အခိင်",
+//                         subtitle: "ယွံတ် အချာက်၊ ဘည်ရေဲန်ဒဲႈ ကာည်း ဆဒါင် အီကဆဲင်တောပ် လံပ်စေတ်မေန်းတိုအီး ကပီုန်တအာင်း အူဒီ",
+//                         latestNews: "ဆဒါင်ပ်ုန်ဘိူန်းရဘံန်းဆူတ်",
+//                         readFull: "ဒီရ်ႈ နိုက်နိုက်အချာက်ပ်ုန်ရိူရ်ႈလေႈ",
+//                         releasedBy: "ကဝ်ရိူရ်ႈလေႈ",
+//                     },
+//                     common: {
+//                         readMore: "ဆီုပ်ဒီရ်ႈ",
+//                         allNews: "ဆဒါင်ပါ်ဒိုႇဒိုည်ႇ",
+//                         save: "တကျြံတ်ဆီမ်း",
+//                         cancel: "ပျံတ်ႎီုန်",
+//                         viewAllDistricts: "တိူရ်ႈဒိုႇဒိုည်ႇ လူမ်စေတ်မေန်းတိုအီး",
+//                         allDistricts: "လူမ်ကကာႈပါ်ဒိုႇဒိုည်ႇ",
+//                         viewAllAnnouncements: "တိူရ်ႈဒိုႇဒိုည်ႇ အချာက်ပ်ုန်ရိူရ်ႈလေႈ",
+//                         pressCenter: "တီုင်ဒါင်း ပ္လေႈဆဒါင်",
+//                         archiveImage: "အရာင်မောဂူန်း",
+//                     },
+//                     contact: {
+//                         badge: "ဒီကဆီုပ်ကဘား",
+//                         title: "ကတူည်ႇဒေဲႈတယဲ",
+//                         subtitle: "ဆာ်အယ်လိုကဇောည်၊ ဘိူန်းအူန်းတိုန်း ဘည်ဟြာင်း(ဆာ်အာဝ်မိုႈ) ဘည်ဒဲႈအကျံမ်ငျာန်။
+//                 location: "ဒီလူမ်ဒါင်း",
+//                         address: "ကဒါႇပိူည်ကပီုန်ဆျှံမ် အရာပ်တအာင်း",
+//                         phone: "ကနံဝ်းႎှုင်",
+//                         email: "အီးမေးလ်",
+//                         officeHours: "အခိင်ႎိူဝ်ႈလူမ်",
+//                         days: "ဆငည်းရႎါည်း – ဆငည်းပူ",
+//                         weekend: "ဆငည်းနဂါး – ဆငည်းကာလိုန်",
+//                         closed: "ဆငည်းဘိ",
+//                         name: "ဇီုဝ်",
+//                         subject: "ကိင်ဘေဲႇ",
+//                         message: "မေတ်ဆေ့",
+//                         placeholderName: "ဇီုဝ်မည်း",
+//                         placeholderEmail: "example@email.com",
+//                         placeholderPhone: "+95 9 xxx xxx xxx",
+//                         placeholderSubject: "ကိက်ဟံပ်ကိင်ဘေဲႇ",
+//                         placeholderMessage: "ကိက်မေတ်ဆေ့မည်း ဒီနီန်...",
+//                         send: "တိုန်း မေတ်ဆေ့",
+//                         sending: "တိုန်းဟာဝ်း...",
+//                         success: "ဟောည်ႇတိုန်းဟောည်ႇ မေတ်ဆေ့ချှ်။ ယဲနံင်ႎီရ်ကဆီုပ်ကဘား။",
+//                         error: "ဘည်တိုန်း အာဝ်ဘာည်းဒါႈ။ ႎီရ်ရီန်းရဲတ်ဘိုး။",
+//                         requiredFields: "ရာ့်မည်း ပနိုက်ဒဲႈ အချာက်ပ်ုန်လိုအ်ုန် နိုက်နိုက်။",
+//                     },
+//                     login: {
+//                         title: "လီပ်အကောက်",
+//                         subtitle: "လီပ်ရောတ် တိုဘေဲႇချြံင် ကာည်း အီးမေးလ် မည်း",
+//                         email: "အီးမေးလ်",
+//                         password: "တိုဘေဲႇချြံင်",
+//                         forgot: "မိုႈလာ့် မည်းဘီရ် တိုဘေဲႇချြံင်?",
+//                         button: "လီပ်ရောတ်",
+//                         loggingIn: "ဟည်လီပ်ရောတ်...",
+//                         noAccount: "ဆာ်ညှံမ်မိူဝ်ႈ အကောက်?",
+//                         contactUs: "ဒီကဆီုပ်ကဘား",
+//                         failed: "အာဝ်ဘိူန်းလီပ် အကောက်။ ႎီရ်စေတ်မေန်း အချာက်မည်း။",
+//                     },
+//                     activities: {
+//                         title: "ဘည်ရည်းရေဲန်",
+
+//                         noActivities: "ညှံမ်မိူဝ်ႈဘည်ရည်းရေဲန်",
+//                         noActivitiesDesc: "ကဇေန်နီး ညှံမ်မိူဝ်ႈ ဘည်ရည်းရေဲန် အီပ္လိူရ်ႈနှဲ။",
+//                         badge: "ဘည်ရည်းရေဲန်",
+//                         admin: "Admin"
+//                     },
+//                     services: {
+//                         title: "ဘည်ရေဲန်ဒဲႈ",
+//                         subtitle: "တခေါရ် ဘည်မိုႈ ဘည်ရေဲန်ဒဲႈ တီုင်စေတ်မေန်းတိုအီး",
+//                         noServices: "ညှံမ်မိူဝ်ႈဘည်ရေဲန်ဒဲႈ",
+//                         noServicesDesc: "ကဇေန်နီး ညှံမ်မိူဝ်ႈ အချက်ဘည်ရေဲန်ဒဲႈ",
+//                         portalBadge: "Reach out our services",
+//                         publicServices: "ဘည်ရေဲန်ဒဲႈ ကူန်ရဝ်မာဂါင်",
+//                         assistanceCenter: "တီုင်ဒါင်း လံပ်ကဇောည်ကူန်ရဝ်မာဂါင်",
+
+//                         applyBtn: "ဟြာင်း",
+//                         serviceNode: "ကဏ္ဍ ဘည်ရေဲန်ဒဲႈ",
+//                         smartcardTitle: "ရေဲန် Smartcard",
+//                         smartcardDesc: "ဘိူန်းရေဲန် ကဘ္လျ ဆမာတ်ကဲတ်က်ြုပ်ကာပ် အီကမာည်း (Smart Identity Card)ကာည်း ကဆီုပ်အဆာက် ကနာည်းကဘ္လျကနံဝ်းတို ကောန်ကုင်။”
+//                 smartcardFeature1: "မိူဝ်ႈနိုက်နိုက် ဘည်ကတ်ုမ်အချာက်",
+//                         smartcardFeature2: "ဘိူန်းကဆီုပ်ဒါဆနီတ် ဒီတ်ဇီတ်တယ်",
+//                         householdTitle: "ရေဲန်စြာင်းတိုအီး",
+//                         householdDesc: "ဘိူန်းဟြာင် ရေဲန် ဘည်ဘြဲဆား၊ ဘည်ဟံပ်စြာင်း ပယောမ်/ပဘိုး အီလီပ်ရမာ ကာည်း ဘည်ရေဲန်စြာင်းထာန်ဂေါည်တိုအီးကမာည်း တေဲင်အောန်လဲင်",
+//                         householdFeature1: "ဘိူန်းရိူရ်ႈ စြာင်းတိုအီး အီကမာည်း",
+//                         householdFeature2: "ဘိူန်းဟံပ် စြာင်း အီယံမ်း/ အီကိူတ်/ အီခ္လါည်း"
+//                     },
+//                     districts: {
+//                         title: "လူမ်စေတ်မေန်းတိုအီး",
+//                         subtitle: "အချာက် ကာည်း လူမ်ကကာႈစေတ်မေန်းတိုအီး",
+//                         noDistricts: "ညှံမ်မိူဝ်ႈအချာက် လူမ်စေတ်မေန်းတိုအီး",
+//                         noDistrictsDesc: "အာဝ်လှေင် နံင်ဟံပ်အချာက် ကဆီုဝ်လူမ်စေတ်မေန်းတိုအီး",
+//                         badge: "REGIONAL IMMIGRATION OFFICES",
+//                         regionalOffices: "Regional Immigration Offices",
+//                         adminOffices: "လူမ်စေတ်မေန်းတိုအီး လှံင်",
+//                         viewDetails: "ယွံတ် ဒုဒုဒဲႇဒဲႇ",
+
+//                         noMap: "ညှံမ်မိူဝ်ႈ အချာက်အရာင်ကတာည်း",
+//                         viewMap: " အရာင်ကတာည်း ယီုဝ်နှဲဒီ ",
+//                         networkError: "ဘည်ကဆီုပ်ကႎှအာဝ်ကရောတ်",
+//                         networkErrorDesc: "အာဝ်မိူဝ်ႈ ဘည်ဘိူန်းလာည်း အချာက်။ ႎီရ်ရီန်းရဲတ်တိူရ်ႈဘိုး။"
+//                     },
+//                     announcements: {
+//                         title: "အချာက်ပ်ုန်ရိူရ်ႈလေႈ",
+
+//                         noAnnouncements: "ညှံမ်မိူဝ်ႈ အချာက်ပ်ုန်ရိူရ်ႈလေႈ",
+//                         noAnnouncementsDesc: "ကဇေန်နီး ညှံမ်မိူဝ်ႈအချာက်ပ္လိူရ်ႈ ပ်ုန်ရိူရ်ႈလေႈအူန်း။",
+//                         officialAnnouncements: "ပ်ုန်ရိူရ်ႈလီပ်တြား တီုင်ဌာန",
+//                         submittedBy: "ကဝ်အီပ္လီပ်လီပ် - ",
+//                         admin: "Admin"
+//                     },
+//                     news: {
+//                         latestOfficialNews: "ဆဒါင်အီလီပ်တြား ရဘံန်းဆူတ်",
+//                         newsDesc: "ဘိူန်းနံပ် တောပ်အခိင်မှောအခိင်အ်ုန် အချာက်ပ်ုန်ရိူရ်ႈလေႈဇာရ်၊ ဘည်ရည်းရေဲန်တီုင်ဌာန ကာည်း အချာက်ဆဒါင်ပ်ုန်ရိူရ်ႈလေႈ လီပ်တြား ",
+//                     },
+//                     newsReader: {
+//                         preparing: "ရဲန်အူန်း ကနာည်ဒီရ်ႈဆဒါင်...",
+//                         notFound: "အာဝ်ဟြီုက်ယိူဝ်း ဆဒါင်",
+//                         notFoundDesc: "ဆဒါင်းကဇေန်နီး မိူဝ်ႈ လီန်းကလူည်ႇ ဆာ်အာဝ်မိုႈ ကတူႈခါမ်ပႎဲႈ။",
+//                         backHome: "နံင်ႎီရ်ဟာဝ်း ပ တံင်ငါည်ပ္လါႇဘေဲႇပြီမ်",
+//                         download: "ဘိူန်းဒေါင်လောတ်",
+//                         author: "ကဝ်အီကိက်",
+//                         admin: "System Admin",
+//                         loves: "ကဝ်အီအုင်",
+//                         back: "ႎီရ် ႎီရ်ရဘံန်း",
+//                         like: "အုင်",
+//                         report: "REPORT",
+//                         publicInteraction: "Public Interaction",
+//                         relatedNews: "ဆဒါင်ကစာပ်",
+//                         noRelated: "ညှံမ်မိူဝ်ႈဆဒါင်ကစာပ်"
+//                     },
+//                     notFound: {
+//                         title: "အာဝ်ဟြီုက်ယိူဝ်း ငါည်ပ္လါႇဘေဲႇ",
+//                         desc: " ငါည်ပ္လါႇဘေဲႇ ပ်ုန်ဟြီုက်အူန်းမည်းဒီန် ဆမာပဲန် ကတူႈခါမ်ပႎဲႈ၊ ခ္လါည်းအူန်းဇီုဝ် (ဆာ်အာဝ်မိုႈ) အာဝ်ဘိူန်းပွံတ်အူဂ္လိူမ် ",
+//                         home: "တံင်ငါည်ပ္လါႇဘေဲႇပြီမ်",
+//                         back: "ႎီရ်ႎီရ်ရဘံန်း"
+//                     },
+//                     pageReader: {
+//                         preparing: "ဟြီုက်တခေါရ် အချာက်...",
+//                         notFound: "အာဝ်ဟြီုက်ယိူဝ်း ငါည်ပ္လါႇဘေဲႇ",
+//                         back: "နံင်ႎီရ်ဟာဝ်း",
+//                         service: "ဘည်ရေဲန်ဒဲႈ",
+//                         districtInfo: "အချာက်ဘည်မိုႈခေဲင်လူမ်",
+//                         download: "ဘိူန်းဒေါင်လောတ်"
+//                     },
+//                     footer: {
+//                         about: "ဘိူန်းဒီရ်ႈ ဘည်မိုႈ၊ ဆဒါင် ကတီးကရီး ပ်ုန်ဘိူန်းရဘံန်းဆူတ် ကာည်း အီဘိူန်းညှူမ် တောပ်ဘည်အခိင်မှောအခိင်အ်ုန်",
+//                         quickLinks: "လီန်းချာ်န်း",
+//                         contact: "ဒီကဆီုပ်ကဘား",
+//                         copyright: "© 2026 Ta'ang Land Government Of Immigration Department. All Rights Reserved.",
+//                         developers: "Designed & Developed by Mai San Hlu & Mai Nay Lin",
+//                         location: "ဒီလူမ်ဒါင်း",
+//                         address: "ကဒါႇပိူည်ကပီုန်ဆျှံမ် ၊ အရာပ်တအာင်း",
+//                         phone: "ကနံဝ်းႎှုင်",
+//                         email: "အီးမေးလ်"
+//                     },
+//                     searchModal: {
+//                         placeholder: "ဟြီုက်တခေါရ် ကဝ်အိကိက်၊ ကဏ္ဍ၊ ဆဒါင်...",
+//                         hint: "ကိက်ဟံပ်ဘေဲႇ ပ်ုန်လိုဟြီုက် (ဘြေ့အ်ုန် (2) တို)",
+//                         noResults: "အာဝ်ယိူဝ်း ပ်ုန်ဘိူန်း",
+//                         noResultsDesc: "အာဝ်မိူဝ်ႈဆဒါင် အီကငျား",
+//                         found: "ယိူဝ်းကဇေန်နီး",
+//                         navigationHint: "↑↓ ရံရ်ႈ • လီပ်ယွံတ် Enter "
+//                     },
+//                     comments: {
+//                         title: "ပ်ုန်ကအာ်မ်း",
+//                         error: "ဘည်ဒဲႈပ်ုန်ကအာ်မ်း အာဝ်ဘာည်းဒါႈ။ (Comment failed)",
+//                         placeholder: "ကိက်ပ်ုန်ကအာ်မ်း အီကဆဲင်တောပ်ဆဒါင်...",
+//                         submit: "နံင်တိုန်း",
+//                         loginRequiredTitle: "ကနာည်ကိက်ပ်ုန်ကအာ်မ်း လိုလီပ်ရောတ်ခေဲင် အကောက်",
+//                         login: "နံင်လီပ်အကောက်",
+//                         anonymous: "အာဝ်နံပ်ဇီုဝ်",
+//                         roleRootAdmin: "Root Admin",
+//                         roleAdmin: "Admin",
+//                         roleStaff: "Staff",
+//                         roleUser: "ကဝ်အီဒါ",
+//                         noComments: "ညှံမ်မိူဝ်ႈ ပ်ုန်ကအာ်မ်း။ ဒဲႈမိုႈ အီဒဲႈပ်ုန်ကအာ်မ်းရအာည်ႇဆူတ်။",
+//                         edit: "နံင်ဘြဲဆား",
+//                         delete: "နံင်ပျံတ်",
+//                         reply: "ပ္လါန် ပ်ုန်ကအာ်မ်း",
+//                         confirmDelete: "နှဲန်လာ့် နံင်ပျံတ် ပ်ုန်ကအာ်မ်းနီန်?"
+//                     },
+//                     breadcrumbs: {
+//                         homeTitle: "တံင်ငါည်ပ္လါဘေဲႇပြီမ်",
+//                         home: "တံင်ဒါင်း ဒီယိူဝ်ႇအ်ုန်"
+//                     },
+//                     shareButtons: {
+//                         title: "ကဆာင်းဆဒါင်",
+//                         shareFacebook: "နံင်ကဆာင်း ခေဲင် Facebook ",
+//                         shareTelegram: "နံင်ကဆာင်း ခေဲင် Telegram",
+//                         copyLink: " copyLink:",
+
+
+
+
+
+
+//                         export default i18n;
