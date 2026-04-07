@@ -14,7 +14,7 @@ export default function PageLoader() {
                     <motion.div
                         className="absolute inset-0 rounded-full bg-primary/10 blur-3xl"
                         animate={{ scale: [1, 1.2, 1] }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                     />
 
                     {/* The Running Circle (Themed Ring) */}
@@ -24,7 +24,7 @@ export default function PageLoader() {
                         />
                         <motion.div
                             animate={{ rotate: 360 }}
-                            transition={{ repeat: Infinity, duration: 6, ease: "linear" }}
+                            transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
                             className="absolute inset-0 w-32 h-32 rounded-full border-t-[3px] border-r-[3px] border-primary shadow-[0_0_15px_rgba(30,58,138,0.3)]"
                         />
                     </div>
@@ -35,7 +35,7 @@ export default function PageLoader() {
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: [1, 1.05, 1], opacity: 1 }}
                             transition={{
-                                scale: { repeat: Infinity, duration: 2, ease: "easeInOut" },
+                                scale: { repeat: Infinity, duration: 4, ease: "easeInOut" },
                                 opacity: { duration: 0.5 }
                             }}
                             className="w-20 h-20 flex items-center justify-center"
@@ -66,8 +66,8 @@ export default function PageLoader() {
                                 }}
                                 transition={{
                                     repeat: Infinity,
-                                    duration: 1.2,
-                                    delay: i * 0.2,
+                                    duration: 1.5,
+                                    delay: i * 0.3,
                                     ease: "easeInOut"
                                 }}
                             />
