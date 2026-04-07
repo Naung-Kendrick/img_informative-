@@ -12,7 +12,7 @@ export default function Announcements() {
     const { data: allAnnouncements, isLoading, isError } = useGetAllAnnouncementsQuery();
     const [currentPage, setCurrentPage] = useState(1);
 
-    const announcements = allAnnouncements || [];
+    const announcements = [...(allAnnouncements || [])].sort((a, b) => new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime());
 
     const totalPages = Math.ceil(announcements.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;

@@ -59,29 +59,52 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ variant = "default" }) =>
     const fetchWeather = async () => {
         setLoading(true);
         setError(false);
+        
+        // Strategy 1: Attempt Open-Meteo (Primary)
         try {
             const response = await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relativehumidity_2m`
+                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relativehumidity_2m`,
+                { mode: 'cors', credentials: 'omit' }
             );
+            
+            if (!response.ok) throw new Error("Open-Meteo failed");
+            
             const data = await response.json();
-
             if (data.current_weather) {
-                // Get humidity from hourly data (closest to current time)
                 const currentHour = new Date().getHours();
-                const humidity = data.hourly.relativehumidity_2m[currentHour] || 0;
+                const humidity = data.hourly?.relativehumidity_2m?.[currentHour] || 0;
 
                 setWeather({
-                    temperature: data.current_weather.temperature,
+                    temperature: Math.round(data.current_weather.temperature),
                     weathercode: data.current_weather.weathercode,
-                    windspeed: data.current_weather.windspeed,
+                    windspeed: Math.round(data.current_weather.windspeed),
                     is_day: data.current_weather.is_day,
                     humidity: humidity
                 });
-            } else {
-                setError(true);
+                return; // Success!
             }
         } catch (err) {
-            console.error("Failed to fetch weather:", err);
+            console.warn("Primary weather API failed, trying fallback...", err);
+        }
+
+        // Strategy 2: Attempt wttr.in (Fallback)
+        try {
+            const response = await fetch(`https://wttr.in/${lat},${lon}?format=j1`);
+            if (!response.ok) throw new Error("Fallback API failed");
+            
+            const data = await response.json();
+            const current = data.current_condition[0];
+            
+            setWeather({
+                temperature: parseInt(current.temp_C),
+                weathercode: parseInt(current.weatherCode),
+                windspeed: parseInt(current.windspeedKmph),
+                humidity: parseInt(current.humidity),
+                // Simple day/night check (6 AM to 6 PM)
+                is_day: new Date().getHours() >= 6 && new Date().getHours() <= 18 ? 1 : 0
+            });
+        } catch (err) {
+            console.error("All weather APIs failed:", err);
             setError(true);
         } finally {
             setLoading(false);
@@ -96,24 +119,32 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ variant = "default" }) =>
     }, []);
 
     const getWeatherIcon = (code: number, isDay: boolean, size = 32) => {
-        if (code === 0) return isDay ? <Sun className="text-amber-400" size={size} /> : <Cloud size={size} className="text-slate-400" />;
-        if (code >= 1 && code <= 3) return <CloudSun className="text-amber-300" size={size} />;
-        if (code >= 45 && code <= 48) return <Cloud className="text-slate-300" size={size} />;
-        if (code >= 51 && code <= 67) return <CloudDrizzle className="text-blue-300" size={size} />;
-        if (code >= 71 && code <= 77) return <div className="text-white" style={{ fontSize: size }}>❄️</div>;
-        if (code >= 80 && code <= 82) return <CloudRain className="text-blue-400" size={size} />;
-        if (code >= 95) return <CloudLightning className="text-indigo-400" size={size} />;
+        // Clear / Sunny
+        if (code === 0 || code === 113) return isDay ? <Sun className="text-amber-400" size={size} /> : <Cloud size={size} className="text-slate-400" />;
+        // Partly Cloudy
+        if ((code >= 1 && code <= 3) || code === 116 || code === 119) return <CloudSun className="text-amber-300" size={size} />;
+        // Foggy
+        if ((code >= 45 && code <= 48) || code === 143 || code === 248) return <Cloud className="text-slate-300" size={size} />;
+        // Drizzle / Light Rain
+        if ((code >= 51 && code <= 67) || code === 263 || code === 266) return <CloudDrizzle className="text-blue-300" size={size} />;
+        // Snow
+        if ((code >= 71 && code <= 77) || code === 327 || code === 230) return <div className="text-white" style={{ fontSize: size }}>❄️</div>;
+        // Rain Showers
+        if ((code >= 80 && code <= 82) || code === 296 || code === 353) return <CloudRain className="text-blue-400" size={size} />;
+        // Thunderstorm
+        if (code >= 95 || code === 389 || code === 391) return <CloudLightning className="text-indigo-400" size={size} />;
         return <Cloud size={size} />;
     };
 
     const getWeatherDesc = (code: number) => {
-        if (code === 0) return "Clear Sky";
-        if (code >= 1 && code <= 3) return "Partly Cloudy";
-        if (code >= 45 && code <= 48) return "Foggy";
-        if (code >= 51 && code <= 67) return "Drizzle";
-        if (code >= 71 && code <= 77) return "Snow";
-        if (code >= 80 && code <= 82) return "Rain Showers";
-        if (code >= 95) return "Thunderstorm";
+        // Handle common codes (both WMO and wttr.in use similar ranges for main conditions)
+        if (code === 0 || code === 113) return "Clear Sky";
+        if ((code >= 1 && code <= 3) || code === 116 || code === 119) return "Partly Cloudy";
+        if ((code >= 45 && code <= 48) || code === 143 || code === 248) return "Foggy";
+        if ((code >= 51 && code <= 67) || code === 263 || code === 266) return "Drizzle";
+        if ((code >= 71 && code <= 77) || code === 327 || code === 230) return "Snow";
+        if ((code >= 80 && code <= 82) || code === 296 || code === 353) return "Rain Showers";
+        if (code >= 95 || code === 389 || code === 391) return "Thunderstorm";
         return "Cloudy";
     };
 

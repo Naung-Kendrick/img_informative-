@@ -6,6 +6,7 @@ import { useGetAllDistrictsQuery } from "../store/districtApiSlice";
 import { ArrowRight, Calendar, User, Zap, Search, Filter, X, MapPin } from "lucide-react";
 import { Skeleton } from "../components/ui/skeleton";
 import NetworkErrorState from "../components/ui/NetworkErrorState";
+import { getEffectiveDate } from "../lib/dateUtils";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -42,11 +43,11 @@ export default function Activities() {
             )
             : true;
 
-        const itemDate = new Date(item.createdAt).toISOString().split('T')[0];
+        const itemDate = new Date(getEffectiveDate(item)).toISOString().split('T')[0];
         const matchesDate = filterDate ? itemDate === filterDate : true;
 
         return matchesSearch && matchesDistrict && matchesDate;
-    }) || [];
+    })?.sort((a, b) => new Date(getEffectiveDate(b)).getTime() - new Date(getEffectiveDate(a)).getTime()) || [];
 
     // Pagination Logic
     const totalPages = Math.ceil(activities.length / ITEMS_PER_PAGE);
@@ -176,7 +177,7 @@ export default function Activities() {
                                         <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
                                             <div className="flex items-center gap-2 p-small text-muted-foreground">
                                                 <Calendar size={12} className="text-primary/70" />
-                                                {new Date(news.createdAt).toLocaleDateString('en-GB')}
+                                                {new Date(getEffectiveDate(news)).toLocaleDateString('en-GB')}
                                             </div>
                                             {(news.district || news.township) && (
                                                 <>

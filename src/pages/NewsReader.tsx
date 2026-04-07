@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useModal } from "../context/ModalContext";
 import { useTranslation } from "react-i18next";
+import { getEffectiveDate, cleanContentForDisplay } from "../lib/dateUtils";
 
 /**
  * Senior UI/UX Redesign: Professional 2-Column News Reader
@@ -139,7 +140,7 @@ export default function NewsReader() {
                                 <div className="hidden sm:block w-[1px] h-3 bg-border" />
                                 <div className="flex items-center gap-2 text-muted-foreground">
                                     <Calendar size={14} />
-                                    <span className="text-xs font-medium">{new Date(article.createdAt).toLocaleDateString("en-GB", { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                                    <span className="text-xs font-medium">{new Date(getEffectiveDate(article)).toLocaleDateString("en-GB", { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                                 </div>
                             </div>
                         </header>
@@ -187,7 +188,7 @@ export default function NewsReader() {
                             prose-strong:text-foreground prose-strong:font-bold
                             prose-blockquote:border-l-primary prose-blockquote:bg-secondary prose-blockquote:py-2 prose-blockquote:px-8 prose-blockquote:rounded-r-lg
                             mb-16"
-                            dangerouslySetInnerHTML={{ __html: article.content }}
+                            dangerouslySetInnerHTML={{ __html: cleanContentForDisplay(article.content) }}
                         />
 
                         {/* Redesigned Engagement Bar */}
@@ -299,7 +300,7 @@ export default function NewsReader() {
                                                     </h5>
                                                     <div className="flex items-center gap-2 text-[11px] text-muted-foreground font-medium">
                                                         <Calendar size={12} />
-                                                        {new Date(news.createdAt).toLocaleDateString("en-GB")}
+                                                        {new Date(getEffectiveDate(news)).toLocaleDateString("en-GB")}
                                                     </div>
                                                 </div>
                                             </Link>

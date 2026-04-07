@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
-import { Menu, Search, Globe, Loader2, User, LogOut, LayoutDashboard, UserCircle } from "lucide-react"
+import { Menu, Search, Loader2, User, LogOut, LayoutDashboard, UserCircle } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { useSelector, useDispatch } from "react-redux"
 import { logout } from "../store/authSlice"
@@ -203,10 +203,16 @@ export default function Navbar() {
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-all text-slate-600 group">
-                                        <Globe size={18} className="group-hover:text-primary transition-colors" />
-                                        <span className="text-[11px] font-black uppercase tracking-widest">
-                                            {i18n.language.startsWith('mm') ? 'မြန်မာ' : i18n.language.startsWith('tg') ? 'တအာင်း' : 'EN'}
-                                        </span>
+                                        <div className="flex items-center gap-2">
+                                            <img
+                                                src={i18n.language.startsWith('mm') ? "https://flagcdn.com/w40/mm.png" : i18n.language.startsWith('tg') ? "/images/flags/PSLF_Web-Banner.webp" : "https://flagcdn.com/w40/gb.png"}
+                                                alt={i18n.language}
+                                                className="w-4 h-3 object-cover shadow-sm rounded-[1px]"
+                                            />
+                                            <span className="text-[11px] font-black uppercase tracking-widest">
+                                                {i18n.language.startsWith('mm') ? 'မြန်မာ' : i18n.language.startsWith('tg') ? 'တအာင်း' : 'EN'}
+                                            </span>
+                                        </div>
                                     </button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="w-40 rounded-xl border-slate-200 shadow-2xl p-1.5 animate-in fade-in zoom-in-95">
@@ -214,21 +220,30 @@ export default function Navbar() {
                                         onClick={() => toggleLanguage('mm')}
                                         className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${i18n.language.startsWith('mm') ? 'bg-primary/10 text-primary' : 'hover:bg-slate-50 text-slate-700'}`}
                                     >
-                                        <span className="font-bold text-xs uppercase tracking-wide">မြန်မာဘာသာ</span>
+                                        <div className="flex items-center gap-2">
+                                            <img src="https://flagcdn.com/w40/mm.png" alt="MM Flag" className="w-5 h-3.5 object-cover shadow-sm rounded-sm" />
+                                            <span className="font-bold text-xs uppercase tracking-wide">မြန်မာဘာသာ</span>
+                                        </div>
                                         {i18n.language.startsWith('mm') && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                         onClick={() => toggleLanguage('tg')}
                                         className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${i18n.language.startsWith('tg') ? 'bg-primary/10 text-primary' : 'hover:bg-slate-50 text-slate-700'}`}
                                     >
-                                        <span className="font-bold text-xs uppercase tracking-wide">တအာင်းဘာသာ</span>
+                                        <div className="flex items-center gap-2">
+                                            <img src="/images/flags/PSLF_Web-Banner.webp" alt="TG Flag" className="w-5 h-3.5 object-cover shadow-sm rounded-sm" />
+                                            <span className="font-bold text-xs uppercase tracking-wide">တအာင်းဘာသာ</span>
+                                        </div>
                                         {i18n.language.startsWith('tg') && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                         onClick={() => toggleLanguage('en')}
                                         className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${i18n.language.startsWith('en') ? 'bg-primary/10 text-primary' : 'hover:bg-slate-50 text-slate-700'}`}
                                     >
-                                        <span className="font-bold text-xs uppercase tracking-wide">English</span>
+                                        <div className="flex items-center gap-2">
+                                            <img src="https://flagcdn.com/w40/gb.png" alt="UK Flag" className="w-5 h-3.5 object-cover shadow-sm rounded-sm" />
+                                            <span className="font-bold text-xs uppercase tracking-wide">English</span>
+                                        </div>
                                         {i18n.language.startsWith('en') && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
@@ -290,14 +305,27 @@ export default function Navbar() {
                         <div className="lg:hidden flex items-center gap-1.5 sm:gap-2">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" size="icon" className="rounded-lg border-slate-200 h-9 w-9 sm:h-10 sm:w-10">
-                                        <Globe size={18} className="text-slate-600" />
+                                    <Button variant="outline" size="icon" className="rounded-lg border-slate-200 h-9 w-9 sm:h-10 sm:w-10 overflow-hidden">
+                                        <img
+                                            src={i18n.language.startsWith('mm') ? "https://flagcdn.com/w40/mm.png" : i18n.language.startsWith('tg') ? "/images/flags/PSLF_Web-Banner.webp" : "https://flagcdn.com/w40/gb.png"}
+                                            alt={i18n.language}
+                                            className="w-5 h-3.5 object-cover"
+                                        />
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-32 rounded-xl border-slate-200 shadow-xl">
-                                    <DropdownMenuItem onClick={() => toggleLanguage('mm')} className="font-bold text-sm">မြန်မာ</DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => toggleLanguage('tg')} className="font-bold text-sm">တအာင်း</DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => toggleLanguage('en')} className="font-bold text-sm">ENGLISH</DropdownMenuItem>
+                                <DropdownMenuContent align="end" className="w-40 rounded-xl border-slate-200 shadow-xl p-1.5">
+                                    <DropdownMenuItem onClick={() => toggleLanguage('mm')} className="font-bold text-sm flex items-center gap-2 px-3 py-2 rounded-lg">
+                                        <img src="https://flagcdn.com/w40/mm.png" alt="MM Flag" className="w-5 h-3.5 object-cover shadow-sm rounded-sm" />
+                                        <span>မြန်မာ</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => toggleLanguage('tg')} className="font-bold text-sm flex items-center gap-2 px-3 py-2 rounded-lg">
+                                        <img src="/images/flags/PSLF_Web-Banner.webp" alt="TG Flag" className="w-5 h-3.5 object-cover shadow-sm rounded-sm" />
+                                        <span>တအာင်း</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => toggleLanguage('en')} className="font-bold text-sm flex items-center gap-2 px-3 py-2 rounded-lg">
+                                        <img src="https://flagcdn.com/w40/gb.png" alt="UK Flag" className="w-5 h-3.5 object-cover shadow-sm rounded-sm" />
+                                        <span>ENGLISH</span>
+                                    </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
 

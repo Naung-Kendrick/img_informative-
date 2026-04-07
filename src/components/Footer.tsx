@@ -104,7 +104,7 @@ const Footer = () => {
                                     </div>
                                     <div className="flex flex-col">
                                         <span className="p-small text-background/40">{t("footer.email")}</span>
-                                        <span className="text-sm font-bold text-background/80 leading-snug truncate max-w-[200px] sm:max-w-none">{info?.email || "contact@immigration.tlfug.gov"}</span>
+                                        <span className="text-sm font-bold text-background/80 leading-snug truncate max-w-[200px] sm:max-w-none">{info?.email || "[EMAIL_ADDRESS]"}</span>
                                     </div>
                                 </div>
                             </div>

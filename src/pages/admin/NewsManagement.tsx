@@ -8,6 +8,7 @@ import { Skeleton } from "../../components/ui/skeleton";
 import { useModal } from "../../context/ModalContext";
 import { useGetAllCategoriesQuery } from "../../store/categoryApiSlice";
 import { useGetAllDistrictsQuery } from "../../store/districtApiSlice";
+import { getEffectiveDate } from "../../lib/dateUtils";
 
 export default function NewsManagement() {
     const { user } = useSelector((state: RootState) => state.auth);
@@ -40,7 +41,7 @@ export default function NewsManagement() {
         const matchesCategory = filterCategory ? item.category === filterCategory : true;
         const matchesDistrict = filterDistrict ? item.district === filterDistrict : true;
 
-        const itemDate = new Date(item.createdAt || Date.now()).toISOString().split('T')[0];
+        const itemDate = new Date(getEffectiveDate(item)).toISOString().split('T')[0];
         const matchesDate = filterDate ? itemDate === filterDate : true;
 
         const matchesSearch = searchQuery
@@ -261,11 +262,11 @@ export default function NewsManagement() {
                                             <div className="flex flex-col gap-1">
                                                 <div className="flex items-center gap-2">
                                                     <Calendar size={12} className="text-slate-400" />
-                                                    <span className="text-sm">{new Date(item.createdAt || Date.now()).toLocaleDateString("en-GB")}</span>
+                                                    <span className="text-sm">{new Date(getEffectiveDate(item)).toLocaleDateString("en-GB")}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2 ml-5">
                                                     <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                                                        {new Date(item.createdAt || Date.now()).toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit', hour12: true })}
+                                                        {new Date(getEffectiveDate(item)).toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit', hour12: true })}
                                                     </span>
                                                 </div>
                                             </div>
@@ -344,7 +345,7 @@ export default function NewsManagement() {
 
             {deleteModalOpen && canDelete && (
                 <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200 padauk-regular">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-md p-6 animate-in zoom-in-95 duration-200 border border-slate-200">
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 animate-in zoom-in-95 duration-200 border border-slate-200">
                         <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center text-red-600 mb-4 animate-bounce">
                             <Trash2 size={24} />
                         </div>

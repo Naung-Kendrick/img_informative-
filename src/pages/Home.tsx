@@ -15,6 +15,7 @@ import {
     ChevronLeft,
     ChevronRight
 } from "lucide-react";
+import { getEffectiveDate } from "../lib/dateUtils";
 import { Skeleton } from "../components/ui/skeleton";
 import { Button } from "../components/ui/button";
 import { NewsCardSkeleton, HeroSkeleton } from "../components/feedback/NewsCardSkeleton";
@@ -55,7 +56,7 @@ const Home = () => {
     // Latest news for Hero and Feed
     const sortedNews = useMemo(() =>
         [...publishedNews].sort(
-            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            (a, b) => new Date(getEffectiveDate(b)).getTime() - new Date(getEffectiveDate(a)).getTime()
         ),
         [publishedNews]);
 
@@ -123,7 +124,7 @@ const Home = () => {
                             </span>
                             <span className="text-slate-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
                                 <Calendar size={14} className="text-primary" />
-                                {new Date(heroNews.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                {new Date(getEffectiveDate(heroNews)).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
                             </span>
                         </div>
 
@@ -316,7 +317,7 @@ const Home = () => {
 
                                 <div className="p-5 sm:p-6 md:p-8 flex flex-col flex-grow">
                                     <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-muted-foreground font-bold text-[10px] uppercase tracking-widest mb-4 sm:mb-6">
-                                        <div className="flex items-center gap-1.5"><Calendar size={12} className="text-primary" /> {new Date(news.createdAt).toLocaleDateString('en-GB')}</div>
+                                        <div className="flex items-center gap-1.5"><Calendar size={12} className="text-primary" /> {new Date(getEffectiveDate(news)).toLocaleDateString('en-GB')}</div>
                                         <div className="w-[1px] h-3 bg-border" />
                                         <div className="flex items-center gap-1.5"><User size={12} className="text-primary" /> {news.author?.name || "Admin"}</div>
                                     </div>

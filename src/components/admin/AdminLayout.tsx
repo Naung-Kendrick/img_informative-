@@ -28,7 +28,6 @@ import {
     Phone,
     BarChart2,
     Clock,
-    Globe,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -445,8 +444,14 @@ export default function AdminLayout() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-all text-slate-600 group">
-                                    <Globe size={18} className="group-hover:text-primary transition-colors" />
-                                    <span className="text-[11px] font-black uppercase tracking-widest">{i18n.language.startsWith('mm') ? 'မြန်မာ' : 'EN'}</span>
+                                    <div className="flex items-center gap-2">
+                                        <img
+                                            src={i18n.language.startsWith('mm') ? "https://flagcdn.com/w40/mm.png" : i18n.language.startsWith('tg') ? "/images/flags/PSLF_Web-Banner.webp" : "https://flagcdn.com/w40/gb.png"}
+                                            alt={i18n.language}
+                                            className="w-4 h-3 object-cover shadow-sm rounded-[1px]"
+                                        />
+                                        <span className="text-[11px] font-black uppercase tracking-widest">{i18n.language.startsWith('mm') ? 'မြန်မာ' : i18n.language.startsWith('tg') ? 'တအာင်း' : 'EN'}</span>
+                                    </div>
                                 </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-40 rounded-xl border-slate-200 shadow-2xl p-1.5 animate-in fade-in zoom-in-95">
@@ -454,14 +459,30 @@ export default function AdminLayout() {
                                     onClick={() => toggleLanguage('mm')}
                                     className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${i18n.language.startsWith('mm') ? 'bg-primary/10 text-primary' : 'hover:bg-slate-50 text-slate-700'}`}
                                 >
-                                    <span className="font-bold text-xs uppercase tracking-wide">မြန်မာဘာသာ</span>
+                                    <div className="flex items-center gap-2">
+                                        <img src="https://flagcdn.com/w40/mm.png" alt="MM Flag" className="w-5 h-3.5 object-cover shadow-sm rounded-sm" />
+                                        <span className="font-bold text-xs uppercase tracking-wide">မြန်မာဘာသာ</span>
+                                    </div>
                                     {i18n.language.startsWith('mm') && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => toggleLanguage('tg')}
+                                    className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${i18n.language.startsWith('tg') ? 'bg-primary/10 text-primary' : 'hover:bg-slate-50 text-slate-700'}`}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <img src="/images/flags/PSLF_Web-Banner.webp" alt="TG Flag" className="w-5 h-3.5 object-cover shadow-sm rounded-sm" />
+                                        <span className="font-bold text-xs uppercase tracking-wide">တအာင်းဘာသာ</span>
+                                    </div>
+                                    {i18n.language.startsWith('tg') && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     onClick={() => toggleLanguage('en')}
                                     className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${i18n.language.startsWith('en') ? 'bg-primary/10 text-primary' : 'hover:bg-slate-50 text-slate-700'}`}
                                 >
-                                    <span className="font-bold text-xs uppercase tracking-wide">English</span>
+                                    <div className="flex items-center gap-2">
+                                        <img src="https://flagcdn.com/w40/gb.png" alt="UK Flag" className="w-5 h-3.5 object-cover shadow-sm rounded-sm" />
+                                        <span className="font-bold text-xs uppercase tracking-wide">English</span>
+                                    </div>
                                     {i18n.language.startsWith('en') && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
                                 </DropdownMenuItem>
                             </DropdownMenuContent>

@@ -4,8 +4,10 @@ import TipTapEditor from "../../components/admin/TipTapEditor";
 import { useCreateNewsMutation, useUploadImageToS3Mutation } from "../../store/newsApiSlice";
 import { useGetAllCategoriesQuery } from "../../store/categoryApiSlice";
 import { useGetAllDistrictsQuery } from "../../store/districtApiSlice";
-import { Loader2, ArrowLeft, UploadCloud, ImageIcon, X, MapPin, PlusCircle, RotateCcw, AlertCircle } from "lucide-react";
+import { Loader2, ArrowLeft, UploadCloud, ImageIcon, X, MapPin, PlusCircle, RotateCcw, AlertCircle, Calendar } from "lucide-react";
 import { useModal } from "../../context/ModalContext";
+import { addWatermarkToImage } from "../../lib/watermark";
+import { embedDateInContent } from "../../lib/dateUtils";
 
 export default function CreateNews() {
     const navigate = useNavigate();
@@ -22,6 +24,7 @@ export default function CreateNews() {
 
 
     const [content, setContent] = useState("<p>သတင်းအကြောင်းအရာများကို ဤနေရာတွင် စတင်ရေးသားပါ...</p>");
+    const [createdAt, setCreatedAt] = useState(new Date().toISOString().split("T")[0]);
 
     // ── Image State ─────────────────────────────────────────────────────────
     const [imageFiles, setImageFiles] = useState<File[]>([]);
@@ -41,7 +44,7 @@ export default function CreateNews() {
     const districtsList = districtsQuery.data || [];
 
     // ── Handlers ────────────────────────────────────────────────────────────
-    const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFiles = Array.from(e.target.files || []);
         if (selectedFiles.length === 0) return;
 
@@ -53,18 +56,27 @@ export default function CreateNews() {
         const validFiles: File[] = [];
         const validPreviews: string[] = [];
 
-        selectedFiles.forEach((file) => {
+        for (const file of selectedFiles) {
             if (!file.type.startsWith("image/")) {
                 showError("မှားယွင်းမှု", `${file.name} သည် ပုံဖိုင် မဟုတ်ပါ။`);
-                return;
+                continue;
             }
             if (file.size > 10 * 1024 * 1024) {
                 showError("ဖိုင်အရွယ်အစား ကြီးလွန်းသည်", `${file.name} သည် 10MB ထက် ကြီးနေပါသည်။`);
-                return;
+                continue;
             }
-            validFiles.push(file);
-            validPreviews.push(URL.createObjectURL(file));
-        });
+
+            try {
+                // Apply watermark
+                const watermarkedFile = await addWatermarkToImage(file);
+                validFiles.push(watermarkedFile);
+                validPreviews.push(URL.createObjectURL(watermarkedFile));
+            } catch (err) {
+                console.error("Watermark failed:", err);
+                validFiles.push(file);
+                validPreviews.push(URL.createObjectURL(file));
+            }
+        }
 
         setImageFiles((prev) => [...prev, ...validFiles]);
         setImagePreviews((prev) => [...prev, ...validPreviews]);
@@ -95,14 +107,18 @@ export default function CreateNews() {
 
             // Determine final values
             const finalDistrict = isCustomDistrict ? customDistrict : district;
+            const customIsoDate = new Date(createdAt).toISOString();
+            const persistentContent = embedDateInContent(content, customIsoDate);
 
             await createNews({
                 title: title.trim(),
                 category,
-                content,
+                content: persistentContent,
                 status,
                 images: bannerImageUrls,
                 district: finalDistrict || undefined,
+                createdAt: customIsoDate,
+                publishedDate: customIsoDate,
             }).unwrap();
 
             showSuccess(
@@ -174,9 +190,21 @@ export default function CreateNews() {
                         </div>
                     </div>
 
-                    {/* ── District Row ────────────────────────── */}
-                    <div className="grid grid-cols-1 gap-6">
-                        {/* District */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2">
+                                <Calendar size={16} className="text-[#808080]" />
+                                သတင်းတင်သည့်ရက်စွဲ (Published Date)
+                            </label>
+                            <input
+                                type="date"
+                                value={createdAt}
+                                onChange={(e) => setCreatedAt(e.target.value)}
+                                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#808080]/20 focus:border-[#808080] transition-all padauk-regular cursor-pointer"
+                            />
+                        </div>
+
+                        {/* District Row ── inside same grid */}
                         <div className="space-y-2">
                             <div className="flex items-center justify-between">
                                 <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2">
@@ -226,8 +254,7 @@ export default function CreateNews() {
                                 )}
                             </div>
                         </div>
-
-                        </div>
+                    </div>
 
                     <div className="space-y-2">
                         <label className="text-sm font-semibold text-slate-700 padauk-bold flex items-center gap-2">

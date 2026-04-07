@@ -7,6 +7,7 @@ export interface News {
     category: string;
     images: string[];
     createdAt: string;
+    publishedDate?: string;
     author: { _id: string; name: string };
     status: "Draft" | "Published" | "Pending";
     likes: Array<{ _id: string; name: string; avatar?: string; email: string }>;
@@ -33,6 +34,8 @@ export interface CreateNewsPayload {
     status: 'Draft' | 'Published' | 'Pending';
     district?: string;
     township?: string;
+    createdAt?: string;
+    publishedDate?: string;
 }
 
 export interface UploadImageResponse {
