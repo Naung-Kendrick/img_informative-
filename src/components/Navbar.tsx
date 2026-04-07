@@ -149,8 +149,8 @@ export default function Navbar() {
                             <div className="relative flex-shrink-0">
                                 <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="Dept Seal" className="h-10 sm:h-14 lg:h-16 w-auto object-contain drop-shadow-md" />
                             </div>
-                            <div className="flex flex-col min-w-0 justify-center">
-                                <span className="text-[12px] sm:text-[16px] lg:text-[20px] font-[800] leading-[1.25] lg:leading-tight text-slate-800 group-hover:text-primary transition-colors pr-1 sm:pr-2 line-clamp-2">
+                            <div className="flex flex-col min-w-0 justify-center py-1">
+                                <span className="text-[12px] sm:text-[16px] lg:text-[20px] font-[800] leading-normal text-slate-800 group-hover:text-primary transition-colors pr-1 sm:pr-2 line-clamp-2">
                                     {t("nav.deptTitle")}
                                 </span>
                                 <span className="text-[7px] sm:text-[10px] lg:text-[12px] text-slate-500 font-bold tracking-[0.08em] sm:tracking-[0.1em] lg:tracking-[0.15em] uppercase mt-0.5 opacity-90 line-clamp-1">
