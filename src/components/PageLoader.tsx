@@ -52,7 +52,7 @@ export default function PageLoader() {
 
                 {/* ── Loading Text with Theme Matching ──────────────────────────────── */}
                 <div className="flex flex-col items-center space-y-3">
-                    <motion.p 
+                    <motion.p
                         animate={{ opacity: [0.3, 1, 0.3] }}
                         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                         className="text-xl font-bold tracking-[0.2em] text-primary padauk-bold"
@@ -70,7 +70,7 @@ export default function PageLoader() {
                                 }}
                                 transition={{
                                     repeat: Infinity,
-                                    duration: 3,
+                                    duration: 5,
                                     delay: i * 0.5,
                                     ease: "easeInOut"
                                 }}
