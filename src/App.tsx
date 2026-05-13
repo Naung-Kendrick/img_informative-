@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { Analytics } from "@vercel/analytics/react"
 import PageLoader from "./components/PageLoader"
 import PwaUpdater from "./components/PwaUpdater"
 import OfflineBanner from "./components/OfflineBanner"
@@ -61,6 +62,7 @@ const LayoutManagement = lazy(() => import("./pages/admin/LayoutManagement"))
 function App() {
   return (
     <>
+      <Analytics />
       <PwaUpdater />
       <OfflineBanner />
       <BrowserRouter>
