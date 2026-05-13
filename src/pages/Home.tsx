@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import SEO from "../components/SEO";
@@ -28,6 +28,7 @@ import NetworkErrorState from "../components/ui/NetworkErrorState";
 const Home = () => {
     const { t } = useTranslation();
     const [currentPage, setCurrentPage] = useState(1);
+    const [currentHeroImage, setCurrentHeroImage] = useState(0);
     const newsPerPage = 6;
 
     const { data: layout = [], isLoading: isLayoutLoading } = useGetLayoutQuery();
@@ -64,6 +65,19 @@ const Home = () => {
     const heroNews = sortedNews[0];
     const allFeedNews = sortedNews.slice(1);
 
+    // Auto-slide hero images every 4 seconds
+    useEffect(() => {
+        if (!heroNews?.images || heroNews.images.length <= 1) return;
+        
+        const interval = setInterval(() => {
+            setCurrentHeroImage((prev) => 
+                (prev + 1) % heroNews.images.length
+            );
+        }, 4000); // 4 seconds
+
+        return () => clearInterval(interval);
+    }, [heroNews]);
+
     // Latest 5 Announcements
     const latestAnnouncements = useMemo(() =>
         [...announcements]
@@ -99,14 +113,41 @@ const Home = () => {
                 <div className="absolute inset-0 z-0">
                     {heroNews.images && heroNews.images.length > 0 ? (
                         <>
-                            <ImageWithSkeleton
-                                src={heroNews.images[0]}
-                                alt=""
-                                className="w-full h-full object-cover opacity-40 scale-105"
-                                containerClassName="absolute inset-0"
-                                skeletonClassName="bg-slate-800"
-                            />
+                            {heroNews.images.map((image, index) => (
+                                <div
+                                    key={index}
+                                    className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                                        index === currentHeroImage ? 'opacity-100' : 'opacity-0'
+                                    }`}
+                                >
+                                    <ImageWithSkeleton
+                                        src={image}
+                                        alt=""
+                                        className="w-full h-full object-cover opacity-40 scale-105"
+                                        containerClassName="absolute inset-0"
+                                        skeletonClassName="bg-slate-800"
+                                    />
+                                </div>
+                            ))}
                             <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent z-20" />
+                            
+                            {/* Image indicators */}
+                            {heroNews.images.length > 1 && (
+                                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+                                    {heroNews.images.map((_, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setCurrentHeroImage(index)}
+                                            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                                index === currentHeroImage 
+                                                    ? 'bg-primary w-6' 
+                                                    : 'bg-white/50 hover:bg-white/80'
+                                            }`}
+                                            aria-label={`Go to image ${index + 1}`}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </>
                     ) : (
                         <div className="w-full h-full bg-slate-800" />
