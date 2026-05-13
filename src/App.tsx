@@ -1,6 +1,5 @@
 import { lazy, Suspense } from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { HelmetProvider } from "react-helmet-async"
 import PageLoader from "./components/PageLoader"
 import PwaUpdater from "./components/PwaUpdater"
 import OfflineBanner from "./components/OfflineBanner"
@@ -61,7 +60,7 @@ const LayoutManagement = lazy(() => import("./pages/admin/LayoutManagement"))
  */
 function App() {
   return (
-    <HelmetProvider>
+    <>
       <PwaUpdater />
       <OfflineBanner />
       <BrowserRouter>
@@ -166,7 +165,7 @@ function App() {
           </Suspense>
         </ErrorBoundary>
       </BrowserRouter>
-    </HelmetProvider>
+    </>
   )
 }
 

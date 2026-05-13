@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import { useEffect } from "react";
 
 interface SEOProps {
   title?: string;
@@ -38,43 +38,83 @@ export function SEO({
   const canonicalUrl = pathname ? `${siteConfig.siteUrl}${pathname}` : siteConfig.siteUrl;
   const langAttribute = lang === "my" ? "my" : "en";
 
-  return (
-    <Helmet htmlAttributes={{ lang: langAttribute }}>
-      {/* Basic Meta Tags */}
-      <title>{seoTitle}</title>
-      <meta name="description" content={seoDescription} />
-      <meta name="keywords" content={seoKeywords} />
-      <link rel="canonical" href={canonicalUrl} />
+  useEffect(() => {
+    // Update document language
+    document.documentElement.lang = langAttribute;
 
-      {/* Robots */}
-      {noindex ? (
-        <meta name="robots" content="noindex, nofollow" />
-      ) : (
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-      )}
+    // Update title
+    document.title = seoTitle;
 
-      {/* Open Graph */}
-      <meta property="og:type" content={type} />
-      <meta property="og:title" content={title || siteConfig.defaultTitle} />
-      <meta property="og:description" content={seoDescription} />
-      <meta property="og:image" content={seoImage} />
-      <meta property="og:url" content={canonicalUrl} />
-      <meta property="og:site_name" content={siteConfig.siteName} />
-      <meta property="og:locale" content={lang === "my" ? "my_MM" : "en_US"} />
+    // Helper to update or create meta tags
+    const updateMetaTag = (name: string, content: string, property = false) => {
+      const selector = property ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let meta = document.head.querySelector(selector) as HTMLMetaElement;
+      if (!meta) {
+        meta = document.createElement("meta");
+        if (property) {
+          meta.setAttribute("property", name);
+        } else {
+          meta.name = name;
+        }
+        document.head.appendChild(meta);
+      }
+      meta.content = content;
+    };
 
-      {/* Twitter Card */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title || siteConfig.defaultTitle} />
-      <meta name="twitter:description" content={seoDescription} />
-      <meta name="twitter:image" content={seoImage} />
-      <meta name="twitter:site" content={siteConfig.twitterHandle} />
+    // Basic Meta Tags
+    updateMetaTag("description", seoDescription);
+    updateMetaTag("keywords", seoKeywords);
+    updateMetaTag("author", siteConfig.siteName);
+    updateMetaTag("language", "English, Burmese");
+    updateMetaTag("robots", noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1");
 
-      {/* Language Alternates */}
-      <link rel="alternate" hrefLang="en" href={canonicalUrl} />
-      <link rel="alternate" hrefLang="my" href={canonicalUrl} />
-      <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
-    </Helmet>
-  );
+    // Open Graph
+    updateMetaTag("og:type", type, true);
+    updateMetaTag("og:title", title || siteConfig.defaultTitle, true);
+    updateMetaTag("og:description", seoDescription, true);
+    updateMetaTag("og:image", seoImage, true);
+    updateMetaTag("og:url", canonicalUrl, true);
+    updateMetaTag("og:site_name", siteConfig.siteName, true);
+    updateMetaTag("og:locale", lang === "my" ? "my_MM" : "en_US", true);
+
+    // Twitter Card
+    updateMetaTag("twitter:card", "summary_large_image");
+    updateMetaTag("twitter:title", title || siteConfig.defaultTitle);
+    updateMetaTag("twitter:description", seoDescription);
+    updateMetaTag("twitter:image", seoImage);
+    updateMetaTag("twitter:site", siteConfig.twitterHandle);
+
+    // Canonical URL
+    let canonical = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      document.head.appendChild(canonical);
+    }
+    canonical.href = canonicalUrl;
+
+    // Language Alternates
+    const hrefLangs = ["en", "my", "x-default"];
+    hrefLangs.forEach((hreflang) => {
+      const selector = `link[rel="alternate"][hreflang="${hreflang}"]`;
+      let link = document.head.querySelector(selector) as HTMLLinkElement;
+      if (!link) {
+        link = document.createElement("link");
+        link.rel = "alternate";
+        link.hreflang = hreflang;
+        document.head.appendChild(link);
+      }
+      link.href = canonicalUrl;
+    });
+
+    // Cleanup function to reset to defaults when component unmounts
+    return () => {
+      document.title = siteConfig.defaultTitle;
+    };
+  }, [seoTitle, seoDescription, seoKeywords, seoImage, canonicalUrl, langAttribute, lang, type, title, noindex]);
+
+  // This component doesn't render anything visible
+  return null;
 }
 
 export default SEO;
