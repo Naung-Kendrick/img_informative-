@@ -1,6 +1,6 @@
 import { useGetAllDistrictsQuery } from "../store/districtApiSlice";
 import type { District } from "../store/districtApiSlice";
-import { MapPin, Phone, Building, ArrowRight, UserCircle } from "lucide-react";
+import { MapPin, Building, ArrowRight, UserCircle } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Skeleton } from "../components/ui/skeleton";
 import NetworkErrorState from "../components/ui/NetworkErrorState";
@@ -110,15 +110,6 @@ export default function Districts() {
                                             </div>
                                             <p className="p-default pt-1">
                                                 {district.address}
-                                            </p>
-                                        </div>
-
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
-                                                <Phone size={16} className="text-primary" />
-                                            </div>
-                                            <p className="text-foreground font-bold tracking-wider text-[15px]">
-                                                {district.phone}
                                             </p>
                                         </div>
 
