@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import SEO from "../components/SEO";
 import { useGetAllNewsQuery } from "../store/newsApiSlice";
 import { useGetAllAnnouncementsQuery } from "../store/announcementApiSlice";
 import { useGetAllDistrictsQuery } from "../store/districtApiSlice";
@@ -451,15 +452,22 @@ const Home = () => {
     }
 
     return (
-        <div className="page-container bg-background animate-in fade-in duration-500">
-            {mappedSections()}
+        <>
+            <SEO
+                pathname="/"
+                title="Home"
+                description="Official website of Ta'ang Land Government Immigration Department. ပလောင်းပြည် ရှေ့နေပြည်ထောင်အဖွဲ့မှ ကြိုဆိုပါသည်။ Passport, visa, citizenship services and official announcements."
+            />
+            <div className="page-container bg-background animate-in fade-in duration-500">
+                {mappedSections()}
 
             {isError && (
                 <div className="container-custom py-10">
                     <NetworkErrorState />
                 </div>
             )}
-        </div>
+            </div>
+        </>
     );
 };
 
