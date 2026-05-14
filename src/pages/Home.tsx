@@ -497,7 +497,7 @@ const Home = () => {
             <SEO
                 pathname="/"
                 title="Home"
-                description="Official website of Ta'ang Land Government Immigration Department. ပလောင်းပြည် ရှေ့နေပြည်ထောင်အဖွဲ့မှ ကြိုဆိုပါသည်။ Passport, visa, citizenship services and official announcements."
+                description="Official website of Ta'ang Land Government Immigration Department | တီုင်စေတ်မေန်းတိုအီး အဆိုးယကပီုန်တအာင်း | တအာင်းပြည်အစိုးရ လူဝင်မှုကြီးကြပ်‌ရေး ဌာန"
             />
             <div className="page-container bg-background animate-in fade-in duration-500">
                 {mappedSections()}
