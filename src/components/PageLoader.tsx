@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const MIN_DISPLAY_MS = 4000; // always visible for at least 4 seconds
+const MIN_DISPLAY_MS = 2000; // always visible for at least 2 seconds
 
 /**
  * Premium Page Loader with the Ta'ang Land emblem.

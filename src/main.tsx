@@ -10,14 +10,14 @@ import App from './App.tsx'
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID";
 
-// Hide the native HTML splash screen after 4 seconds (minimum display time)
+// Hide the native HTML splash screen after 2 seconds
 const splash = document.getElementById('splash');
 if (splash) {
   setTimeout(() => {
     splash.classList.add('hidden');
     // Remove from DOM after the CSS fade-out transition (0.6s)
     setTimeout(() => splash.remove(), 700);
-  }, 4000);
+  }, 2000);
 }
 
 createRoot(document.getElementById('root')!).render(
