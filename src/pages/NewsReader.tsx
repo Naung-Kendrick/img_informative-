@@ -20,6 +20,7 @@ import {
 import { useModal } from "../context/ModalContext";
 import { useTranslation } from "react-i18next";
 import { getEffectiveDate, cleanContentForDisplay } from "../lib/dateUtils";
+import { sanitizeHtml } from "../lib/sanitize";
 
 /**
  * Senior UI/UX Redesign: Professional 2-Column News Reader
@@ -188,7 +189,7 @@ export default function NewsReader() {
                             prose-strong:text-foreground prose-strong:font-bold
                             prose-blockquote:border-l-primary prose-blockquote:bg-secondary prose-blockquote:py-2 prose-blockquote:px-8 prose-blockquote:rounded-r-lg
                             mb-16"
-                            dangerouslySetInnerHTML={{ __html: cleanContentForDisplay(article.content) }}
+                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(cleanContentForDisplay(article.content)) }}
                         />
 
                         {/* Redesigned Engagement Bar */}

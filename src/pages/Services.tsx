@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useGetPagesBySectionQuery } from "../store/pageApiSlice";
 import { Skeleton } from "../components/ui/skeleton";
 import NetworkErrorState from "../components/ui/NetworkErrorState";
+import { stripHtml } from "../lib/sanitize";
 
 export default function Services() {
     const { t } = useTranslation();
@@ -83,9 +84,9 @@ export default function Services() {
                                         {service.title}
                                     </h2>
 
-                                    <div className="p-muted mb-8 line-clamp-3 padauk-regular text-[15px] leading-relaxed opacity-80"
-                                        dangerouslySetInnerHTML={{ __html: service.content.replace(/<[^>]*>?/gm, '').substring(0, 160) + '...' }}
-                                    />
+                                    <p className="p-muted mb-8 line-clamp-3 padauk-regular text-[15px] leading-relaxed opacity-80">
+                                        {stripHtml(service.content, 160)}
+                                    </p>
 
                                     <div className="mt-auto w-full">
                                         <Link to={`/services/${service._id}`} className="w-full block">

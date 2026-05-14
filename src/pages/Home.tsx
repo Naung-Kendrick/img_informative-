@@ -24,6 +24,7 @@ import { ImageWithSkeleton } from "../components/feedback/ImageWithSkeleton";
 import StatisticsSection from "../components/StatisticsSection";
 import WeatherWidget from "../components/WeatherWidget";
 import NetworkErrorState from "../components/ui/NetworkErrorState";
+import { stripHtml } from "../lib/sanitize";
 
 const Home = () => {
     const { t } = useTranslation();
@@ -247,9 +248,9 @@ const Home = () => {
                                     <h2 className="h3 mb-4 padauk-bold text-foreground group-hover:text-primary transition-colors">
                                         {service.title}
                                     </h2>
-                                    <div className="text-muted-foreground mb-8 line-clamp-3 padauk-regular text-[15px] leading-relaxed opacity-80"
-                                        dangerouslySetInnerHTML={{ __html: (service.content || "").replace(/<[^>]*>?/gm, '').substring(0, 160) + '...' }}
-                                    />
+                                    <p className="text-muted-foreground mb-8 line-clamp-3 padauk-regular text-[15px] leading-relaxed opacity-80">
+                                        {stripHtml(service.content || "", 160)}
+                                    </p>
                                     <div className="mt-auto w-full">
                                         <Link to={`/services/${service._id}`} className="w-full block">
                                             <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/80 font-bold py-5 sm:py-7 text-sm sm:text-base lg:text-lg rounded-2xl transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-primary/20 flex items-center justify-center gap-3 active:scale-[0.98]">

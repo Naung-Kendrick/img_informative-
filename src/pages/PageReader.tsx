@@ -6,6 +6,7 @@ import Breadcrumbs from "../components/Breadcrumbs";
 import ShareButtons from "../components/ShareButtons";
 import NetworkErrorState from "../components/ui/NetworkErrorState";
 import { Loader2, ArrowLeft, MapPin, Briefcase, X, ZoomIn, Download } from "lucide-react";
+import { sanitizeHtml } from "../lib/sanitize";
 
 export default function PageReader() {
     const { t } = useTranslation();
@@ -138,7 +139,7 @@ export default function PageReader() {
                             prose-strong:text-foreground prose-strong:font-bold
                             prose-blockquote:border-l-primary prose-blockquote:bg-secondary prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-xl
                             prose-li:text-muted-foreground"
-                            dangerouslySetInnerHTML={{ __html: page.content }}
+                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(page.content) }}
                         />
                     </div>
 
