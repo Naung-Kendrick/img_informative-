@@ -19,8 +19,88 @@ const IconMap: Record<string, React.ElementType> = {
     Heart
 };
 
+// Counting tick sound using Web Audio API
+// Plays soft ticks that speed up as numbers climb, with a final chime when done
+const createCountingSound = () => {
+    try {
+        const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+        if (!AudioContext) return null;
+
+        const ctx = new AudioContext();
+        let tickInterval: ReturnType<typeof setInterval> | null = null;
+        let lastProgress = 0;
+
+        const playTick = (progress: number) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            // Pitch rises as progress increases (counting feel)
+            const baseFreq = 800 + (progress * 400);
+            osc.type = "sine";
+            osc.frequency.value = baseFreq;
+
+            const now = ctx.currentTime;
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.06, now + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+            osc.start(now);
+            osc.stop(now + 0.06);
+        };
+
+        const playFinishChime = () => {
+            const notes = [783.99, 1046.50]; // G5, C6
+            notes.forEach((freq, i) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = "sine";
+                osc.frequency.value = freq;
+
+                const start = ctx.currentTime + (i * 0.1);
+                gain.gain.setValueAtTime(0, start);
+                gain.gain.linearRampToValueAtTime(0.1, start + 0.03);
+                gain.gain.exponentialRampToValueAtTime(0.001, start + 0.4);
+
+                osc.start(start);
+                osc.stop(start + 0.4);
+            });
+        };
+
+        return {
+            tick: (progress: number) => {
+                // Play ticks at intervals that speed up with progress
+                // Early: tick every ~150ms, Late: tick every ~40ms
+                const timeSinceLastTick = progress - lastProgress;
+                const threshold = 0.02 - (progress * 0.015); // Gets smaller = more frequent
+                if (timeSinceLastTick >= Math.max(threshold, 0.005)) {
+                    playTick(progress);
+                    lastProgress = progress;
+                }
+            },
+            finish: () => {
+                playFinishChime();
+                setTimeout(() => ctx.close(), 1500);
+            },
+            cleanup: () => {
+                if (tickInterval) clearInterval(tickInterval);
+                ctx.close().catch(() => {});
+            }
+        };
+    } catch {
+        return null;
+    }
+};
+
+// Track if any CountUp has already created audio (only 1 sound stream)
+let sharedAudio: ReturnType<typeof createCountingSound> = null;
+let audioRefCount = 0;
+
 // Custom CountUp Component
-const CountUp = ({ end, duration = 2000 }: { end: number, duration?: number }) => {
+const CountUp = ({ end, duration = 2000, index = 0 }: { end: number, duration?: number, index?: number }) => {
     const [count, setCount] = useState(0);
     const countRef = useRef<HTMLDivElement>(null);
     const [isVisible, setIsVisible] = useState(false);
@@ -44,6 +124,12 @@ const CountUp = ({ end, duration = 2000 }: { end: number, duration?: number }) =
     useEffect(() => {
         if (!isVisible) return;
 
+        // First counter creates the shared audio
+        if (index === 0 && !sharedAudio) {
+            sharedAudio = createCountingSound();
+        }
+        audioRefCount++;
+
         let startTimestamp: number | null = null;
         const step = (timestamp: number) => {
             if (!startTimestamp) startTimestamp = timestamp;
@@ -54,15 +140,30 @@ const CountUp = ({ end, duration = 2000 }: { end: number, duration?: number }) =
 
             setCount(Math.floor(easeOutProgress * end));
 
+            // Play tick sound as numbers go up (only from first counter to avoid overlap)
+            if (index === 0 && sharedAudio) {
+                sharedAudio.tick(progress);
+            }
+
             if (progress < 1) {
                 window.requestAnimationFrame(step);
             } else {
                 setCount(end); // Ensure we end accurately
+                // Last counter to finish plays the chime
+                audioRefCount--;
+                if (audioRefCount <= 0 && sharedAudio) {
+                    sharedAudio.finish();
+                    sharedAudio = null;
+                }
             }
         };
 
         window.requestAnimationFrame(step);
-    }, [end, duration, isVisible]);
+
+        return () => {
+            // Cleanup on unmount
+        };
+    }, [end, duration, isVisible, index]);
 
     return (
         <div ref={countRef}>
@@ -120,7 +221,7 @@ export default function StatisticsSection() {
                                     </div>
 
                                     <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-1 sm:mb-2 tracking-tight font-sans drop-shadow-md">
-                                        <CountUp end={stat.value} duration={2500 + (idx * 500)} />
+                                        <CountUp end={stat.value} duration={2500 + (idx * 500)} index={idx} />
                                     </div>
 
                                     {(stat.date_en || stat.date_mm) && (
