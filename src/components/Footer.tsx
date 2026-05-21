@@ -125,7 +125,7 @@ const Footer = () => {
                         </span>
                         <div className="flex items-center gap-2 sm:gap-3">
                             <span className="text-[10px] font-black uppercase tracking-widest text-primary px-2 py-0.5 bg-primary/5 rounded-sm border border-primary/10 shadow-sm">
-                                MAI SAN HLU
+                                MAI NAUNG NAUNG
                             </span>
                             <span className="text-white/10 font-bold text-[10px]">&</span>
                             <span className="text-[10px] font-black uppercase tracking-widest text-primary px-2 py-0.5 bg-primary/5 rounded-sm border border-primary/10 shadow-sm">
