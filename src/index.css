@@ -143,6 +143,12 @@
     text-size-adjust: 100%;
   }
 
+  @media (min-width: 1024px) {
+    html {
+      zoom: 0.8;
+    }
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased selection:bg-primary/20 selection:text-primary;
     font-feature-settings: "cv11", "ss01";
