@@ -25,10 +25,47 @@ export function sanitizeHtml(dirty: string): string {
 }
 
 /**
- * Strip all HTML tags and return plain text (for previews).
+ * Strip all HTML tags, decode HTML entities (like &nbsp;), and return plain text (for previews).
  */
 export function stripHtml(html: string, maxLength = 160): string {
     if (!html) return "";
-    const plain = html.replace(/<[^>]*>?/gm, "");
+    
+    // Replace block-level tag closures and breaks with spaces to prevent words from sticking together
+    let plain = html
+        .replace(/<br\s*\/?>/gi, " ")
+        .replace(/<\/p>/gi, " ")
+        .replace(/<\/div>/gi, " ")
+        .replace(/<[^>]*>?/gm, "");
+    
+    // Decode HTML entities
+    if (typeof window !== "undefined") {
+        try {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(plain, "text/html");
+            plain = doc.documentElement.textContent || plain;
+        } catch (e) {
+            // Fallback for simple entity replacement
+            plain = plain
+                .replace(/&nbsp;/g, " ")
+                .replace(/&amp;/g, "&")
+                .replace(/&lt;/g, "<")
+                .replace(/&gt;/g, ">")
+                .replace(/&quot;/g, '"')
+                .replace(/&#39;/g, "'");
+        }
+    } else {
+        // Fallback if running outside of browser context (e.g. tests)
+        plain = plain
+            .replace(/&nbsp;/g, " ")
+            .replace(/&amp;/g, "&")
+            .replace(/&lt;/g, "<")
+            .replace(/&gt;/g, ">")
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+    }
+    
+    // Replace non-breaking spaces (\u00A0) with standard spaces
+    plain = plain.replace(/\u00A0/g, " ").trim();
+
     return plain.length > maxLength ? plain.substring(0, maxLength) + "..." : plain;
 }
