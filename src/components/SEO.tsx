@@ -14,7 +14,7 @@ interface SEOProps {
 const siteConfig = {
   siteName: "Ta'ang Land Immigration",
   defaultTitle: "Ta'ang Land Government of Immigration Department | Official Portal",
-  defaultDescription: "Official website of Ta'ang Land Government Immigration Department | တီုင်စေတ်မေန်းတိုအီး အဆိုးယကပီုန်တအာင်း | တအာင်းပြည်အစိုးရ လူဝင်မှုကြီးကြပ်‌ရေး ဌာန",
+  defaultDescription: "Official website of Ta'ang Land Government Immigration Department | တီုင်စေတ်မေန်းတိုအီး အစိုးယကပီုန်တအာင်း | တအာင်းပြည်အစိုးရ လူဝင်မှုကြီးကြပ်‌ရေး ဌာန",
   defaultKeywords: "Ta'ang Land, Immigration Department, Palaung, Myanmar Immigration, Passport, Visa, Citizenship, Ta'ang, ပလောင်ပြည်, ရှေ့နေပြည်ထောင်, ပလောင်, ပလောင်းပြည်, မြန်မာ, taang immigration, taang land immigration, taang img, taang IDTL, idtl, IDTL, NOH Portal, taangland, ta'ang government, ta'ang state",
   siteUrl: "https://www.taanglandimmigration.org",
   defaultImage: "/images/web_logo.jpg",
