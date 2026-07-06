@@ -20,7 +20,7 @@ const resources = {
                 profileSettings: "Profile Settings",
                 logout: "Logout",
                 deptTitle: "IMMIGRATION DEPARTMENT. TA'ANG LAND GOVERNMENT",
-                deptSubtitle: "တီုင်စေတ်မေန်းတိုအီး အဆိုးယကပီုန်တအာင်း",
+                deptSubtitle: "တီုင်စေတ်မေန်းတိုအီး အစိုးယကပီုန်တအာင်း",
                 searchPlaceholder: "Search documents...",
                 noSearchRes: "No results."
             },
@@ -545,7 +545,7 @@ const resources = {
                 login: "ဒီလီပ်ရောတ်",
                 profileSettings: "အချာက်ကနာည်တို",
                 logout: "နံင်လေႈ",
-                deptTitle: "တီုင်စေတ်မေန်းတိုအီး အဆိုးယကပီုန်တအာင်း",
+                deptTitle: "တီုင်စေတ်မေန်းတိုအီး အစိုးယကပီုန်တအာင်း",
                 deptSubtitle: "Immigration Department • Ta'ang Land Government",
                 searchPlaceholder: "ဟြီုက်တခေါရ် ပ္လါႇဘေဲႇ...",
                 noSearchRes: "အာဝ်မိူဝ်ႈပ်ုန်ဘိူန်း။"
@@ -808,7 +808,7 @@ export default i18n;
 //                 login: "ဒီလီပ်ရောတ်",
 //                 profileSettings: "အချာက်ကနာည်တို",
 //                 logout: "နံင်လေႈ",
-//                 deptTitle: "တီုင်စေတ်မေန်းတိုအီး အဆိုးယကပီုန်တအာင်း",
+//                 deptTitle: "တီုင်စေတ်မေန်းတိုအီး အစိုးယကပီုန်တအာင်း",
 //                 deptSubtitle: "Immigration Department • Ta'ang Land Government",
 //                 searchPlaceholder: "ဟြီုက်တခေါရ် ပ္လါႇဘေဲႇ...",
 //                 noSearchRes: "အာဝ်မိူဝ်ႈပ်ုန်ဘိူန်း။"
@@ -831,7 +831,7 @@ export default i18n;
 //                     login: "ဒီလီပ်ရောတ်",
 //                     profileSettings: "အချာက်ကနာည်တို",
 //                     logout: "နံင်လေႈ",
-//                     deptTitle: "တီုင်စေတ်မေန်းတိုအီး အဆိုးယကပီုန်တအာင်း",
+//                     deptTitle: "တီုင်စေတ်မေန်းတိုအီး အစိုးယကပီုန်တအာင်း",
 //                     deptSubtitle: "Immigration Department • Ta'ang Land Government",
 //                     searchPlaceholder: "ဟြီုက်တခေါရ် ပ္လါႇဘေဲႇ...",
 //                     noSearchRes: "အာဝ်မိူဝ်ႈပ်ုန်ဘိူန်း။"

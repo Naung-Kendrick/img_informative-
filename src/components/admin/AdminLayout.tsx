@@ -89,6 +89,23 @@ export default function AdminLayout() {
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+    useEffect(() => {
+        // Prevent body/html from scrolling and showing double scrollbars on Admin dashboard
+        const originalHtmlOverflow = document.documentElement.style.overflow;
+        const originalBodyOverflow = document.body.style.overflow;
+        const originalBodyHeight = document.body.style.height;
+
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+        document.body.style.height = '100%';
+        
+        return () => {
+            document.documentElement.style.overflow = originalHtmlOverflow;
+            document.body.style.overflow = originalBodyOverflow;
+            document.body.style.height = originalBodyHeight;
+        };
+    }, []);
+
     // Global Notification State
     const [toastMessage, setToastMessage] = useState<{ id: string, name: string, subject: string, type?: 'contact' | 'report' | 'pendingPost' } | null>(null);
     const knownContactIds = useRef<Set<string>>(new Set());
@@ -304,10 +321,10 @@ export default function AdminLayout() {
     ];
 
     return (
-        <div className="flex h-screen overflow-hidden bg-slate-50">
+        <div className="flex h-screen lg:h-[125vh] overflow-hidden bg-slate-50">
             {/* Sidebar - Desktop & Mobile */}
             <aside
-                className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex flex-col ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                className={`fixed inset-y-0 left-0 z-50 w-[270px] bg-slate-900 text-slate-300 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex flex-col ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
             >
                 {/* Sidebar Header with Role Badge */}
