@@ -326,7 +326,7 @@ const resources = {
                 title: "ကျွန်ုပ်တို့ထံ ဆက်သွယ်ပါ",
                 subtitle: "အကူအညီလိုအပ်ပါက၊ တိုင်ကြားချက် သို့မဟုတ် အကြံပြုချက်များ ပေးပို့နိုင်ပါသည်။",
                 location: "ရုံးချုပ်တည်နေရာ",
-                address: "တအာင်းဒေသ၊ ရှမ်းပြည်နယ်မြောက်ပိုင်း",
+                address: "တအာင်းဒေသ",
                 phone: "ဖုန်းနံပါတ်",
                 email: "အီးမေးလ်",
                 officeHours: "ရုံးဖွင့်ချိန်",
@@ -452,7 +452,7 @@ const resources = {
                 copyright: "© 2026 Ta'ang Land Government Of Immigration Department. All Rights Reserved.",
                 developers: "Designed & Developed by Mai Naung Naung & Mai Nay Lin",
                 location: "ရုံးချုပ်တည်နေရာ",
-                address: "တအာင်းဒေသ၊ ရှမ်းပြည်နယ်မြောက်ပိုင်း",
+                address: "တအာင်းဒေသ",
                 phone: "ဖုန်းနံပါတ်",
                 email: "အီးမေးလ်"
             },
