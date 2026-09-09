@@ -77,15 +77,6 @@
     <xhtml:link rel="alternate" hreflang="my" href="https://www.taanglandimmigration.org/announcements"/>
   </url>
 
-  <!-- Contact Page -->
-  <url>
-    <loc>https://www.taanglandimmigration.org/contact</loc>
-    <lastmod>2025-05-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.taanglandimmigration.org/contact"/>
-    <xhtml:link rel="alternate" hreflang="my" href="https://www.taanglandimmigration.org/contact"/>
-  </url>
 
   <!-- Help Center Page -->
   <url>

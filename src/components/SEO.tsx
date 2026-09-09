@@ -13,7 +13,7 @@ interface SEOProps {
 
 const siteConfig = {
   siteName: "Ta'ang Land Immigration",
-  defaultTitle: "Ta'ang Land Government of Immigration Department | Official Portal",
+  defaultTitle: "Ta'ang Land Immigration | Official Portal",
   defaultDescription: "Official website of Ta'ang Land Government Immigration Department | တီုင်စေတ်မေန်းတိုအီး အစိုးယကပီုန်တအာင်း | တအာင်းပြည်အစိုးရ လူဝင်မှုကြီးကြပ်‌ရေး ဌာန",
   defaultKeywords: "Ta'ang Land, Immigration Department, Palaung, Myanmar Immigration, Passport, Visa, Citizenship, Ta'ang, ပလောင်ပြည်, ရှေ့နေပြည်ထောင်, ပလောင်, ပလောင်းပြည်, မြန်မာ, taang immigration, taang land immigration, taang img, taang IDTL, idtl, IDTL, NOH Portal, taangland, ta'ang government, ta'ang state",
   siteUrl: "https://www.taanglandimmigration.org",
@@ -70,7 +70,7 @@ export function SEO({
 
     // Open Graph
     updateMetaTag("og:type", type, true);
-    updateMetaTag("og:title", title || siteConfig.defaultTitle, true);
+    updateMetaTag("og:title", title ? `${title} | ${siteConfig.siteName}` : siteConfig.siteName, true);
     updateMetaTag("og:description", seoDescription, true);
     updateMetaTag("og:image", seoImage, true);
     updateMetaTag("og:url", canonicalUrl, true);
@@ -79,7 +79,7 @@ export function SEO({
 
     // Twitter Card
     updateMetaTag("twitter:card", "summary_large_image");
-    updateMetaTag("twitter:title", title || siteConfig.defaultTitle);
+    updateMetaTag("twitter:title", title ? `${title} | ${siteConfig.siteName}` : siteConfig.siteName);
     updateMetaTag("twitter:description", seoDescription);
     updateMetaTag("twitter:image", seoImage);
     updateMetaTag("twitter:site", siteConfig.twitterHandle);
