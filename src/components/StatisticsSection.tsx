@@ -229,32 +229,42 @@ export default function StatisticsSection() {
                     {statistics.map((stat, idx) => {
                         const IconElement = IconMap[stat.icon] || Activity;
                         const title = currentLang === 'mm' ? stat.title_mm : stat.title_en;
+                        const dateText = currentLang === 'mm' ? (stat.date_mm || stat.date_en) : (stat.date_en || stat.date_mm);
 
                         return (
-                            <div key={stat._id} className="relative group perspective-1000">
+                            <div key={stat._id} className="relative group perspective-1000 h-full">
                                 {/* Hover Light effect */}
                                 <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl blur-xl -z-10"></div>
 
-                                <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3.5 sm:p-4 md:p-5 lg:p-6 rounded-xl sm:rounded-2xl flex flex-col items-center text-center transform transition-transform duration-500 hover:-translate-y-2 group-hover:border-primary/30 h-full shadow-2xl">
-                                    <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-slate-900/80 border border-slate-700 flex items-center justify-center mb-2.5 sm:mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-500 shadow-inner group-hover:shadow-primary/20">
-                                        <IconElement size={20} className="text-primary sm:hidden" />
-                                        <IconElement size={24} className="text-primary hidden sm:block md:hidden" />
-                                        <IconElement size={28} className="text-primary hidden md:block" />
+                                <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 p-3 sm:p-4 lg:p-5 rounded-2xl flex flex-col items-center text-center transform transition-transform duration-500 hover:-translate-y-2 group-hover:border-primary/30 h-full shadow-2xl justify-between">
+                                    {/* Icon Slot */}
+                                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-slate-900/80 border border-slate-700 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-500 shadow-inner group-hover:shadow-primary/20 shrink-0">
+                                        <IconElement size={24} className="text-primary sm:hidden" />
+                                        <IconElement size={28} className="text-primary hidden sm:block" />
                                     </div>
 
-                                    <div className="text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-extrabold text-white mb-1 tracking-tight font-sans drop-shadow-md">
-                                        <CountUp end={stat.value} duration={2500 + (idx * 500)} index={idx} />
+                                    {/* Count / Number Slot */}
+                                    <div className="h-9 sm:h-11 flex items-center justify-center text-2xl sm:text-3xl lg:text-3xl xl:text-4xl font-extrabold text-white tracking-tight font-sans drop-shadow-md tabular-nums">
+                                        <CountUp end={stat.value} duration={2500 + (idx * 300)} index={idx} />
                                     </div>
 
-                                    {(stat.date_en || stat.date_mm) && (
-                                        <div className="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-2.5 sm:mb-3 bg-slate-900/60 px-2 py-0.5 rounded-full border border-slate-700/50 shadow-inner whitespace-nowrap">
-                                            {t("stats.asOf")} {stat.date_en || stat.date_mm}
-                                        </div>
-                                    )}
+                                    {/* Date Badge Slot */}
+                                    <div className="h-6 flex items-center justify-center my-1 sm:my-1.5">
+                                        {dateText ? (
+                                            <div className="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase tracking-wider bg-slate-900/60 px-2 py-0.5 rounded-full border border-slate-700/50 shadow-inner whitespace-nowrap">
+                                                {t("stats.asOf")} {dateText}
+                                            </div>
+                                        ) : (
+                                            <div className="h-full"></div>
+                                        )}
+                                    </div>
 
-                                    <h3 className="text-xs sm:text-sm lg:text-[14px] font-bold text-slate-300 padauk-bold mt-auto leading-snug group-hover:text-white transition-colors line-clamp-2">
-                                        {title}
-                                    </h3>
+                                    {/* Title / Label Slot */}
+                                    <div className="h-12 sm:h-14 flex items-center justify-center w-full mt-1">
+                                        <h3 className="text-xs sm:text-sm lg:text-[13px] xl:text-[14px] font-bold text-slate-300 padauk-bold leading-tight group-hover:text-white transition-colors text-center line-clamp-2">
+                                            {title}
+                                        </h3>
+                                    </div>
                                 </div>
                             </div>
                         );
