@@ -12,13 +12,13 @@ const Footer = () => {
         <footer className="bg-foreground text-background/80 border-t border-background/10 relative overflow-hidden">
             {/* Ta'ang Land Government Emblem Corner Watermark Background */}
             <div
-                className="absolute -bottom-10 -right-10 sm:-bottom-14 sm:-right-14 md:-bottom-16 md:-right-16 pointer-events-none select-none opacity-[0.08] transition-opacity"
+                className="absolute -bottom-6 -right-6 sm:-bottom-8 sm:-right-8 md:-bottom-10 md:-right-10 pointer-events-none select-none opacity-[0.08] transition-opacity"
                 aria-hidden="true"
             >
                 <img
                     src="/image.png"
                     alt=""
-                    className="w-72 h-72 sm:w-96 sm:h-96 md:w-[440px] md:h-[440px] lg:w-[520px] lg:h-[520px] object-contain"
+                    className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[340px] lg:h-[340px] object-contain"
                 />
             </div>
 

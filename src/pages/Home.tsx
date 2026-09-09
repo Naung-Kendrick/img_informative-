@@ -124,13 +124,13 @@ const Home = () => {
                                     <ImageWithSkeleton
                                         src={image}
                                         alt=""
-                                        className="w-full h-full object-cover opacity-40 scale-105"
+                                        className="w-full h-full object-cover scale-105 transition-transform duration-700"
                                         containerClassName="absolute inset-0"
                                         skeletonClassName="bg-slate-800"
                                     />
                                 </div>
                             ))}
-                            <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent z-20" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/50 to-slate-950/30 z-20" />
                             
                             {/* Image indicators */}
                             {heroNews.images.length > 1 && (
@@ -159,7 +159,7 @@ const Home = () => {
                     <WeatherWidget variant="compact" />
                 </div>
 
-                <div className="container-custom relative z-10 py-12 sm:py-16 md:py-20">
+                <div className="w-full px-3 sm:px-6 lg:px-10 xl:px-14 mx-auto max-w-[1920px] relative z-10 py-12 sm:py-16 md:py-20">
                     <div className="max-w-3xl">
                         <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 sm:mb-6 animate-in slide-in-from-left duration-700">
                             <span className="px-3 py-1 bg-primary text-white text-[10px] font-bold tracking-widest uppercase rounded">
@@ -171,11 +171,11 @@ const Home = () => {
                             </span>
                         </div>
 
-                        <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.4] sm:leading-[1.5] md:leading-[1.6] mb-4 sm:mb-6 md:mb-8 animate-in slide-in-from-left duration-1000 delay-100 padauk-bold">
+                        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-white leading-[1.4] sm:leading-[1.45] md:leading-[1.5] mb-4 sm:mb-5 md:mb-6 animate-in slide-in-from-left duration-1000 delay-100 padauk-bold">
                             {heroNews.title}
                         </h1>
 
-                        <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-300 mb-6 sm:mb-8 md:mb-10 leading-[1.6] sm:leading-[1.8] line-clamp-2 sm:line-clamp-3 max-w-2xl animate-in slide-in-from-left duration-1000 delay-200 padauk-regular">
+                        <p className="text-xs sm:text-sm md:text-base text-slate-300 mb-5 sm:mb-6 md:mb-8 leading-[1.6] sm:leading-[1.7] line-clamp-2 sm:line-clamp-3 max-w-2xl animate-in slide-in-from-left duration-1000 delay-200 padauk-regular">
                             {t("hero.subtitle") || "Providing transparent, efficient, and secure immigration services for all residents and visitors. Stay updated with our official policy enhancements and legal frameworks."}
                         </p>
 
