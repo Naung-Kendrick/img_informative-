@@ -77,26 +77,33 @@ const Footer = () => {
                             <span className="w-8 h-[1px] bg-primary"></span>
                         </h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                            <div className="flex gap-4">
-                                <div className="h-11 w-11 shrink-0 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 text-primary">
-                                    <MapPin size={20} />
-                                </div>
-                                <div className="flex flex-col gap-1">
-                                    <span className="p-small text-background/40">{t("footer.location")}</span>
-                                    <span className="text-sm leading-relaxed text-background/60">
-                                        {info ? (currentLang === 'mm' ? info.address_mm : info.address_en) : t("footer.address")}
-                                    </span>
-                                    {/* Office Hours */}
-                                    <div className="flex items-center gap-1.5 mt-2 pt-2 border-t border-background/10">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary shrink-0">
-                                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                                        </svg>
-                                        <span className="text-xs text-background/50">
-                                            9:00 AM – 4:00 PM &nbsp;·&nbsp; Mon – Fri
+                            {/* Left column: Location + Office Hours */}
+                            <div className="flex flex-col gap-4">
+                                <div className="flex gap-4">
+                                    <div className="h-11 w-11 shrink-0 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 text-primary">
+                                        <MapPin size={20} />
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="p-small text-background/40">{t("footer.location")}</span>
+                                        <span className="text-sm leading-relaxed text-background/60">
+                                            {info ? (currentLang === 'mm' ? info.address_mm : info.address_en) : t("footer.address")}
                                         </span>
                                     </div>
                                 </div>
+                                {/* Office Hours */}
+                                <div className="flex items-center gap-4 group">
+                                    <div className="h-11 w-11 shrink-0 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 text-primary group-hover:bg-primary group-hover:text-background transition-all">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                                        </svg>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="p-small text-background/40">Office Hours</span>
+                                        <span className="text-sm font-bold text-background/80 leading-snug">9:00 AM – 4:00 PM &nbsp;·&nbsp; Mon – Fri</span>
+                                    </div>
+                                </div>
                             </div>
+                            {/* Right column: Phone + Email */}
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-center gap-4 group">
                                     <div className="h-11 w-11 shrink-0 flex items-center justify-center rounded-sm bg-background/5 border border-background/10 text-primary group-hover:bg-primary group-hover:text-background transition-all">
