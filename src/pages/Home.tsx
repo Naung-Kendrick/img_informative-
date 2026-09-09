@@ -48,7 +48,7 @@ const Home = () => {
 
     // Filter for Published services
     const publishedServices = useMemo(() =>
-        services.filter(s => s.status === "Published").slice(0, 2),
+        services.filter(s => s.status === "Published").slice(0, 3),
         [services]);
 
     // Filter for Published news
@@ -215,9 +215,9 @@ const Home = () => {
 
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto">
                     {isServicesLoading ? (
-                        [1, 2].map(i => <Skeleton key={i} className="h-96 rounded-[2rem]" />)
+                        [1, 2, 3].map(i => <Skeleton key={i} className="h-96 rounded-[2rem]" />)
                     ) : publishedServices.length > 0 ? (
                         publishedServices.map((service, index) => (
                             <div
