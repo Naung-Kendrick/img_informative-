@@ -149,10 +149,10 @@ export default function Navbar() {
                                 <img src="/photo_2026-03-09_14-35-44-removebg-preview.png" alt="Dept Seal" className="h-10 sm:h-14 lg:h-16 w-auto object-contain drop-shadow-md" />
                             </div>
                             <div className="flex flex-col min-w-0 justify-center py-1">
-                                <span className="text-[12px] sm:text-[16px] lg:text-[20px] font-[800] leading-normal text-slate-800 group-hover:text-primary transition-colors pr-1 sm:pr-2 line-clamp-2">
+                                <span className="text-[14px] sm:text-[18px] lg:text-[22px] font-[800] leading-normal text-slate-800 group-hover:text-primary transition-colors pr-1 sm:pr-2 line-clamp-2 padauk-bold">
                                     {t("nav.deptTitle")}
                                 </span>
-                                <span className="text-[7px] sm:text-[10px] lg:text-[12px] text-slate-500 font-bold tracking-[0.08em] sm:tracking-[0.1em] lg:tracking-[0.15em] uppercase mt-0.5 opacity-90 line-clamp-1">
+                                <span className="text-[9px] sm:text-[11px] lg:text-[13px] text-slate-500 font-bold tracking-[0.08em] sm:tracking-[0.1em] lg:tracking-[0.15em] uppercase mt-0.5 opacity-90 line-clamp-1">
                                     {t("nav.deptSubtitle")}
                                 </span>
                             </div>
@@ -433,15 +433,15 @@ export default function Navbar() {
 
             {/* Bottom Tier: Navigational Backbone */}
             <div className="bg-primary hidden lg:block border-b border-white/5">
-                <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px]">
-                    <nav className="flex justify-between items-center h-12">
+                <div className="w-full px-3 sm:px-6 lg:px-10 xl:px-14 mx-auto max-w-[1920px]">
+                    <nav className="flex justify-between items-center h-13">
                         {links.map((link) => (
                             <Link
                                 key={link.name}
                                 to={link.path}
-                                className={`px-8 h-full flex items-center text-[13px] font-bold tracking-[0.1em] uppercase transition-all relative group ${isActive(link.path)
+                                className={`px-4 xl:px-6 h-full flex items-center text-[15px] xl:text-[16px] font-bold tracking-wide padauk-bold transition-all relative group ${isActive(link.path)
                                     ? "text-primary bg-white shadow-[0_-4px_0_inset_currentColor]"
-                                    : "text-white/80 hover:text-white hover:bg-white/10"
+                                    : "text-white/90 hover:text-white hover:bg-white/10"
                                     }`}
                             >
                                 {link.name}
