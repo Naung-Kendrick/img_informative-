@@ -109,7 +109,7 @@ export default function StatisticsManagement() {
         }
     };
 
-    const iconOptions = ["Activity", "Users", "Home", "CreditCard", "Briefcase", "MapPin", "Map", "Database", "Globe", "UserCheck", "ShieldCheck", "Heart"];
+    const iconOptions = ["Activity", "Users", "Home", "CreditCard", "Briefcase", "MapPin", "Map", "Database", "Globe", "UserCheck", "ShieldCheck", "Heart", "Landmark", "Building2", "Trees"];
 
     return (
         <div className="container mx-auto px-4 py-8 animate-in fade-in duration-500">
