@@ -158,17 +158,7 @@ export default function Navbar() {
                             </div>
                         </Link>
 
-                        {/* Flags — PSLF always visible */}
-                        <div className="flex items-center flex-shrink-0">
-                            <img
-                                src="/images/flags/PSLF_Web-Banner.webp"
-                                alt="PSLF Flag"
-                                className="h-[18px] sm:h-5 lg:h-6 w-auto object-cover rounded-[2px] shadow-sm ring-1 ring-black/10"
-                            />
-                        </div>
 
-                        {/* Spacer */}
-                        <div className="flex-1" />
 
                         {/* Fast Actions Module */}
                         <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
