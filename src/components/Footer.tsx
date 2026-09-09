@@ -9,9 +9,21 @@ const Footer = () => {
     const currentLang = i18n.language || "mm";
 
     return (
-        <footer className="bg-foreground text-background/80 border-t border-background/10">
+        <footer className="bg-foreground text-background/80 border-t border-background/10 relative overflow-hidden">
+            {/* Ta'ang Land Government Emblem Corner Watermark Background */}
+            <div
+                className="absolute -bottom-10 -right-10 sm:-bottom-14 sm:-right-14 md:-bottom-16 md:-right-16 pointer-events-none select-none opacity-[0.08] transition-opacity"
+                aria-hidden="true"
+            >
+                <img
+                    src="/image.png"
+                    alt=""
+                    className="w-72 h-72 sm:w-96 sm:h-96 md:w-[440px] md:h-[440px] lg:w-[520px] lg:h-[520px] object-contain"
+                />
+            </div>
+
             {/* Main Footer Content */}
-            <div className="w-full px-3 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px] py-10 sm:py-16 md:py-24">
+            <div className="w-full px-3 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px] py-10 sm:py-16 md:py-24 relative z-10">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-16">
 
                     {/* Column 1: Department Identity */}
@@ -130,7 +142,7 @@ const Footer = () => {
             </div>
 
             {/* Bottom Bar: Ethics & Copyright */}
-            <div className="border-t border-background/10 py-6 sm:py-8 bg-black/20">
+            <div className="border-t border-background/10 py-6 sm:py-8 bg-black/20 relative z-10">
                 <div className="w-full px-3 sm:px-8 lg:px-12 xl:px-16 mx-auto max-w-[1920px] flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6">
                     <div className="p-small text-background/40 text-center md:text-left">
                         {t("footer.copyright")}
