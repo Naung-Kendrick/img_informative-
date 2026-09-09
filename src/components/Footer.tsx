@@ -86,6 +86,15 @@ const Footer = () => {
                                     <span className="text-sm leading-relaxed text-background/60">
                                         {info ? (currentLang === 'mm' ? info.address_mm : info.address_en) : t("footer.address")}
                                     </span>
+                                    {/* Office Hours */}
+                                    <div className="flex items-center gap-1.5 mt-2 pt-2 border-t border-background/10">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary shrink-0">
+                                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                                        </svg>
+                                        <span className="text-xs text-background/50">
+                                            9:00 AM – 4:00 PM &nbsp;·&nbsp; Mon – Fri
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <div className="flex flex-col gap-4">
