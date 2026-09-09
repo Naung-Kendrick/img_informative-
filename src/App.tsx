@@ -91,49 +91,97 @@ function App() {
 
             {/* Admin Site Routes */}
             <Route path="/admin" element={<AdminLayout />}>
-              {/* All roles: Dashboard, News, Profile */}
+              {/* All roles (1+): Dashboard, Profile */}
               <Route index element={<DashboardOverview />} />
-              <Route path="reports" element={<ReportsManagement />} />
-              <Route path="news/interactions/:id" element={<NewsInteractionsManagement />} />
-              <Route path="categories" element={<CategoryManagement />} />
-              <Route path="news" element={<NewsManagement />} />
-              <Route path="news/new" element={<CreateNews />} />
-              <Route path="news/edit/:id" element={
-                <RoleGuard minRole={2}>
-                  <EditNews />
-                </RoleGuard>
-              } />
               <Route path="profile" element={<Profile />} />
 
-              {/* CMS Sections (view & create) */}
+              {/* Admin (role 2+): News, Activities, Reports */}
+              <Route path="reports" element={<ReportsManagement />} />
+              <Route path="news" element={<NewsManagement />} />
+              <Route path="news/new" element={<CreateNews />} />
+              <Route path="news/interactions/:id" element={<NewsInteractionsManagement />} />
+              <Route path="news/edit/:id" element={<EditNews />} />
               <Route path="activities" element={<ActivitiesManagement />} />
-              <Route path="services" element={
-                <PageManagement
-                  section="services"
-                  title="ဝန်ဆောင်မှုများ စီမံရန်"
-                  subtitle="ဝန်ဆောင်မှုဆိုင်ရာ စာမျက်နှာများကို စီမံခန့်ခွဲပါ။"
-                  emptyText="ဝန်ဆောင်မှု စာမျက်နှာများ မရှိသေးပါ။"
-                />
+
+              {/* Root Admin (role 3) only — all other CMS & management */}
+              <Route path="categories" element={
+                <RoleGuard minRole={3}>
+                  <CategoryManagement />
+                </RoleGuard>
               } />
-              <Route path="districts" element={<DistrictsManagement />} />
-              <Route path="districts/new" element={<CreateDistrict />} />
-              <Route path="districts/edit/:id" element={<EditDistrict />} />
-              <Route path="announcements" element={<AnnouncementsManagement />} />
-              <Route path="announcements/new" element={<CreateAnnouncement />} />
-              <Route path="about" element={<AboutManagement />} />
-              <Route path="faq" element={<FaqManagement />} />
-              <Route path="hotnews" element={<HotNewsManagement />} />
-              <Route path="pages/new" element={<CreatePage />} />
+              <Route path="hotnews" element={
+                <RoleGuard minRole={3}>
+                  <HotNewsManagement />
+                </RoleGuard>
+              } />
+              <Route path="services" element={
+                <RoleGuard minRole={3}>
+                  <PageManagement
+                    section="services"
+                    title="ဝန်ဆောင်မှုများ စီမံရန်"
+                    subtitle="ဝန်ဆောင်မှုဆိုင်ရာ စာမျက်နှာများကို စီမံခန့်ခွဲပါ။"
+                    emptyText="ဝန်ဆောင်မှု စာမျက်နှာများ မရှိသေးပါ။"
+                  />
+                </RoleGuard>
+              } />
+              <Route path="districts" element={
+                <RoleGuard minRole={3}>
+                  <DistrictsManagement />
+                </RoleGuard>
+              } />
+              <Route path="districts/new" element={
+                <RoleGuard minRole={3}>
+                  <CreateDistrict />
+                </RoleGuard>
+              } />
+              <Route path="districts/edit/:id" element={
+                <RoleGuard minRole={3}>
+                  <EditDistrict />
+                </RoleGuard>
+              } />
+              <Route path="announcements" element={
+                <RoleGuard minRole={3}>
+                  <AnnouncementsManagement />
+                </RoleGuard>
+              } />
+              <Route path="announcements/new" element={
+                <RoleGuard minRole={3}>
+                  <CreateAnnouncement />
+                </RoleGuard>
+              } />
+              <Route path="about" element={
+                <RoleGuard minRole={3}>
+                  <AboutManagement />
+                </RoleGuard>
+              } />
+              <Route path="faq" element={
+                <RoleGuard minRole={3}>
+                  <FaqManagement />
+                </RoleGuard>
+              } />
+              <Route path="pages/new" element={
+                <RoleGuard minRole={3}>
+                  <CreatePage />
+                </RoleGuard>
+              } />
               <Route path="pages/edit/:id" element={
-                <RoleGuard minRole={2}>
+                <RoleGuard minRole={3}>
                   <EditPage />
                 </RoleGuard>
               } />
-
-              {/* Admin+ only (role >= 2): Users & Audit */}
+              <Route path="statistics" element={
+                <RoleGuard minRole={3}>
+                  <StatisticsManagement />
+                </RoleGuard>
+              } />
+              <Route path="layout" element={
+                <RoleGuard minRole={3}>
+                  <LayoutManagement />
+                </RoleGuard>
+              } />
               <Route path="contact" element={<Navigate to="/admin" replace />} />
               <Route path="contact-info" element={
-                <RoleGuard minRole={2}>
+                <RoleGuard minRole={3}>
                   <ContactInfoManagement />
                 </RoleGuard>
               } />
@@ -145,12 +193,6 @@ function App() {
               <Route path="audit-logs" element={
                 <RoleGuard minRole={3}>
                   <AuditLogs />
-                </RoleGuard>
-              } />
-              <Route path="statistics" element={<StatisticsManagement />} />
-              <Route path="layout" element={
-                <RoleGuard minRole={2}>
-                  <LayoutManagement />
                 </RoleGuard>
               } />
 

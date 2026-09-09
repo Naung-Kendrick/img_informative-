@@ -246,23 +246,23 @@ export default function AdminLayout() {
     const navLinks = [
         // ── Core Management ──
         { name: "ပင်မ ဒက်ရှ်ဘုတ်", path: "/admin", icon: LayoutDashboard, minRole: 1, group: "core" },
-        { name: "အစီရင်ခံစာများ", path: "/admin/reports", icon: BarChart2, minRole: 1, group: "core" },
-        { name: "သတင်းများ စီမံရန်", path: "/admin/news", icon: Newspaper, minRole: 1, group: "core", badge: role >= 2 ? pendingNewsCount : 0 },
-        { name: "ကိန်းဂဏန်းများ စီမံရန်", path: "/admin/statistics", icon: Activity, minRole: 1, group: "core" },
+        { name: "အစီရင်ခံစာများ", path: "/admin/reports", icon: BarChart2, minRole: 2, group: "core" },
+        { name: "သတင်းများ စီမံရန်", path: "/admin/news", icon: Newspaper, minRole: 2, group: "core", badge: role >= 2 ? pendingNewsCount : 0 },
+        { name: "ကိန်းဂဏန်းများ စီမံရန်", path: "/admin/statistics", icon: Activity, minRole: 3, group: "core" },
         { name: "အကောင့်များ စီမံရန်", path: "/admin/users", icon: Users, minRole: 3, group: "core" },
         { name: "History Log (Audit Trail)", path: "/admin/audit-logs", icon: Clock, minRole: 3, group: "core" },
-        { name: "Home Layout စီမံရန်", path: "/admin/layout", icon: LayoutDashboard, minRole: 2, group: "core" },
+        { name: "Home Layout စီမံရန်", path: "/admin/layout", icon: LayoutDashboard, minRole: 3, group: "core" },
 
         // ── CMS Content Sections ──
-        { name: "ကဏ္ဍများ စီမံရန်", path: "/admin/categories", icon: LayoutDashboard, minRole: 1, group: "cms" },
-        { name: "လှုပ်ရှားမှုများ", path: "/admin/activities", icon: Activity, minRole: 1, group: "cms" },
-        { name: "အထူးသတင်းများ (Ticker)", path: "/admin/hotnews", icon: Megaphone, minRole: 1, group: "cms" },
-        { name: "ဝန်ဆောင်မှုများ", path: "/admin/services", icon: Briefcase, minRole: 1, group: "cms" },
-        { name: "လူဝင်မှုကြီးကြပ်ရေးရုံးများ", path: "/admin/districts", icon: MapPin, minRole: 1, group: "cms" },
-        { name: "ထုတ်ပြန်ချက်နှင့် ညွှန်ကြားချက်များ", path: "/admin/announcements", icon: Megaphone, minRole: 1, group: "cms", badge: role >= 2 ? pendingAnnouncementsCount : 0 },
-        { name: "ဌာနအကြောင်း", path: "/admin/about", icon: Info, minRole: 1, group: "cms" },
-        { name: "FAQ မေးခွန်းများ", path: "/admin/faq", icon: HelpCircle, minRole: 1, group: "cms" },
-        { name: "လိပ်စာနှင့် ဆက်သွယ်ရန် အချက်အလက်", path: "/admin/contact-info", icon: MapPin, minRole: 2, group: "cms" },
+        { name: "လှုပ်ရှားမှုများ", path: "/admin/activities", icon: Activity, minRole: 2, group: "cms" },
+        { name: "ကဏ္ဍများ စီမံရန်", path: "/admin/categories", icon: LayoutDashboard, minRole: 3, group: "cms" },
+        { name: "အထူးသတင်းများ (Ticker)", path: "/admin/hotnews", icon: Megaphone, minRole: 3, group: "cms" },
+        { name: "ဝန်ဆောင်မှုများ", path: "/admin/services", icon: Briefcase, minRole: 3, group: "cms" },
+        { name: "လူဝင်မှုကြီးကြပ်ရေးရုံးများ", path: "/admin/districts", icon: MapPin, minRole: 3, group: "cms" },
+        { name: "ထုတ်ပြန်ချက်နှင့် ညွှန်ကြားချက်များ", path: "/admin/announcements", icon: Megaphone, minRole: 3, group: "cms", badge: role >= 3 ? pendingAnnouncementsCount : 0 },
+        { name: "ဌာနအကြောင်း", path: "/admin/about", icon: Info, minRole: 3, group: "cms" },
+        { name: "FAQ မေးခွန်းများ", path: "/admin/faq", icon: HelpCircle, minRole: 3, group: "cms" },
+        { name: "လိပ်စာနှင့် ဆက်သွယ်ရန် အချက်အလက်", path: "/admin/contact-info", icon: MapPin, minRole: 3, group: "cms" },
     ];
 
     // Find current active link name for breadcrumbs
