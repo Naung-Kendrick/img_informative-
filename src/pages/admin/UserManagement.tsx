@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useGetUsersQuery, useUpdateUserRoleMutation, useUpdateUserStatusMutation, useDeleteUserMutation } from "../../store/usersApiSlice";
+import { useGetUsersQuery, useCreateUserMutation, useUpdateUserRoleMutation, useUpdateUserStatusMutation, useDeleteUserMutation } from "../../store/usersApiSlice";
 import type { RootState } from "../../store";
-import { Loader2, Trash2, UserCog, User as UserIcon, ShieldCheck, ShieldAlert, AlertCircle } from "lucide-react";
+import { Loader2, Trash2, UserCog, User as UserIcon, ShieldCheck, ShieldAlert, AlertCircle, UserPlus, X } from "lucide-react";
 import type { User } from "../../store/authSlice";
 import { Skeleton } from "../../components/ui/skeleton";
 import { useModal } from "../../context/ModalContext";
@@ -18,17 +18,26 @@ export default function UserManagement() {
     const { user: currentUser } = useSelector((state: RootState) => state.auth);
     const { showSuccess, showError } = useModal();
 
-    // RoleGuard in App.tsx handles access control; this is a safety fallback
-    if (!currentUser) return null;
+    // Access control: only Root Admin (role 3) can access and manage users
+    if (!currentUser || currentUser.role !== 3) return null;
 
     // RTK Query Hooks
     const { data: users, isLoading, isError, refetch } = useGetUsersQuery();
+    const [createUser, { isLoading: isCreating }] = useCreateUserMutation();
     const [updateUserRole, { isLoading: isUpdating }] = useUpdateUserRoleMutation();
     const [updateUserStatus, { isLoading: isStatusUpdating }] = useUpdateUserStatusMutation();
     const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [userToDelete, setUserToDelete] = useState<string | null>(null);
+
+    // Create User Modal State
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [createName, setCreateName] = useState("");
+    const [createEmail, setCreateEmail] = useState("");
+    const [createPassword, setCreatePassword] = useState("");
+    const [createPhone, setCreatePhone] = useState("");
+    const [createRole, setCreateRole] = useState(1);
 
     const handleRoleChange = async (userId: string, newRole: number) => {
         try {
@@ -73,6 +82,30 @@ export default function UserManagement() {
         }
     };
 
+    const handleCreateUser = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            await createUser({
+                name: createName,
+                email: createEmail,
+                password: createPassword,
+                phone: createPhone,
+                role: Number(createRole),
+            }).unwrap();
+            showSuccess("အောင်မြင်ပါသည်", `အကောင့်အသစ် ဖွင့်လှစ်ပြီးပါပြီ: ${createEmail}`);
+            setIsCreateModalOpen(false);
+            setCreateName("");
+            setCreateEmail("");
+            setCreatePassword("");
+            setCreatePhone("");
+            setCreateRole(1);
+            refetch();
+        } catch (err: any) {
+            console.error("Failed to create user:", err);
+            showError("မအောင်မြင်ပါ", err?.data?.message || "အကောင့်ဖွင့်ခြင်း မအောင်မြင်ပါ။");
+        }
+    };
+
     return (
         <div className="container mx-auto px-4 py-8 animate-in fade-in duration-500">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
@@ -84,6 +117,13 @@ export default function UserManagement() {
                         အဖွဲ့ဝင်များ၏ ရာထူးများကို သတ်မှတ်ခြင်းနှင့် အကောင့်များကို စီမံခန့်ခွဲပါ။
                     </p>
                 </div>
+                <button
+                    onClick={() => setIsCreateModalOpen(true)}
+                    className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-xl font-medium shadow-sm transition-all padauk-bold text-sm"
+                >
+                    <UserPlus className="h-4 w-4" />
+                    <span>အကောင့်အသစ်ဖွင့်ရန် (Create User)</span>
+                </button>
             </div>
 
             {isLoading ? (
@@ -287,6 +327,128 @@ export default function UserManagement() {
                                 ဆက်လက်ဖျက်သိမ်းမည်
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Create User Modal */}
+            {isCreateModalOpen && (
+                <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200 padauk-regular">
+                    <div className="bg-white rounded-3xl shadow-xl w-full max-w-lg p-6 md:p-8 animate-in zoom-in-95 duration-200 border border-slate-200">
+                        <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                                    <UserPlus size={20} />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold text-slate-900 padauk-bold">အကောင့်အသစ်ဖွင့်ရန် (Create User)</h3>
+                                    <p className="text-xs text-slate-500">အသုံးပြုသူအသစ်အတွက် အချက်အလက်နှင့် စကားဝှက် သတ်မှတ်ပေးပါ</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setIsCreateModalOpen(false)}
+                                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleCreateUser} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 padauk-bold">
+                                    အမည် (Full Name) *
+                                </label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={createName}
+                                    onChange={(e) => setCreateName(e.target.value)}
+                                    placeholder="e.g. Mai Tun Oo"
+                                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 padauk-bold">
+                                    အီးမေးလ် (Email Address) *
+                                </label>
+                                <input
+                                    type="email"
+                                    required
+                                    value={createEmail}
+                                    onChange={(e) => setCreateEmail(e.target.value)}
+                                    placeholder="user@example.com"
+                                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 padauk-bold">
+                                        စကားဝှက် (Password) *
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type="password"
+                                            required
+                                            minLength={6}
+                                            value={createPassword}
+                                            onChange={(e) => setCreatePassword(e.target.value)}
+                                            placeholder="••••••••"
+                                            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 padauk-bold">
+                                        ဖုန်းနံပါတ် (Phone)
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        value={createPhone}
+                                        onChange={(e) => setCreatePhone(e.target.value)}
+                                        placeholder="09..."
+                                        className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 padauk-bold">
+                                    ရာထူး (Assigned Role) *
+                                </label>
+                                <select
+                                    value={createRole}
+                                    onChange={(e) => setCreateRole(Number(e.target.value))}
+                                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
+                                >
+                                    <option value={1}>ဝန်ထမ်း (Staff - Role 1)</option>
+                                    <option value={0}>အသုံးပြုသူ (Regular User - Role 0)</option>
+                                    {currentUser.role === 3 && (
+                                        <option value={2}>စီမံခန့်ခွဲသူ (Admin - Role 2)</option>
+                                    )}
+                                </select>
+                            </div>
+
+                            <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 mt-6">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsCreateModalOpen(false)}
+                                    className="px-5 py-2.5 text-sm font-bold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all hover:border-slate-300"
+                                >
+                                    ပယ်ဖျက်မည်
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={isCreating}
+                                    className="px-6 py-2.5 text-sm font-bold text-white bg-primary hover:bg-primary/90 rounded-xl transition-all shadow-md shadow-primary/20 flex items-center gap-2 disabled:opacity-70"
+                                >
+                                    {isCreating ? <Loader2 size={16} className="animate-spin" /> : <UserPlus size={16} />}
+                                    အကောင့်ဖွင့်မည် (Create)
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

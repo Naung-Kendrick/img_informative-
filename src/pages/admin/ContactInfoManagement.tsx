@@ -16,7 +16,8 @@ import {
     Clock,
     Globe,
     Loader2,
-    Info
+    Building2,
+    CheckCircle2
 } from "lucide-react";
 import { useModal } from "../../context/ModalContext";
 
@@ -75,91 +76,98 @@ export default function ContactInfoManagement() {
 
     if (isLoading) return (
         <div className="flex justify-center items-center h-64">
-            <Loader2 className="animate-spin text-primary" size={48} />
+            <Loader2 className="animate-spin text-blue-500" size={36} />
         </div>
     );
 
     return (
-        <div className="container mx-auto px-4 py-8 animate-in fade-in duration-500 max-w-5xl">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 gap-4">
+        <div className="space-y-8 animate-in fade-in duration-300">
+            {/* Page Header */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 border-l-8 border-primary pl-4 padauk-bold">
-                        ဆက်သွယ်ရန် အချက်အလက်များ
+                    <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white padauk-bold flex items-center gap-2.5">
+                        <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            <Building2 size={20} />
+                        </div>
+                        <span>လိပ်စာနှင့် ဆက်သွယ်ရန် အချက်အလက်များ</span>
                     </h1>
-                    <p className="text-slate-500 mt-2 text-lg padauk-regular">
-                        ဝက်ဘ်ဆိုက်အောက်ခြေ (Footer) နှင့် ဆက်သွယ်ရန်စာမျက်နှာရှိ အချက်အလက်များကို ပြင်ဆင်ပါ။
+                    <p className="text-slate-400 text-xs sm:text-sm mt-1 padauk-regular">
+                        ဝက်ဘ်ဆိုက်အောက်ခြေ (Footer) တွင် ဖော်ပြထားသော ရုံးချုပ်လိပ်စာ၊ ဖုန်းနံပါတ်၊ အီးမေးလ်နှင့် လူမှုကွန်ရက်များကို စီမံခန့်ခွဲပါ။
                     </p>
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-8">
-                {/* Basic Contact Info */}
-                <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow ring-1 ring-slate-100">
-                    <div className="flex items-center gap-3 mb-8 pb-4 border-b border-slate-100">
-                        <div className="p-2.5 bg-primary/10 rounded-xl text-primary">
-                            <Info size={24} />
+            <form onSubmit={handleSubmit} className="space-y-6">
+                {/* 1. Basic Contact Info Card */}
+                <div className="bg-[#0e1627] rounded-2xl border border-slate-800 p-6 sm:p-8 shadow-sm">
+                    <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800/80">
+                        <div className="p-2.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl">
+                            <MapPin size={20} />
                         </div>
-                        <h2 className="text-xl font-bold text-slate-900 padauk-bold">အခြေခံ အချက်အလက်များ</h2>
+                        <div>
+                            <h2 className="text-base font-bold text-white padauk-bold">ရုံးချုပ် လိပ်စာနှင့် ဆက်သွယ်ရန်</h2>
+                            <p className="text-xs text-slate-400">လိပ်စာ၊ ဖုန်းနံပါတ်နှင့် အီးမေးလ်</p>
+                        </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-5">
                             <div>
-                                <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-                                    <MapPin size={18} className="text-primary" /> လိပ်စာ (မြန်မာ)
+                                <label className="flex items-center gap-2 text-xs font-semibold text-slate-300 mb-2 padauk-bold">
+                                    <MapPin size={14} className="text-blue-400" /> ရုံးချုပ်လိပ်စာ (မြန်မာ)
                                 </label>
                                 <textarea
                                     name="address_mm"
                                     value={formData.address_mm}
                                     onChange={handleChange}
                                     rows={3}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all padauk-regular resize-none"
-                                    placeholder="မြန်မာဘာသာဖြင့် လိပ်စာထည့်ပါ"
+                                    className="w-full bg-[#090e1a] border border-slate-800 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all padauk-regular resize-none"
+                                    placeholder="ဥပမာ။ တအာင်းပြည်၊ နမ့်ဆန်မြို့နယ်..."
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-                                    <MapPin size={18} className="text-primary" /> Address (English)
+                                <label className="flex items-center gap-2 text-xs font-semibold text-slate-300 mb-2">
+                                    <MapPin size={14} className="text-blue-400" /> Headquarter Address (English)
                                 </label>
                                 <textarea
                                     name="address_en"
                                     value={formData.address_en}
                                     onChange={handleChange}
                                     rows={3}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
-                                    placeholder="Enter address in English"
+                                    className="w-full bg-[#090e1a] border border-slate-800 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all resize-none"
+                                    placeholder="e.g. Ta'ang Land Headquarter..."
                                     required
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-6">
+                        <div className="space-y-5">
                             <div>
-                                <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-                                    <Phone size={18} className="text-primary" /> ဖုန်းနံပါတ် (Phone)
+                                <label className="flex items-center gap-2 text-xs font-semibold text-slate-300 mb-2 padauk-bold">
+                                    <Phone size={14} className="text-emerald-400" /> ဖုန်းနံပါတ် (Phone Number)
                                 </label>
                                 <input
                                     type="text"
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleChange}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                                    placeholder="+95 9 ..."
+                                    className="w-full bg-[#090e1a] border border-slate-800 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
+                                    placeholder="+95 9 123 456 789"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-                                    <Mail size={18} className="text-primary" /> အီးမေးလ် (Email)
+                                <label className="flex items-center gap-2 text-xs font-semibold text-slate-300 mb-2 padauk-bold">
+                                    <Mail size={14} className="text-sky-400" /> တရားဝင် အီးမေးလ် (Official Email)
                                 </label>
                                 <input
                                     type="email"
                                     name="email"
                                     value={formData.email}
                                     onChange={handleChange}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                                    placeholder="example@mail.com"
+                                    className="w-full bg-[#090e1a] border border-slate-800 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
+                                    placeholder="info@taanglandimmigration.org"
                                     required
                                 />
                             </div>
@@ -167,98 +175,106 @@ export default function ContactInfoManagement() {
                     </div>
                 </div>
 
-                {/* Social Media & Working Hours */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow ring-1 ring-slate-100">
-                        <div className="flex items-center gap-3 mb-8 pb-4 border-b border-slate-100">
-                            <div className="p-2.5 bg-blue-500/10 rounded-xl text-blue-600">
-                                <Globe size={24} />
+                {/* 2. Social Media & Working Hours */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Social Media Links */}
+                    <div className="bg-[#0e1627] rounded-2xl border border-slate-800 p-6 sm:p-8 shadow-sm">
+                        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800/80">
+                            <div className="p-2.5 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-xl">
+                                <Globe size={20} />
                             </div>
-                            <h2 className="text-xl font-bold text-slate-900 padauk-bold">လူမှုကွန်ရက် လင့်ခ်များ</h2>
+                            <div>
+                                <h2 className="text-base font-bold text-white padauk-bold">လူမှုကွန်ရက် လင့်ခ်များ</h2>
+                                <p className="text-xs text-slate-400">Facebook, Telegram, Viber</p>
+                            </div>
                         </div>
 
-                        <div className="space-y-6">
+                        <div className="space-y-4">
                             <div>
-                                <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-                                    <Facebook size={18} className="text-blue-600" /> Facebook URL
+                                <label className="flex items-center gap-2 text-xs font-semibold text-slate-300 mb-2">
+                                    <Facebook size={14} className="text-blue-500" /> Facebook Page URL
                                 </label>
                                 <input
                                     type="text"
                                     name="facebook"
                                     value={formData.facebook}
                                     onChange={handleChange}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                                    className="w-full bg-[#090e1a] border border-slate-800 focus:border-blue-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
                                     placeholder="https://facebook.com/..."
                                 />
                             </div>
                             <div>
-                                <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-                                    <Send size={18} className="text-[#0088cc]" /> Telegram URL
+                                <label className="flex items-center gap-2 text-xs font-semibold text-slate-300 mb-2">
+                                    <Send size={14} className="text-[#0088cc]" /> Telegram Channel URL
                                 </label>
                                 <input
                                     type="text"
                                     name="telegram"
                                     value={formData.telegram}
                                     onChange={handleChange}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#0088cc]/20 focus:border-[#0088cc] transition-all"
+                                    className="w-full bg-[#090e1a] border border-slate-800 focus:border-blue-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
                                     placeholder="https://t.me/..."
                                 />
                             </div>
                             <div>
-                                <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-                                    <MessageCircle size={18} className="text-[#7360f2]" /> Viber URL
+                                <label className="flex items-center gap-2 text-xs font-semibold text-slate-300 mb-2">
+                                    <MessageCircle size={14} className="text-[#7360f2]" /> Viber Community URL
                                 </label>
                                 <input
                                     type="text"
                                     name="viber"
                                     value={formData.viber}
                                     onChange={handleChange}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#7360f2]/20 focus:border-[#7360f2] transition-all"
-                                    placeholder="https://viber.click/..."
+                                    className="w-full bg-[#090e1a] border border-slate-800 focus:border-blue-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
+                                    placeholder="https://invite.viber.com/..."
                                 />
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow ring-1 ring-slate-100 flex flex-col">
-                        <div className="flex items-center gap-3 mb-8 pb-4 border-b border-slate-100">
-                            <div className="p-2.5 bg-orange-500/10 rounded-xl text-orange-600">
-                                <Clock size={24} />
+                    {/* Working Hours & Map */}
+                    <div className="bg-[#0e1627] rounded-2xl border border-slate-800 p-6 sm:p-8 shadow-sm flex flex-col">
+                        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800/80">
+                            <div className="p-2.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-xl">
+                                <Clock size={20} />
                             </div>
-                            <h2 className="text-xl font-bold text-slate-900 padauk-bold">ရုံးချိန်များ</h2>
+                            <div>
+                                <h2 className="text-base font-bold text-white padauk-bold">ရုံးချိန်နှင့် တည်နေရာ</h2>
+                                <p className="text-xs text-slate-400">ရုံးဖွင့်ချိန်များနှင့် Google Maps Embed</p>
+                            </div>
                         </div>
 
-                        <div className="space-y-6 flex-grow">
+                        <div className="space-y-4 flex-grow">
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2 padauk-bold">ရုံးချိန် (မြန်မာ)</label>
+                                <label className="block text-xs font-semibold text-slate-300 mb-2 padauk-bold">ရုံးချိန် (မြန်မာ)</label>
                                 <input
                                     type="text"
                                     name="working_hours_mm"
                                     value={formData.working_hours_mm}
                                     onChange={handleChange}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all padauk-regular"
+                                    className="w-full bg-[#090e1a] border border-slate-800 focus:border-blue-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all padauk-regular"
                                     placeholder="ဥပမာ။ တနင်္လာ မှ သောကြာ (၉:၀၀ နံနက် မှ ၄:၀၀ ညနေ)"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2">Working Hours (English)</label>
+                                <label className="block text-xs font-semibold text-slate-300 mb-2">Working Hours (English)</label>
                                 <input
                                     type="text"
                                     name="working_hours_en"
                                     value={formData.working_hours_en}
                                     onChange={handleChange}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
+                                    className="w-full bg-[#090e1a] border border-slate-800 focus:border-blue-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
                                     placeholder="e.g. Mon - Fri (9:00 AM - 4:00 PM)"
                                 />
                             </div>
-                            <div className="pt-4">
-                                <label className="block text-sm font-bold text-slate-700 mb-2">Google Map Embed URL</label>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-300 mb-2">Google Map Embed URL</label>
                                 <input
                                     type="text"
                                     name="map_embed_url"
                                     value={formData.map_embed_url}
                                     onChange={handleChange}
-                                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-xs"
+                                    className="w-full bg-[#090e1a] border border-slate-800 focus:border-blue-500 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all font-mono"
                                     placeholder="https://www.google.com/maps/embed?pb=..."
                                 />
                             </div>
@@ -266,18 +282,24 @@ export default function ContactInfoManagement() {
                     </div>
                 </div>
 
-                <div className="flex justify-end pt-4 pb-12">
+                {/* Submit / Action Bar */}
+                <div className="flex items-center justify-between pt-2">
+                    <div className="flex items-center gap-2 text-xs text-slate-400">
+                        <CheckCircle2 size={14} className="text-emerald-400" />
+                        <span>သိမ်းဆည်းပြီးပါက ပင်မဝက်ဘ်ဆိုက် Footer တွင် ချက်ချင်းပြောင်းလဲဖော်ပြမည်ဖြစ်ပါသည်။</span>
+                    </div>
+
                     <button
                         type="submit"
                         disabled={isUpdating || !canEdit}
-                        className="flex items-center gap-3 bg-primary hover:bg-primary/90 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all shadow-xl shadow-primary/20 hover:shadow-2xl hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:grayscale padauk-bold disabled:pointer-events-none"
+                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-md transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none padauk-bold"
                     >
                         {isUpdating ? (
-                            <Loader2 className="animate-spin" size={24} />
+                            <Loader2 className="animate-spin" size={16} />
                         ) : (
-                            <Save size={24} />
+                            <Save size={16} />
                         )}
-                        အချက်အလက်များကို သိမ်းဆည်းမည်
+                        <span>အချက်အလက် သိမ်းဆည်းမည်</span>
                     </button>
                 </div>
             </form>

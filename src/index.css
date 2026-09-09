@@ -144,7 +144,7 @@
   }
 
   @media (min-width: 1024px) {
-    html {
+    html:not(.admin-mode) {
       zoom: 0.8;
     }
   }
@@ -264,4 +264,96 @@
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(156, 163, 175, 0.35) transparent;
+}
+
+/* 
+  =========================================
+  ADMIN PORTAL UNIFIED DARK MODE OVERRIDES
+  =========================================
+*/
+.admin-mode {
+  color-scheme: dark;
+  background-color: #070b14 !important;
+}
+
+.admin-mode,
+.admin-mode body,
+.admin-mode button,
+.admin-mode input,
+.admin-mode select,
+.admin-mode textarea {
+  background-color: #070b14 !important;
+  color: #f1f5f9 !important;
+  font-family: "LocalFont", "Pyidaungsu", "Padauk", "Noto Serif Myanmar", "Myanmar Text", "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* Convert all white cards and containers in admin into sleek dark surfaces */
+.admin-mode .bg-white {
+  background-color: #0e1627 !important;
+}
+
+.admin-mode .bg-slate-50,
+.admin-mode .bg-slate-100 {
+  background-color: #131d33 !important;
+}
+
+.admin-mode .bg-slate-200 {
+  background-color: #1e293b !important;
+}
+
+.admin-mode .border-slate-200,
+.admin-mode .border-slate-100 {
+  border-color: #1e293b !important;
+}
+
+.admin-mode .text-slate-900,
+.admin-mode .text-slate-800 {
+  color: #f8fafc !important;
+}
+
+.admin-mode .text-slate-700,
+.admin-mode .text-slate-600 {
+  color: #cbd5e1 !important;
+}
+
+.admin-mode .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+/* Dark form inputs for all admin management pages */
+.admin-mode input:not([type="checkbox"]):not([type="radio"]),
+.admin-mode select,
+.admin-mode textarea {
+  background-color: #090e1a !important;
+  border-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+.admin-mode input::placeholder,
+.admin-mode textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Dark table styling for data tables */
+.admin-mode table {
+  color: #f1f5f9 !important;
+}
+
+.admin-mode table thead tr,
+.admin-mode table th {
+  background-color: #090e1a !important;
+  color: #94a3b8 !important;
+  border-color: #1e293b !important;
+}
+
+.admin-mode table tbody tr {
+  border-color: #1e293b !important;
+}
+
+.admin-mode table tbody tr:hover {
+  background-color: #131d33 !important;
+}
+
+.admin-mode table td {
+  border-color: #1e293b !important;
 }

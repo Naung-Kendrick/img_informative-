@@ -27,7 +27,6 @@ const getLinks = (t: (key: string) => string) => [
     { name: t("nav.districts"), path: "/districts" },
     { name: t("nav.announcements"), path: "/announcements" },
     { name: t("nav.about"), path: "/about" },
-    { name: t("nav.contact"), path: "/contact" },
     { name: t("nav.helpCenter"), path: "/help-center" },
 ]
 

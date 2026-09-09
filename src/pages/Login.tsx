@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Loader2 } from "lucide-react";
 import { useDispatch } from "react-redux";
-import { useLoginMutation, useGoogleLoginMutation, useRegisterMutation } from "../store/authApiSlice";
+import { useLoginMutation, useGoogleLoginMutation } from "../store/authApiSlice";
 import { setCredentials } from "../store/authSlice";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 
@@ -17,25 +17,16 @@ export default function Login() {
     const { t } = useTranslation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [name, setName] = useState("");
-    const [phone, setPhone] = useState("");
-    const [isRegistering, setIsRegistering] = useState(false);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [login, { isLoading, isError, error }] = useLoginMutation();
-    const [register, { isLoading: isRegisterLoading, isError: isRegisterError, error: registerError }] = useRegisterMutation();
     const [googleLogin, { isLoading: isGoogleLoading }] = useGoogleLoginMutation();
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            let authData;
-            if (isRegistering) {
-                authData = await register({ name, email, password, phone }).unwrap();
-            } else {
-                authData = await login({ email, password }).unwrap();
-            }
+            const authData = await login({ email, password }).unwrap();
 
             dispatch(
                 setCredentials({
@@ -116,42 +107,13 @@ export default function Login() {
                 {/* Right Side - Form */}
                 <div className="p-8 md:p-14 flex flex-col justify-center bg-card relative">
 
-                    {(isError || isRegisterError) && (
+                    {isError && (
                         <div className="bg-destructive/10 text-destructive text-sm p-4 text-center rounded-lg mb-6 border border-destructive/20 animate-in shake">
-                            {((error || registerError) as AuthError)?.data?.message || (isRegistering ? "Registration failed. Please try again." : t("login.failed"))}
+                            {(error as AuthError)?.data?.message || t("login.failed")}
                         </div>
                     )}
 
                     <form onSubmit={handleAuth} className="space-y-6">
-                        {isRegistering && (
-                            <>
-                                <div className="space-y-2">
-                                    <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider ml-1">
-                                        Full Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                        className="w-full bg-secondary/50 border border-border text-foreground rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm font-medium placeholder:text-muted-foreground/50 shadow-sm"
-                                        placeholder="John Doe"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider ml-1">
-                                        Phone Number <span className="text-muted-foreground/50 font-normal lowercase">(optional)</span>
-                                    </label>
-                                    <input
-                                        type="tel"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
-                                        className="w-full bg-secondary/50 border border-border text-foreground rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm font-medium placeholder:text-muted-foreground/50 shadow-sm"
-                                        placeholder="+95 9..."
-                                    />
-                                </div>
-                            </>
-                        )}
                         {/* Email Input */}
                         <div className="space-y-2">
                             <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider ml-1">
@@ -188,7 +150,7 @@ export default function Login() {
                                 <input type="checkbox" className="w-4 h-4 rounded border-border text-primary focus:ring-primary/20 bg-secondary" />
                                 <span className="text-xs font-semibold text-muted-foreground group-hover:text-foreground transition-colors">Remember me</span>
                             </label>
-                            <Link to="/contact" className="text-xs font-semibold text-primary hover:text-primary/80 transition-colors">
+                            <Link to="/help-center" className="text-xs font-semibold text-primary hover:text-primary/80 transition-colors">
                                 Forgot password?
                             </Link>
                         </div>
@@ -197,34 +159,22 @@ export default function Login() {
                         <div className="pt-2">
                             <button
                                 type="submit"
-                                disabled={isLoading || isRegisterLoading || isGoogleLoading}
+                                disabled={isLoading || isGoogleLoading}
                                 className="w-full bg-[#1e3a8a] hover:bg-[#1e3a8a]/90 text-white font-bold py-4 rounded-full shadow-lg shadow-blue-900/10 transition-all text-sm disabled:opacity-70 disabled:pointer-events-none flex items-center justify-center gap-2 active:scale-[0.98]"
                             >
-                                {(isLoading || isRegisterLoading) ? (
+                                {isLoading ? (
                                     <>
                                         <Loader2 className="h-5 w-5 animate-spin" />
                                         <span>Processing...</span>
                                     </>
                                 ) : (
-                                    <span className="padauk-bold">{isRegistering ? "Create Account" : "Login"}</span>
+                                    <span className="padauk-bold">Login</span>
                                 )}
                             </button>
                         </div>
                     </form>
 
                     <div className="mt-8 text-center space-y-5">
-                        <div className="flex items-center justify-center gap-2 text-sm font-medium">
-                            <span className="text-muted-foreground">
-                                {isRegistering ? "Already have an account?" : "Not a member yet?"}
-                            </span>
-                            <button
-                                type="button"
-                                onClick={() => setIsRegistering(!isRegistering)}
-                                className="text-primary hover:underline font-bold"
-                            >
-                                {isRegistering ? "Sign in instead" : "Create an account"}
-                            </button>
-                        </div>
 
                         <div className="relative mt-8 mb-4">
                             <div className="absolute inset-0 flex items-center">
@@ -235,7 +185,7 @@ export default function Login() {
                             </div>
                         </div>
 
-                        {/* Sign up / Google Login Block */}
+                        {/* Sign in with Google Block */}
                         <div className="w-full flex justify-center [&>div]:w-full [&>div>div]:w-full [&>div>div>iframe]:w-full hover:scale-[1.02] transition-transform duration-300 relative z-10">
                             <GoogleLogin
                                 onSuccess={handleGoogleSuccess}
@@ -243,7 +193,7 @@ export default function Login() {
                                 useOneTap
                                 theme="filled_blue"
                                 shape="rectangular"
-                                text="signup_with"
+                                text="signin_with"
                                 size="large"
                             />
                         </div>

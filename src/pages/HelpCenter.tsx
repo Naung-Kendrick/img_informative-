@@ -1,10 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-    ChevronDown,
-    Headphones,
-} from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGetAllFaqsQuery } from "../store/faqApiSlice";
 
@@ -104,22 +100,6 @@ const HelpCenter = () => {
                                 FAQ တစ်စုံတစ်ရာ မရှိသေးပါ။
                             </div>
                         )}
-                    </div>
-
-                    {/* Contact Support CTA */}
-                    <div className="mt-20 p-10 bg-slate-50 rounded-[3rem] border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-8">
-                        <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center text-primary">
-                                <Headphones size={32} />
-                            </div>
-                            <div>
-                                <h3 className="text-2xl font-bold padauk-bold">{t("help.contactSupport")}</h3>
-                                <p className="text-muted-foreground">{t("help.contactDesc")}</p>
-                            </div>
-                        </div>
-                        <Link to="/contact" className="px-10 py-4 bg-foreground text-background rounded-full font-bold hover:bg-slate-800 transition-all active:scale-95 whitespace-nowrap">
-                            Contact Support
-                        </Link>
                     </div>
                 </div>
             </section>

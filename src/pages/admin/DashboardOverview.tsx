@@ -3,14 +3,14 @@ import type { RootState } from "../../store";
 import { useGetAllNewsQuery } from "../../store/newsApiSlice";
 import { useGetUsersQuery } from "../../store/usersApiSlice";
 import { useGetPagesBySectionQuery } from "../../store/pageApiSlice";
-import { useGetAllContactsQuery } from "../../store/contactApiSlice";
 import { useGetAllDistrictsQuery } from "../../store/districtApiSlice";
 import { useGetAllAnnouncementsQuery } from "../../store/announcementApiSlice";
 import { Link } from "react-router-dom";
 import {
     Newspaper, Users as UsersIcon, CheckCircle2, FileEdit,
-    Activity, Briefcase, MapPin, Mail, MailOpen, Megaphone, Zap,
-    Plus, ArrowRight, ShieldCheck, Clock, TrendingUp
+    Activity, Briefcase, MapPin, Megaphone, Zap,
+    Plus, ArrowRight, ShieldCheck, TrendingUp, Calendar,
+    Shield, ChevronRight
 } from "lucide-react";
 
 export default function DashboardOverview() {
@@ -19,10 +19,9 @@ export default function DashboardOverview() {
 
     // ── Data Hooks (conditionally skip based on role) ──
     const { data: news = [], isLoading: newsLoading } = useGetAllNewsQuery();
-    const { data: users = [], isLoading: usersLoading } = useGetUsersQuery(undefined, { skip: role < 2 });
+    const { data: users = [], isLoading: usersLoading } = useGetUsersQuery(undefined, { skip: role < 3 });
     const { data: servicePages = [], isLoading: servicesLoading } = useGetPagesBySectionQuery("services", { skip: role < 1 });
     const { data: districts = [], isLoading: districtsLoading } = useGetAllDistrictsQuery(undefined, { skip: role < 1 });
-    const { data: contacts = [], isLoading: contactsLoading } = useGetAllContactsQuery(undefined, { skip: role < 2 });
     const { data: dedicatedAnnouncements = [], isLoading: announcementsLoading } = useGetAllAnnouncementsQuery();
 
     // ── Computed Stats ──
@@ -30,6 +29,7 @@ export default function DashboardOverview() {
     const draftCount = news.filter(n => n.status === "Draft").length;
     const activitiesCount = news.filter(n => n.category?.toLowerCase() === "activities").length;
     const announcementsCount = dedicatedAnnouncements.length;
+    
     // Staff: only show own news
     const myNewsCount = news.filter(n => n.author?._id === user?._id).length;
     const myPublishedCount = news.filter(n => n.author?._id === user?._id && n.status === "Published").length;
@@ -37,41 +37,45 @@ export default function DashboardOverview() {
 
     const adminCount = users.filter(u => u.role > 0).length;
     const regularUsersCount = users.filter(u => u.role === 0).length;
-    const unreadContacts = contacts.filter(c => !c.isRead).length;
 
-    // ── Role Labels ──
-    const roleLabel = role === 3 ? "Root Admin" : role === 2 ? "Admin" : "Staff";
-    const roleGreeting = role === 3
-        ? "စနစ်အား အပြီးအစီးထိန်းချုပ်နိုင်သည်။"
+    // Role Label & Clearance
+    const roleTitle = role === 3 ? "Root Administrator" : role === 2 ? "Administrator" : "Staff Member";
+    const roleMyanmar = role === 3 ? "အဆင့်မြင့် အုပ်ချုပ်သူ (Root Admin)" : role === 2 ? "စီမံခန့်ခွဲသူ (Admin)" : "ဌာန ဝန်ထမ်း (Staff)";
+    const roleDescription = role === 3
+        ? "စနစ်တစ်ခုလုံးအား စီမံခန့်ခွဲနိုင်သော အဆင့်မြင့် စီမံခန့်ခွဲသူ အကောင့်ဖြင့် ဝင်ရောက်ထားပါသည်။"
         : role === 2
-            ? "သတင်းများ၊ ကဏ္ဍများနှင့် ဆက်သွယ်ချက်များကို စီမံခန့်ခွဲနိုင်သည်။"
-            : "သတင်းရေးသားခြင်းနှင့် ကဏ္ဍအချက်အလက်များ ကြည့်ရှုနိုင်သည်။";
+            ? "သတင်းများ၊ ဝန်ဆောင်မှုများနှင့် ကဏ္ဍစုံကို စီမံခန့်ခွဲနိုင်ပါသည်။"
+            : "သတင်းရေးသားခြင်းနှင့် ကဏ္ဍဆိုင်ရာ အချက်အလက်များကို စစ်ဆေးကြည့်ရှုနိုင်ပါသည်။";
 
     return (
-        <div className="animate-in fade-in duration-500">
+        <div className="space-y-8 animate-in fade-in duration-300">
 
-            {/* ── Welcome Banner ─────────────────────────────── */}
-            <div className={`mb-8 rounded-2xl p-6 md:p-8 border shadow-sm ${role === 3 ? "bg-gradient-to-r from-[#1e3a8a] to-[#1e1b4b] border-[#1e3a8a]/50" :
-                role === 2 ? "bg-gradient-to-r from-[#1e40af] to-[#1e3a8a] border-[#1e3a8a]/50" :
-                    "bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] border-blue-500"
-                }`}>
-                <div className="flex items-start justify-between flex-wrap gap-4">
-                    <div>
-                        <div className="flex items-center gap-2 mb-2">
-                            <ShieldCheck size={18} className="text-white/60" />
-                            <span className="text-white/60 text-xs font-bold uppercase tracking-widest">{roleLabel}</span>
-                        </div>
-                        <h1 className="text-2xl md:text-3xl font-extrabold text-white padauk-bold mb-2">
-                            မင်္ဂလာပါ၊ {user?.name}
-                        </h1>
-                        <p className="text-white/70 padauk-regular text-sm max-w-lg">
-                            {roleGreeting}
-                        </p>
+            {/* ── Executive Header Banner (Professional Dark Mode) ─────────────────────────────── */}
+            <div className="bg-[#0e1627] border border-slate-800 rounded-2xl p-6 sm:p-7 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <div className="flex items-center gap-2 mb-1 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                        <span>Ta'ang Land Immigration Department</span>
+                        <span className="text-slate-600">•</span>
+                        <span className="text-emerald-400 font-bold">{roleTitle}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-white/50 text-xs">
-                        <Clock size={14} />
+
+                    <h1 className="text-2xl sm:text-3xl font-extrabold text-white padauk-bold tracking-tight">
+                        မင်္ဂလာပါ၊ {user?.name}
+                    </h1>
+
+                    <p className="text-sm text-slate-300 padauk-regular mt-1.5 max-w-2xl leading-relaxed">
+                        {roleDescription}
+                    </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row md:flex-col items-start md:items-end gap-2.5 shrink-0">
+                    <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/80 border border-slate-700/80 text-xs font-semibold text-slate-200 shadow-2xs">
+                        <Calendar size={14} className="text-blue-400" />
                         <span>{new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</span>
                     </div>
+                    <span className="text-[11px] font-medium text-slate-400 padauk-bold px-1">
+                        {roleMyanmar}
+                    </span>
                 </div>
             </div>
 
@@ -81,64 +85,77 @@ export default function DashboardOverview() {
             {role === 1 && (
                 <>
                     {/* My News Stats */}
-                    <h2 className="text-lg font-bold text-slate-800 padauk-bold mb-4 flex items-center gap-2">
-                        <span className="w-1.5 h-5 rounded-full bg-blue-500 inline-block" />
-                        ကျွန်ုပ်၏ သတင်းများ
-                    </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-                        <StatCard
-                            icon={<Newspaper size={22} />}
-                            label="ကျွန်ုပ် ရေးသားသော သတင်းများ"
-                            value={newsLoading ? "-" : myNewsCount}
-                            bg="bg-blue-50" text="text-blue-600" border="border-blue-100"
-                        />
-                        <StatCard
-                            icon={<CheckCircle2 size={22} />}
-                            label="လွှင့်တင်ပြီး"
-                            value={newsLoading ? "-" : myPublishedCount}
-                            bg="bg-green-50" text="text-green-600" border="border-green-100"
-                        />
-                        <StatCard
-                            icon={<FileEdit size={22} />}
-                            label="မူကြမ်းများ"
-                            value={newsLoading ? "-" : myDraftCount}
-                            bg="bg-slate-100" text="text-slate-600" border="border-slate-200"
-                        />
-                    </div>
+                    <section>
+                        <div className="flex items-center gap-2.5 mb-4">
+                            <div className="w-1.5 h-5 rounded-full bg-blue-500" />
+                            <h2 className="text-base font-bold text-slate-100 padauk-bold">
+                                ကျွန်ုပ်၏ သတင်းများ
+                            </h2>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                            <DarkStatCard
+                                icon={<Newspaper size={20} />}
+                                label="ကျွန်ုပ် ရေးသားသော သတင်းများ"
+                                value={newsLoading ? "-" : myNewsCount}
+                                to="/admin/news"
+                                accent="blue"
+                            />
+                            <DarkStatCard
+                                icon={<CheckCircle2 size={20} />}
+                                label="လွှင့်တင်ပြီး သတင်းများ"
+                                value={newsLoading ? "-" : myPublishedCount}
+                                to="/admin/news"
+                                accent="green"
+                            />
+                            <DarkStatCard
+                                icon={<FileEdit size={20} />}
+                                label="သတင်း မူကြမ်းများ"
+                                value={newsLoading ? "-" : myDraftCount}
+                                to="/admin/news"
+                                accent="amber"
+                            />
+                        </div>
+                    </section>
 
-                    {/* Site Overview (read-only) */}
-                    <h2 className="text-lg font-bold text-slate-800 padauk-bold mb-4 flex items-center gap-2">
-                        <span className="w-1.5 h-5 rounded-full bg-slate-500 inline-block" />
-                        ဝက်ဘ်ဆိုက် အနှစ်ချုပ်
-                    </h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-                        <MiniStat icon={<TrendingUp size={18} />} label="စုစုပေါင်း သတင်းများ" value={newsLoading ? "-" : publishedCount} color="text-slate-600" />
-                        <MiniStat icon={<Zap size={18} />} label="လှုပ်ရှားမှုများ" value={newsLoading ? "-" : activitiesCount} color="text-slate-600" />
-                        <MiniStat icon={<Briefcase size={18} />} label="ဝန်ဆောင်မှုများ" value={servicesLoading ? "-" : servicePages.length} color="text-violet-600" />
-                        <MiniStat icon={<Megaphone size={18} />} label="ထုတ်ပြန်ချက်များ" value={announcementsLoading ? "-" : announcementsCount} color="text-rose-600" />
-                    </div>
+                    {/* Site Overview */}
+                    <section>
+                        <div className="flex items-center gap-2.5 mb-4">
+                            <div className="w-1.5 h-5 rounded-full bg-slate-500" />
+                            <h2 className="text-base font-bold text-slate-100 padauk-bold">
+                                ဝက်ဘ်ဆိုက် အနှစ်ချုပ်
+                            </h2>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            <DarkMiniStat icon={<TrendingUp size={18} />} label="စုစုပေါင်း သတင်းများ" value={newsLoading ? "-" : publishedCount} to="/admin/news" color="text-blue-400" />
+                            <DarkMiniStat icon={<Zap size={18} />} label="လှုပ်ရှားမှုများ" value={newsLoading ? "-" : activitiesCount} to="/admin/activities" color="text-slate-300" />
+                            <DarkMiniStat icon={<Briefcase size={18} />} label="ဝန်ဆောင်မှုများ" value={servicesLoading ? "-" : servicePages.length} to="/admin/services" color="text-violet-400" />
+                            <DarkMiniStat icon={<Megaphone size={18} />} label="ထုတ်ပြန်ချက်များ" value={announcementsLoading ? "-" : announcementsCount} to="/admin/announcements" color="text-rose-400" />
+                        </div>
+                    </section>
 
                     {/* Staff Quick Actions */}
-                    <h2 className="text-lg font-bold text-slate-800 padauk-bold mb-4 flex items-center gap-2">
-                        <span className="w-1.5 h-5 rounded-full bg-green-500 inline-block" />
-                        အမြန် လုပ်ဆောင်ရန်
-                    </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <QuickAction
-                            to="/admin/news/new"
-                            icon={<Newspaper size={24} />}
-                            title="သတင်းအသစ် တင်မည်"
-                            subtitle="ဝက်ဘ်ဆိုက်အတွက် သတင်းအသစ် ရေးသားပါ။"
-                            variant="dark"
-                        />
-                        <QuickAction
-                            to="/admin/news"
-                            icon={<FileEdit size={24} />}
-                            title="ကျွန်ုပ်၏ သတင်းများ ကြည့်မည်"
-                            subtitle="ရေးသားထားသော သတင်းများကို ပြင်ဆင်/စစ်ဆေးပါ။"
-                            variant="amber"
-                        />
-                    </div>
+                    <section>
+                        <div className="flex items-center gap-2.5 mb-4">
+                            <div className="w-1.5 h-5 rounded-full bg-emerald-500" />
+                            <h2 className="text-base font-bold text-slate-100 padauk-bold">
+                                အမြန် ဆောင်ရွက်ရန်
+                            </h2>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <DarkQuickAction
+                                to="/admin/news/new"
+                                icon={<Newspaper size={22} />}
+                                title="သတင်းအသစ် တင်မည်"
+                                subtitle="ဝက်ဘ်ဆိုက်အတွက် သတင်းအသစ် ရေးသားဖော်ပြပါ။"
+                            />
+                            <DarkQuickAction
+                                to="/admin/news"
+                                icon={<FileEdit size={22} />}
+                                title="ကျွန်ုပ်၏ သတင်းများ ကြည့်မည်"
+                                subtitle="ရေးသားထားသော သတင်းများကို ပြင်ဆင်/စစ်ဆေးပါ။"
+                            />
+                        </div>
+                    </section>
                 </>
             )}
 
@@ -148,91 +165,105 @@ export default function DashboardOverview() {
             {role === 2 && (
                 <>
                     {/* Primary Stats */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
-                        <StatCard
-                            icon={<CheckCircle2 size={22} />}
-                            label="လွှင့်တင်ပြီး သတင်းများ"
-                            value={newsLoading ? "-" : publishedCount}
-                            bg="bg-slate-50" text="text-primary" border="border-slate-100"
-                        />
-                        <StatCard
-                            icon={<FileEdit size={22} />}
-                            label="သတင်းမူကြမ်းများ"
-                            value={newsLoading ? "-" : draftCount}
-                            bg="bg-slate-100" text="text-slate-600" border="border-slate-200"
-                        />
-                        <StatCard
-                            icon={<UsersIcon size={22} />}
-                            label="ဝန်ထမ်းများ / အကောင့်များ"
-                            value={usersLoading ? "-" : users.length}
-                            bg="bg-blue-50" text="text-blue-600" border="border-blue-100"
-                        />
-                        <StatCard
-                            icon={<Mail size={22} />}
-                            label="ဆက်သွယ်ချက်များ"
-                            value={contactsLoading ? "-" : contacts.length}
-                            bg="bg-green-50" text="text-green-600" border="border-green-100"
-                            badge={unreadContacts}
-                        />
-                    </div>
+                    <section>
+                        <div className="flex items-center gap-2.5 mb-4">
+                            <div className="w-1.5 h-5 rounded-full bg-blue-500" />
+                            <h2 className="text-base font-bold text-slate-100 padauk-bold">
+                                အဓိက အချက်အလက်များ
+                            </h2>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                            <DarkStatCard
+                                icon={<CheckCircle2 size={20} />}
+                                label="လွှင့်တင်ပြီး သတင်းများ"
+                                value={newsLoading ? "-" : publishedCount}
+                                to="/admin/news"
+                                accent="blue"
+                            />
+                            <DarkStatCard
+                                icon={<FileEdit size={20} />}
+                                label="သတင်းမူကြမ်းများ"
+                                value={newsLoading ? "-" : draftCount}
+                                to="/admin/news"
+                                accent="amber"
+                            />
+                            <DarkStatCard
+                                icon={<MapPin size={20} />}
+                                label="လူဝင်မှုကြီးကြပ်ရေးရုံးများ"
+                                value={districtsLoading ? "-" : districts.length}
+                                to="/admin/districts"
+                                accent="indigo"
+                            />
+                            <DarkStatCard
+                                icon={<Megaphone size={20} />}
+                                label="ထုတ်ပြန်ချက်များ"
+                                value={announcementsLoading ? "-" : announcementsCount}
+                                to="/admin/announcements"
+                                accent="emerald"
+                            />
+                        </div>
+                    </section>
 
                     {/* CMS Section Stats */}
-                    <h2 className="text-lg font-bold text-slate-800 padauk-bold mb-4 flex items-center gap-2">
-                        <span className="w-1.5 h-5 rounded-full bg-primary inline-block" />
-                        ကဏ္ဍအလိုက် အချက်အလက်
-                    </h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
-                        <MiniStat icon={<Zap size={18} />} label="လှုပ်ရှားမှုများ" value={newsLoading ? "-" : activitiesCount} color="text-slate-600" />
-                        <MiniStat icon={<Briefcase size={18} />} label="ဝန်ဆောင်မှုများ" value={servicesLoading ? "-" : servicePages.length} color="text-violet-600" />
-                        <MiniStat icon={<MapPin size={18} />} label="လူဝင်မှုကြီးကြပ်ရေးရုံးများ" value={districtsLoading ? "-" : districts.length} color="text-teal-600" />
-                        <MiniStat icon={<Megaphone size={18} />} label="ထုတ်ပြန်ချက်များ" value={announcementsLoading ? "-" : announcementsCount} color="text-rose-600" />
-                        <Link to="/admin/contact" className="relative">
-                            <MiniStat icon={<Mail size={18} />} label="ဆက်သွယ်ချက်များ" value={contactsLoading ? "-" : contacts.length} color="text-sky-600" />
-                            {unreadContacts > 0 && (
-                                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm animate-pulse">
-                                    {unreadContacts}
+                    <section>
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-2.5">
+                                <div className="w-1.5 h-5 rounded-full bg-indigo-500" />
+                                <h2 className="text-base font-bold text-slate-100 padauk-bold">
+                                    ဝက်ဘ်ဆိုက် ကဏ္ဍအလိုက် အချက်အလက်
+                                </h2>
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                                    4 ကဏ္ဍ
                                 </span>
-                            )}
-                        </Link>
-                    </div>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <DarkMiniStat icon={<Zap size={18} />} label="လှုပ်ရှားမှုများ" value={newsLoading ? "-" : activitiesCount} to="/admin/activities" color="text-slate-300" />
+                            <DarkMiniStat icon={<Briefcase size={18} />} label="ဝန်ဆောင်မှုများ" value={servicesLoading ? "-" : servicePages.length} to="/admin/services" color="text-violet-400" />
+                            <DarkMiniStat icon={<MapPin size={18} />} label="လူဝင်မှုကြီးကြပ်ရေးရုံးများ" value={districtsLoading ? "-" : districts.length} to="/admin/districts" color="text-teal-400" />
+                            <DarkMiniStat icon={<Megaphone size={18} />} label="ထုတ်ပြန်ချက်များ" value={announcementsLoading ? "-" : announcementsCount} to="/admin/announcements" color="text-rose-400" />
+                        </div>
+                    </section>
 
                     {/* Admin Quick Actions */}
-                    <h2 className="text-lg font-bold text-slate-800 padauk-bold mb-4 flex items-center gap-2">
-                        <span className="w-1.5 h-5 rounded-full bg-primary inline-block" />
-                        အမြန် လုပ်ဆောင်ရန်
-                    </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        <QuickAction
-                            to="/admin/news/new"
-                            icon={<Newspaper size={24} />}
-                            title="သတင်းအသစ် တင်မည်"
-                            subtitle="ဝက်ဘ်ဆိုက်အတွက် သတင်းအသစ် ရေးသားပါ။"
-                            variant="dark"
-                        />
-                        <QuickAction
-                            to="/admin/pages/new?section=services"
-                            icon={<Plus size={24} />}
-                            title="ဝန်ဆောင်မှု ထည့်မည်"
-                            subtitle="ဝန်ဆောင်မှုအသစ် စာမျက်နှာ ဖန်တီးပါ။"
-                            variant="amber"
-                        />
-                        <QuickAction
-                            to="/admin/contact"
-                            icon={<MailOpen size={24} />}
-                            title="မက်ဆေ့ချ်များ ကြည့်မည်"
-                            subtitle={unreadContacts > 0 ? `မဖတ်ရသေးသော ${unreadContacts} ခု ရှိသည်။` : "မက်ဆေ့ချ်များအားလုံး ဖတ်ပြီးပါပြီ။"}
-                            variant="dark"
-                            badge={unreadContacts}
-                        />
-                    </div>
+                    <section>
+                        <div className="flex items-center gap-2.5 mb-4">
+                            <div className="w-1.5 h-5 rounded-full bg-emerald-500" />
+                            <h2 className="text-base font-bold text-slate-100 padauk-bold">
+                                အမြန် ဆောင်ရွက်ရန်
+                            </h2>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                            <DarkQuickAction
+                                to="/admin/news/new"
+                                icon={<Newspaper size={22} />}
+                                title="သတင်းအသစ် တင်မည်"
+                                subtitle="ဝက်ဘ်ဆိုက်အတွက် သတင်းအသစ် ရေးသားဖော်ပြပါ။"
+                            />
+                            <DarkQuickAction
+                                to="/admin/pages/new?section=services"
+                                icon={<Plus size={22} />}
+                                title="ဝန်ဆောင်မှု ထည့်မည်"
+                                subtitle="ပြည်သူ့ဝန်ဆောင်မှု အသစ် စာမျက်နှာ ဖန်တီးပါ။"
+                            />
+                            <DarkQuickAction
+                                to="/admin/announcements/new"
+                                icon={<Megaphone size={22} />}
+                                title="ထုတ်ပြန်ချက် အသစ်တင်မည်"
+                                subtitle="ဌာနဆိုင်ရာ အသိပေးချက်နှင့် ကြေညာချက်များ တင်ပြပါ။"
+                            />
+                        </div>
+                    </section>
 
                     {/* Admin Permission Info */}
-                    <div className="mt-8 bg-slate-50 border border-slate-200 rounded-2xl p-5 flex items-start gap-3">
-                        <ShieldCheck size={20} className="text-primary shrink-0 mt-0.5" />
+                    <div className="bg-[#0e1627] border border-slate-800 rounded-2xl p-5 flex items-start gap-4 shadow-sm">
+                        <div className="p-2.5 rounded-xl bg-slate-800 text-blue-400 shrink-0 mt-0.5">
+                            <ShieldCheck size={20} />
+                        </div>
                         <div>
-                            <p className="text-sm font-bold text-slate-900 padauk-bold">စီမံခန့်ခွဲသူ အကောင့်</p>
-                            <p className="text-xs text-slate-700 padauk-regular mt-1">
-                                သင်သည် သတင်းများ၊ ကဏ္ဍများ၊ ဆက်သွယ်ချက်များကို စီမံနိုင်ပြီး Staff အကောင့်များ၏ ရာထူးကို ပြောင်းနိုင်ပါသည်။ Root Admin ၏ အကောင့်ကိုမူ ပြင်ဆင်ခွင့်မရှိပါ။
+                            <p className="text-sm font-bold text-slate-100 padauk-bold">စီမံခန့်ခွဲသူ အကောင့် (Administrator)</p>
+                            <p className="text-xs text-slate-400 padauk-regular mt-1 leading-relaxed">
+                                သင်သည် သတင်းများ၊ ကဏ္ဍများ၊ ဆက်သွယ်ချက်များကို စီမံခန့်ခွဲနိုင်ပြီး ဝန်ထမ်း (Staff) အကောင့်များကို ဖန်တီး/ပြင်ဆင်နိုင်ပါသည်။ အဆင့်မြင့် စီမံခန့်ခွဲသူ (Root Admin) ၏ အကောင့်များကိုမူ ပြင်ဆင်ခွင့်မရှိပါ။
                             </p>
                         </div>
                     </div>
@@ -245,81 +276,107 @@ export default function DashboardOverview() {
             {role === 3 && (
                 <>
                     {/* Primary Stats Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
-                        <StatCard
-                            icon={<CheckCircle2 size={22} />}
-                            label="လွှင့်တင်ပြီး သတင်းများ"
-                            value={newsLoading ? "-" : publishedCount}
-                            bg="bg-slate-50" text="text-primary" border="border-slate-100"
-                        />
-                        <StatCard
-                            icon={<FileEdit size={22} />}
-                            label="သတင်းမူကြမ်းများ"
-                            value={newsLoading ? "-" : draftCount}
-                            bg="bg-slate-100" text="text-slate-600" border="border-slate-200"
-                        />
-                        <StatCard
-                            icon={<Activity size={22} />}
-                            label="စီမံခန့်ခွဲသူ/ဝန်ထမ်း"
-                            value={usersLoading ? "-" : adminCount}
-                            bg="bg-blue-50" text="text-blue-600" border="border-blue-100"
-                        />
-                        <StatCard
-                            icon={<UsersIcon size={22} />}
-                            label="အသုံးပြုသူ အကောင့်များ"
-                            value={usersLoading ? "-" : regularUsersCount}
-                            bg="bg-green-50" text="text-green-600" border="border-green-100"
-                        />
-                    </div>
+                    <section>
+                        <div className="flex items-center gap-2.5 mb-4">
+                            <div className="w-1.5 h-5 rounded-full bg-blue-500" />
+                            <h2 className="text-base font-bold text-slate-100 padauk-bold">
+                                အဓိက အချက်အလက်များ
+                            </h2>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                            <DarkStatCard
+                                icon={<CheckCircle2 size={20} />}
+                                label="လွှင့်တင်ပြီး သတင်းများ"
+                                value={newsLoading ? "-" : publishedCount}
+                                to="/admin/news"
+                                accent="blue"
+                            />
+                            <DarkStatCard
+                                icon={<FileEdit size={20} />}
+                                label="သတင်းမူကြမ်းများ"
+                                value={newsLoading ? "-" : draftCount}
+                                to="/admin/news"
+                                accent="amber"
+                            />
+                            <DarkStatCard
+                                icon={<Activity size={20} />}
+                                label="စီမံခန့်ခွဲသူ / ဝန်ထမ်း"
+                                value={usersLoading ? "-" : adminCount}
+                                to="/admin/users"
+                                accent="indigo"
+                            />
+                            <DarkStatCard
+                                icon={<UsersIcon size={20} />}
+                                label="အသုံးပြုသူ အကောင့်များ"
+                                value={usersLoading ? "-" : regularUsersCount}
+                                to="/admin/users"
+                                accent="emerald"
+                            />
+                        </div>
+                    </section>
 
                     {/* CMS Section Stats */}
-                    <h2 className="text-lg font-bold text-slate-800 padauk-bold mb-4 flex items-center gap-2">
-                        <span className="w-1.5 h-5 rounded-full bg-primary inline-block" />
-                        ကဏ္ဍအလိုက် အချက်အလက်
-                    </h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
-                        <MiniStat icon={<Zap size={18} />} label="လှုပ်ရှားမှုများ" value={newsLoading ? "-" : activitiesCount} color="text-slate-600" />
-                        <MiniStat icon={<Briefcase size={18} />} label="ဝန်ဆောင်မှုများ" value={servicesLoading ? "-" : servicePages.length} color="text-violet-600" />
-                        <MiniStat icon={<MapPin size={18} />} label="လူဝင်မှုကြီးကြပ်ရေးရုံးများ" value={districtsLoading ? "-" : districts.length} color="text-teal-600" />
-                        <MiniStat icon={<Megaphone size={18} />} label="ထုတ်ပြန်ချက်များ" value={announcementsLoading ? "-" : announcementsCount} color="text-rose-600" />
-                        <Link to="/admin/contact" className="relative">
-                            <MiniStat icon={<Mail size={18} />} label="ဆက်သွယ်ချက်များ" value={contactsLoading ? "-" : contacts.length} color="text-sky-600" />
-                            {unreadContacts > 0 && (
-                                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm animate-pulse">
-                                    {unreadContacts}
+                    <section>
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-2.5">
+                                <div className="w-1.5 h-5 rounded-full bg-indigo-500" />
+                                <h2 className="text-base font-bold text-slate-100 padauk-bold">
+                                    ဝက်ဘ်ဆိုက် ကဏ္ဍအလိုက် အချက်အလက်
+                                </h2>
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                                    4 ကဏ္ဍ
                                 </span>
-                            )}
-                        </Link>
-                    </div>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <DarkMiniStat icon={<Zap size={18} />} label="လှုပ်ရှားမှုများ" value={newsLoading ? "-" : activitiesCount} to="/admin/activities" color="text-slate-300" />
+                            <DarkMiniStat icon={<Briefcase size={18} />} label="ဝန်ဆောင်မှုများ" value={servicesLoading ? "-" : servicePages.length} to="/admin/services" color="text-violet-400" />
+                            <DarkMiniStat icon={<MapPin size={18} />} label="လူဝင်မှုကြီးကြပ်ရေးရုံးများ" value={districtsLoading ? "-" : districts.length} to="/admin/districts" color="text-teal-400" />
+                            <DarkMiniStat icon={<Megaphone size={18} />} label="ထုတ်ပြန်ချက်များ" value={announcementsLoading ? "-" : announcementsCount} to="/admin/announcements" color="text-rose-400" />
+                        </div>
+                    </section>
 
                     {/* Root Admin Quick Actions */}
-                    <h2 className="text-lg font-bold text-slate-800 padauk-bold mb-4 flex items-center gap-2">
-                        <span className="w-1.5 h-5 rounded-full bg-primary inline-block" />
-                        အမြန် လုပ်ဆောင်ရန်
-                    </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        <QuickAction
-                            to="/admin/news/new"
-                            icon={<Newspaper size={24} />}
-                            title="သတင်းအသစ် တင်မည်"
-                            subtitle="ဝက်ဘ်ဆိုက်အတွက် သတင်းအသစ် ရေးသားပါ။"
-                            variant="dark"
-                        />
-                        <QuickAction
-                            to="/admin/pages/new?section=services"
-                            icon={<Plus size={24} />}
-                            title="ဝန်ဆောင်မှု ထည့်မည်"
-                            subtitle="ဝန်ဆောင်မှုအသစ် စာမျက်နှာ ဖန်တီးပါ။"
-                            variant="amber"
-                        />
-                        <QuickAction
-                            to="/admin/contact"
-                            icon={<MailOpen size={24} />}
-                            title="မက်ဆေ့ချ်များ ကြည့်မည်"
-                            subtitle={unreadContacts > 0 ? `မဖတ်ရသေးသော ${unreadContacts} ခု ရှိသည်။` : "မက်ဆေ့ချ်များအားလုံး ဖတ်ပြီးပါပြီ။"}
-                            variant="dark"
-                            badge={unreadContacts}
-                        />
+                    <section>
+                        <div className="flex items-center gap-2.5 mb-4">
+                            <div className="w-1.5 h-5 rounded-full bg-emerald-500" />
+                            <h2 className="text-base font-bold text-slate-100 padauk-bold">
+                                အမြန် ဆောင်ရွက်ရန်
+                            </h2>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                            <DarkQuickAction
+                                to="/admin/news/new"
+                                icon={<Newspaper size={22} />}
+                                title="သတင်းအသစ် တင်မည်"
+                                subtitle="ဝက်ဘ်ဆိုက်အတွက် သတင်းအသစ် ရေးသားဖော်ပြပါ။"
+                            />
+                            <DarkQuickAction
+                                to="/admin/pages/new?section=services"
+                                icon={<Plus size={22} />}
+                                title="ဝန်ဆောင်မှု ထည့်မည်"
+                                subtitle="ပြည်သူ့ဝန်ဆောင်မှု အသစ် စာမျက်နှာ ဖန်တီးပါ။"
+                            />
+                            <DarkQuickAction
+                                to="/admin/announcements/new"
+                                icon={<Megaphone size={22} />}
+                                title="ထုတ်ပြန်ချက် အသစ်တင်မည်"
+                                subtitle="ဌာနဆိုင်ရာ အသိပေးချက်နှင့် ကြေညာချက်များ တင်ပြပါ။"
+                            />
+                        </div>
+                    </section>
+
+                    {/* Root Admin Security Clearance Notice */}
+                    <div className="bg-[#0e1627] border border-slate-800 rounded-2xl p-5 flex items-start gap-4 shadow-sm">
+                        <div className="p-2.5 rounded-xl bg-slate-800 text-emerald-400 shrink-0 mt-0.5">
+                            <Shield size={20} />
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-slate-100 padauk-bold">Root Admin လုံခြုံရေးအဆင့်အတန်း (Highest Authority)</p>
+                            <p className="text-xs text-slate-400 padauk-regular mt-1 leading-relaxed">
+                                သင်သည် စနစ်၏ ပင်မစီမံခန့်ခွဲသူဖြစ်ပြီး စနစ်တစ်ခုလုံး၊ ဝန်ထမ်းအကောင့်များ၊ အစီရင်ခံစာများ၊ လုံခြုံရေးမှတ်တမ်းများ (Audit Trail) နှင့် ပင်မစာမျက်နှာ Layout များကို အပြည့်အဝ ထိန်းချုပ်ခွင့်ရှိပါသည်။
+                            </p>
+                        </div>
                     </div>
                 </>
             )}
@@ -328,70 +385,133 @@ export default function DashboardOverview() {
     );
 }
 
-/* ── Reusable Sub-components ──────────────────────────────────────────── */
+/* ── Dark Mode Reusable Sub-components ──────────────────────────────────────────── */
 
-function StatCard({ icon, label, value, bg, text, border, badge }: {
-    icon: React.ReactNode; label: string; value: string | number;
-    bg: string; text: string; border: string; badge?: number;
-}) {
-    return (
-        <div className="relative bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow">
-            <div className={`w-11 h-11 rounded-xl ${bg} ${text} ${border} border flex items-center justify-center shrink-0`}>
-                {icon}
-            </div>
-            <div>
-                <p className="text-xs font-semibold text-slate-500 padauk-bold">{label}</p>
-                <h3 className="text-2xl font-extrabold text-slate-900 mt-0.5">{value}</h3>
-            </div>
-            {badge !== undefined && badge > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm animate-pulse">
-                    {badge}
-                </span>
-            )}
-        </div>
-    );
+interface DarkStatCardProps {
+    icon: React.ReactNode;
+    label: string;
+    value: string | number;
+    to: string;
+    accent: 'blue' | 'green' | 'indigo' | 'amber' | 'emerald';
+    badge?: number;
 }
 
-function MiniStat({ icon, label, value, color }: {
-    icon: React.ReactNode; label: string; value: string | number; color: string;
-}) {
-    return (
-        <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm text-center hover:shadow-md transition-shadow">
-            <div className={`${color} mx-auto mb-2`}>{icon}</div>
-            <p className="text-[22px] font-extrabold text-slate-900">{value}</p>
-            <p className="text-[11px] font-semibold text-slate-500 padauk-bold mt-1">{label}</p>
-        </div>
-    );
-}
+function DarkStatCard({ icon, label, value, to, accent, badge }: DarkStatCardProps) {
+    const accentStyles = {
+        blue: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+        green: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+        indigo: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
+        amber: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+        emerald: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    }[accent];
 
-function QuickAction({ to, icon, title, subtitle, variant, badge }: {
-    to: string; icon: React.ReactNode; title: string; subtitle: string;
-    variant: 'dark' | 'amber'; badge?: number;
-}) {
-    const isDark = variant === 'dark';
     return (
         <Link
             to={to}
-            className={`group relative p-6 rounded-2xl border shadow-sm hover:shadow-lg transition-all flex flex-col ${isDark
-                ? 'bg-[#1e1b4b] border-[#1e3a8a]/50'
-                : 'bg-gradient-to-br from-[#1e3a8a] to-[#1e40af] border-[#1e3a8a]/20 shadow-primary/20'
-                }`}
+            className="relative bg-[#0e1627] border border-slate-800/90 hover:border-slate-700 rounded-2xl p-5 transition-all duration-200 shadow-sm flex flex-col justify-between group h-full"
         >
-            {badge ? (
-                <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-md">
-                    {badge}
-                </span>
-            ) : null}
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform ${isDark ? 'bg-[#1e3a8a] border-2 border-white/10 text-white' : 'bg-white/10 border-2 border-white/30 text-white'
-                }`}>
-                {icon}
+            <div className="flex items-center justify-between">
+                <div className={`w-10 h-10 rounded-xl ${accentStyles} border flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform`}>
+                    {icon}
+                </div>
+
+                {badge !== undefined && badge > 0 && (
+                    <span className="px-2 py-0.5 bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[10px] font-bold rounded-full">
+                        {badge} မဖတ်ရသေး
+                    </span>
+                )}
             </div>
-            <h3 className="text-lg font-bold text-white padauk-bold mb-1">{title}</h3>
-            <p className={`text-sm padauk-regular mb-3 ${isDark ? 'text-slate-400' : 'text-white/80'}`}>{subtitle}</p>
-            <div className="mt-auto flex items-center text-xs font-bold text-[#e2e8f0]">
-                သွားမည် <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
+
+            <div className="mt-4">
+                <div className="text-3xl font-extrabold text-white tracking-tight font-sans group-hover:text-blue-400 transition-colors">
+                    {value}
+                </div>
+                <p className="text-sm font-semibold text-slate-200 mt-1.5 line-clamp-1">
+                    {label}
+                </p>
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-medium text-slate-400 group-hover:text-blue-400 transition-colors">
+                <span>အသေးစိတ် စီမံရန်</span>
+                <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
             </div>
         </Link>
     );
 }
 
+interface DarkMiniStatProps {
+    icon: React.ReactNode;
+    label: string;
+    value: string | number;
+    color: string;
+    to: string;
+    badge?: number;
+}
+
+function DarkMiniStat({ icon, label, value, color, to, badge }: DarkMiniStatProps) {
+    return (
+        <Link
+            to={to}
+            className="relative bg-[#0e1627] border border-slate-800/90 hover:border-slate-700 rounded-2xl p-4 sm:p-5 transition-all duration-200 shadow-sm flex flex-col items-center text-center group h-full"
+        >
+            {badge !== undefined && badge > 0 && (
+                <span className="absolute top-2.5 right-2.5 px-1.5 py-0.5 text-[10px] font-bold rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                    {badge}
+                </span>
+            )}
+            <div className={`w-10 h-10 rounded-xl bg-slate-800/80 ${color} border border-slate-700/60 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform`}>
+                {icon}
+            </div>
+            <p className="text-2xl sm:text-3xl font-extrabold text-white font-sans group-hover:text-blue-400 transition-colors">
+                {value}
+            </p>
+            <p className="text-sm font-semibold text-slate-200 mt-1.5 line-clamp-1">
+                {label}
+            </p>
+        </Link>
+    );
+}
+
+interface DarkQuickActionProps {
+    to: string;
+    icon: React.ReactNode;
+    title: string;
+    subtitle: string;
+    badge?: number;
+}
+
+function DarkQuickAction({ to, icon, title, subtitle, badge }: DarkQuickActionProps) {
+    return (
+        <Link
+            to={to}
+            className="group relative bg-[#0e1627] border border-slate-800 hover:border-blue-500/50 hover:bg-[#111c33] rounded-2xl p-5 sm:p-6 transition-all duration-200 shadow-sm flex flex-col justify-between"
+        >
+            {badge ? (
+                <span className="absolute top-3 right-3 px-2 py-0.5 bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[11px] font-bold rounded-full">
+                    {badge}
+                </span>
+            ) : null}
+
+            <div>
+                <div className="w-11 h-11 rounded-xl bg-slate-800 border border-slate-700 text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-all flex items-center justify-center mb-4">
+                    {icon}
+                </div>
+
+                <h3 className="text-base font-bold text-white padauk-bold mb-1 group-hover:text-blue-300 transition-colors">
+                    {title}
+                </h3>
+
+                <p className="text-xs text-slate-400 padauk-regular leading-relaxed line-clamp-2">
+                    {subtitle}
+                </p>
+            </div>
+
+            <div className="mt-5 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-white transition-colors">
+                <span>ဆောင်ရွက်ရန်</span>
+                <div className="p-1 rounded-lg bg-slate-800/80 group-hover:bg-blue-600 transition-colors">
+                    <ChevronRight size={13} />
+                </div>
+            </div>
+        </Link>
+    );
+}

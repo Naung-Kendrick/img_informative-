@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import PageLoader from "./components/PageLoader"
 import AnalyticsWrapper from "./components/AnalyticsWrapper"
 import PwaUpdater from "./components/PwaUpdater"
@@ -9,9 +9,9 @@ import ErrorBoundary from "./components/ErrorBoundary"
 import Layout from "./components/Layout"
 import AdminLayout from "./components/admin/AdminLayout"
 import RoleGuard from "./components/admin/RoleGuard"
+import Home from "./pages/Home"
 
 // 👉 Public Pages (Lazy Loaded)
-const Home = lazy(() => import("./pages/Home"))
 const NewsReader = lazy(() => import("./pages/NewsReader"))
 const Activities = lazy(() => import("./pages/Activities"))
 const Services = lazy(() => import("./pages/Services"))
@@ -20,7 +20,6 @@ const Announcements = lazy(() => import("./pages/Announcements"))
 const AnnouncementDetail = lazy(() => import("./pages/AnnouncementDetail"))
 const Districts = lazy(() => import("./pages/Districts"))
 const AboutPage = lazy(() => import("./pages/AboutPage"))
-const Contact = lazy(() => import("./pages/Contact"))
 const HelpCenter = lazy(() => import("./pages/HelpCenter"))
 const LegalPage = lazy(() => import("./pages/LegalPage"))
 const Login = lazy(() => import("./pages/Login"))
@@ -39,7 +38,6 @@ const AnnouncementsManagement = lazy(() => import("./pages/admin/AnnouncementsMa
 const CreateAnnouncement = lazy(() => import("./pages/admin/CreateAnnouncement"))
 const HotNewsManagement = lazy(() => import("./pages/admin/HotNewsManagement"))
 const PageManagement = lazy(() => import("./pages/admin/PageManagement"))
-const ContactManagement = lazy(() => import("./pages/admin/ContactManagement"))
 const ContactInfoManagement = lazy(() => import("./pages/admin/ContactInfoManagement"))
 const FaqManagement = lazy(() => import("./pages/admin/FaqManagement"))
 const CreatePage = lazy(() => import("./pages/admin/CreatePage"))
@@ -81,7 +79,7 @@ function App() {
               <Route path="announcements" element={<Announcements />} />
               <Route path="announcements/:id" element={<AnnouncementDetail />} />
               <Route path="about" element={<AboutPage />} />
-              <Route path="contact" element={<Contact />} />
+              <Route path="contact" element={<Navigate to="/" replace />} />
               <Route path="help-center" element={<HelpCenter />} />
               <Route path="privacy-policy" element={<LegalPage />} />
               <Route path="terms-of-service" element={<LegalPage />} />
@@ -132,19 +130,15 @@ function App() {
                 </RoleGuard>
               } />
 
-              {/* Admin+ only (role >= 2): Contacts & Users */}
-              <Route path="contact" element={
-                <RoleGuard minRole={2}>
-                  <ContactManagement />
-                </RoleGuard>
-              } />
+              {/* Admin+ only (role >= 2): Users & Audit */}
+              <Route path="contact" element={<Navigate to="/admin" replace />} />
               <Route path="contact-info" element={
                 <RoleGuard minRole={2}>
                   <ContactInfoManagement />
                 </RoleGuard>
               } />
               <Route path="users" element={
-                <RoleGuard minRole={2}>
+                <RoleGuard minRole={3}>
                   <UserManagement />
                 </RoleGuard>
               } />

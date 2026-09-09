@@ -131,7 +131,7 @@ const LegalPage = () => {
                             <section className="pt-8 border-t border-border">
                                 <h3 className="text-lg font-bold text-foreground mb-2 padauk-bold">Reporting Failures</h3>
                                 <p className="text-sm text-muted-foreground">
-                                    If you encounter an accessibility barrier, please report it via our <Link to="/contact" className="text-primary hover:underline">Contact Center</Link>. Reports are audited monthly by the Federal Inclusion Council.
+                                    If you encounter an accessibility barrier, please report it via our <Link to="/help-center" className="text-primary hover:underline">Help Center</Link>. Reports are audited monthly by the Federal Inclusion Council.
                                 </p>
                             </section>
                         </div>

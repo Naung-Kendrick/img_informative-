@@ -12,15 +12,15 @@ export function sanitizeHtml(dirty: string): string {
             "h1", "h2", "h3", "h4", "h5", "h6",
             "ul", "ol", "li", "blockquote",
             "a", "img", "code", "pre",
-            "table", "thead", "tbody", "tr", "td", "th",
-            "iframe"
+            "table", "thead", "tbody", "tr", "td", "th"
         ],
         ALLOWED_ATTR: [
             "href", "src", "alt", "title", "target", "rel",
-            "class", "style", "width", "height",
-            "allow", "allowfullscreen", "frameborder"
+            "class", "style", "width", "height"
         ],
-        ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+        FORBID_TAGS: ["script", "style", "iframe", "object", "embed", "base", "form", "input", "button"],
+        FORBID_ATTR: ["onerror", "onload", "onclick", "onmouseover", "onfocus", "onblur"],
+        ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel):)/i,
     });
 }
 
